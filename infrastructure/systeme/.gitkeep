@@ -1,0 +1,9 @@
+# Scripts Système
+
+Ce dossier contient les scripts PowerShell pour l'administration système.
+
+- Création d'utilisateurs AD
+- Configuration Windows Server
+- GPO
+
+**Responsable : Océane**

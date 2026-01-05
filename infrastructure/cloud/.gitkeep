@@ -1,0 +1,9 @@
+# Cloud Azure
+
+Ce dossier contient les templates Infrastructure as Code pour Azure.
+
+- Templates Terraform (.tf)
+- Templates ARM (JSON)
+- Scripts Azure CLI
+
+**Responsable : Océane**

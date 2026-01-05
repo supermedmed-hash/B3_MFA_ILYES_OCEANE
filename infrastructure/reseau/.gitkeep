@@ -1,0 +1,9 @@
+# Configuration Réseau
+
+Ce dossier contient les configurations des équipements réseau.
+
+- Exports GNS3/EVE-NG
+- Configurations Cisco (switches, routeurs)
+- Configuration PfSense/Firewall
+
+**Responsable : Ilyes**

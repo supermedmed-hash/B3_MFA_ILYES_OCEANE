@@ -1,0 +1,77 @@
+# ===============================================
+# Smart Office 2.0 - .gitignore
+# ===============================================
+
+# ----- Système -----
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# ----- IDE (VS Code, IntelliJ...) -----
+.vscode/
+.idea/
+*.suo
+*.user
+*.sln.docstates
+
+# ----- Python -----
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+venv/
+env/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ----- Node.js -----
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# ----- Docker -----
+.env
+.env.local
+.env.*.local
+docker-compose.override.yml
+
+# ----- Fichiers sensibles (NE JAMAIS COMMITER !) -----
+*.pfx
+*.key
+*.pem
+id_rsa
+id_rsa.pub
+secrets.txt
+credentials.json
+*.credential
+
+# ----- Logs -----
+*.log
+logs/
+*.log.*
+
+# ----- Build / Dist -----
+dist/
+build/
+out/
+target/
+
+# ----- Fichiers temporaires -----
+*.tmp
+*.temp
+*.swp
+*~
+
+# ----- Terraform -----
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+
+# ----- Backups -----
+*.bak
+*.backup
