@@ -1,0 +1,86 @@
+# ==============================================================================
+# JURY DEFENSE - POURQUOI DOCKER COMPOSE ?
+# Docker Compose est l'outil parfait pour un MVP / PoC (Proof of Concept).
+# Il permet de déployer toute notre infrastructure en une seule commande de manière 
+# reproductible et isolée ("Infrastructure as Code" à petite échelle).
+# ==============================================================================
+
+services:
+  # ==========================================
+  # 1. LAYER APPLICATIF : NOTRE API NODE.JS
+  # ==========================================
+  web-app:
+    build: . # Indique de construire l'image via le Dockerfile du dossier courant
+    container_name: smartoffice_web
+    ports:
+      - "3000:3000" # Mapping réseau : PORT_HOST:PORT_CONTENEUR
+    environment:
+      # Principes "12-Factor App" : Les configurations doivent être injectées depuis l'extérieur.
+      # Rien n'est hardcodé dans l'app Node.js.
+      - PORT=3000
+      - POSTGRES_USER=admin_postgres
+      - POSTGRES_PASSWORD=secret_postgres
+      - POSTGRES_DB=smartoffice
+      - POSTGRES_HOST=db-postgres # Magie de Docker DNS : On utilise le nom du service comme Hostname
+      - MONGO_URI=mongodb://db-mongo:27017/smartoffice_iot
+    depends_on:
+      # Assure un ordre de démarrage. L'app web ne démarre pas avant la création des BD.
+      - db-postgres
+      - db-mongo
+    networks:
+      - smartoffice-net # Rattache l'app au réseau privé créé en bas du fichier
+    restart: always # Politique de "High Availability" : redémarre l'app automatiquement si elle crash.
+
+  # ==========================================
+  # 2. LAYER DATA : BASE RELATIONNELLE (ACID)
+  # ==========================================
+  # Choix de PostgreSQL : Utilisé pour les données structurées nécessitant 
+  # intégrité et transactions strictes (Users, Salles, Planning de réservations).
+  db-postgres:
+    image: postgres:15-alpine # Encore Alpine, minimisation des ressources allouées
+    container_name: smartoffice_postgres
+    environment:
+      - POSTGRES_USER=admin_postgres
+      - POSTGRES_PASSWORD=secret_postgres
+      - POSTGRES_DB=smartoffice
+    ports:
+      # Exposer la DB sur l'hôte permet aux développeurs de s'y connecter 
+      # localement avec un outil client comme DBeaver ou pgAdmin.
+      - "5432:5432"
+    volumes:
+      # PERSISTANCE DES DONNÉES (Crucial à expliquer)
+      # Sans ça, effacer le conteneur efface les données. 
+      # Ici, les datas vivent sur l'hôte (dans le volume nommé pgdata).
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - smartoffice-net
+    restart: unless-stopped
+
+  # ==========================================
+  # 3. LAYER DATA : BASE NoSQL / DOCUMENTS
+  # ==========================================
+  # Choix de MongoDB : Utilisé car parfait pour ingérer un volume massif 
+  # de logs ou de données IoT sans schéma figé.
+  db-mongo:
+    image: mongo:6 # Image officielle Mongo
+    container_name: smartoffice_mongo
+    ports:
+      - "27017:27017" # Accès externe pour debugging (ex: MongoDB Compass)
+    volumes:
+      - mongodata:/data/db # Persistance des données MongoDB
+    networks:
+      - smartoffice-net
+    restart: unless-stopped
+
+# ==========================================
+# RÉSEAU ET VOLUMES GÉRÉS
+# ==========================================
+
+networks:
+  smartoffice-net:
+    driver: bridge # Crée un LAN virtuel privé (VLAN) isolé pour nos 3 conteneurs.
+
+volumes:
+  # Déclaration des "Named Volumes" pris en charge par le daemon Docker.
+  pgdata:
+  mongodata:
