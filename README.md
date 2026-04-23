@@ -134,4 +134,4 @@ Pour toute question sur le projet, contacter l'équipe via le canal Teams du pro
 
 ---
 
-*Projet réalisé dans le cadre du cursus B3 Infrastructure - 2024/2025*
+*Projet réalisé dans le cadre du cursus B3 Infrastructure - 2025/2026*
