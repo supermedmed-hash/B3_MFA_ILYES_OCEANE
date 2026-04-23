@@ -29,6 +29,8 @@ jobs:
     needs: build-and-push
     runs-on: ubuntu-latest
     steps:
+      - name: ⬇️ Checkout code
+        uses: actions/checkout@v4
       - name: 🔑 Login to Azure
         uses: azure/login@v1
         with:
