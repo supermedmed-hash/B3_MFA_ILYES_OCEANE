@@ -10,7 +10,8 @@ Bienvenue sur le dépôt officiel du projet de fin d'année B3.
 |--------|------|-----------------|
 | **Ilyes** | Lead Infrastructure & Sécurité | Configuration réseau, VLANs, Firewall, VPN |
 | **Océane** | Lead Systèmes & Cloud Hybride | Windows Server, Active Directory, Azure |
-| **Mehdi** | Lead DevOps, Data & Gestion de Projet | CI/CD, Docker, BDD, Supervision, GitHub |
+| **Florian** | Lead Data & Supervision | PostgreSQL, Zabbix, Grafana |
+| **Mehdi** | Lead DevOps & Gestion de Projet | CI/CD, Docker, MongoDB, GitHub, Planning |
 
 ---
 
@@ -80,9 +81,9 @@ smart-office-2.0/
 | `/infrastructure/reseau/` | Configs switches/routeurs | Ilyes |
 | `/infrastructure/systeme/` | Scripts PowerShell AD | Océane |
 | `/infrastructure/cloud/` | Templates Azure (Terraform/JSON) | Océane |
-| `/monitoring/zabbix/` | Templates XML Zabbix | Mehdi |
-| `/monitoring/grafana/` | Dashboards JSON | Mehdi |
-| `/data/sql/` | Scripts PostgreSQL | Mehdi |
+| `/monitoring/zabbix/` | Templates XML Zabbix | Florian |
+| `/monitoring/grafana/` | Dashboards JSON | Florian |
+| `/data/sql/` | Scripts PostgreSQL | Florian |
 | `/data/nosql/` | Scripts MongoDB | Mehdi |
 
 ---
@@ -133,4 +134,4 @@ Pour toute question sur le projet, contacter l'équipe via le canal Teams du pro
 
 ---
 
-*Projet réalisé dans le cadre du cursus B3 Infrastructure - 2024/2025*
+*Projet réalisé dans le cadre du cursus B3 Infrastructure - 2025/2026*
