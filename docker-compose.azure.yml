@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  smartoffice-web:
+    image: ${ACR_LOGIN_SERVER}/smartoffice-web:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - POSTGRES_HOST=db-postgres
+      - POSTGRES_USER=admin_postgres
+      - POSTGRES_PASSWORD=secret_postgres
+      - POSTGRES_DB=smartoffice
+      - MONGO_URI=mongodb://db-mongo:27017/smartoffice_iot
+    depends_on:
+      - db-postgres
+      - db-mongo
+
+  db-postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=admin_postgres
+      - POSTGRES_PASSWORD=secret_postgres
+      - POSTGRES_DB=smartoffice
+
+  db-mongo:
+    image: mongo:6-alpine
