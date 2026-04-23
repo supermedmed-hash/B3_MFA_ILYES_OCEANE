@@ -13,10 +13,8 @@ services:
       - POSTGRES_DB=smartoffice
       - MONGO_URI=mongodb://db-mongo:27017/smartoffice_iot
     depends_on:
-      db-postgres:
-        condition: service_healthy
-      db-mongo:
-        condition: service_healthy
+      - db-postgres
+      - db-mongo
 
   db-postgres:
     image: postgres:15-alpine
