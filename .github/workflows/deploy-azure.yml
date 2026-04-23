@@ -1,4 +1,4 @@
-name: 🚀 Deploy Smart Office to Azure
+name: 🚀 Deploy Smart Office to Azure # v1.0.1
 
 on:
   push:
