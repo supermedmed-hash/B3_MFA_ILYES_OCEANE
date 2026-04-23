@@ -37,5 +37,5 @@ jobs:
       - name: 🚀 Deploy to Azure App Service
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'smartoffice-poc'
+          app-name: 'smartoffice-poc-app'
           images: '${{ secrets.ACR_LOGIN_SERVER }}/smartoffice-web:latest'
