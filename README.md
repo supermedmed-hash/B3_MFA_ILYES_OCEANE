@@ -10,6 +10,8 @@ Bienvenue sur le dépôt officiel du projet de fin d'année B3.
 |--------|------|-----------------|
 | **Ilyes** | Lead Infrastructure & Sécurité | Configuration réseau, VLANs, Firewall, VPN |
 | **Océane** | Lead Systèmes & Cloud Hybride | Windows Server, Active Directory, Azure |
+*   **Déploiement** : Automatisé via GitHub Actions vers Azure App Service.
+*   **Infrastructure** : Hybride (On-Premise + Azure Cloud IaaS/PaaS).
 | **Florian** | Lead Data & Supervision | PostgreSQL, Zabbix, Grafana |
 | **Mehdi** | Lead DevOps & Gestion de Projet | CI/CD, Docker, MongoDB, GitHub, Planning |
 
