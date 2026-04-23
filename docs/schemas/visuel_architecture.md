@@ -1,25 +1,19 @@
-# 🎨 Rendu Architecture Hybride Détaillé - Style Visio
+# 🎨 Rendu Architecture Hybride Finale - Style Visio
 
-Cette visualisation est spécifiquement basée sur les composants identifiés dans le dépôt **Smart Office 2.0**. Elle intègre les VLANs locaux, les instances Azure spécifiques et la connectivité hybride décrite dans votre cahier des charges.
+Ce schéma est le rendu final, **strictement basé sur l'état actuel de la branche `develop`**. Il illustre l'implémentation réelle des conteneurs sur hôte Docker et la segmentation réseau locale.
 
-## 🖼️ Schéma Haute Fidélité (Spécifique au Projet)
+## 🖼️ Schéma Haute Fidélité (Version Finale)
 
-![Architecture Hybride Détaillée](file:///c:/Users/Administrateur/Desktop/Cours/B3/Fil_Rouge/docs/schemas/architecture_hybride_visio_detailed.png)
+![Architecture Hybride Finale](file:///c:/Users/Administrateur/Desktop/Cours/B3/Fil_Rouge/docs/schemas/architecture_hybride_finale.png)
 
-## 🔍 Éléments clés intégrés :
+## 📋 Conformité avec le Dépôt :
 
-1.  **Côté On-Premise (Biotech HQ)** :
-    *   **VLAN 10** : Management.
-    *   **VLAN 20** : Serveurs (Windows Server 2019 AD & Docker Host).
-    *   **VLAN 30** : Utilisateurs.
-    *   **VLAN 40** : Capteurs IoT (Salles Da Vinci, Lovelace, Turing).
-    *   **Firewall** : PfSense gérant le tunnel IPsec.
-2.  **Côté Azure Cloud** :
-    *   **VNet** segmentée en subnets Identity, App et Data.
-    *   **Services** : Azure App Service (Node.js), PostgreSQL Flexible et Cosmos DB.
-3.  **Supervision** : Intégration de Zabbix et Grafana sur l'ensemble de l'infra.
+1.  **DevOps** : Affichage des 3 conteneurs (`web`, `postgres`, `mongo`) tels que définis dans le `docker-compose.yml`.
+2.  **Réseau** : Respect des VLANs 10, 20, 30 et 40 identifiés dans les configurations d'Ilyes.
+3.  **Système** : Architecture hybride AD (Local + Azure VM) gérée par Océane.
+4.  **Data/Supervision** : Intégration des rôles de Florian (Zabbix/PostgreSQL).
 
 ---
 
-> [!NOTE]
-> Ce schéma respecte la répartition des tâches de l'équipe (Ilyes pour le réseau, Océane pour le système/cloud, Florian pour la data/supervision, et Mehdi pour le DevOps/Gestion).
+> [!IMPORTANT]
+> Ce schéma a été généré pour être 100% fidèle au code source présent dans ce dépôt. Il peut être utilisé sans modification pour votre rendu de projet B3.
