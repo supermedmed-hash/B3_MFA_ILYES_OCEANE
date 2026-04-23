@@ -10,7 +10,7 @@ services:
   # 1. LAYER APPLICATIF : NOTRE API NODE.JS
   # ==========================================
   web-app:
-    build: . # Indique de construire l'image via le Dockerfile du dossier courant
+    build: ./app-reservation # Indique de construire l'image via le Dockerfile du dossier app-reservation
     container_name: smartoffice_web
     ports:
       - "3000:3000" # Mapping réseau : PORT_HOST:PORT_CONTENEUR

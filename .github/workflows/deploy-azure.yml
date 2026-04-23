@@ -1,0 +1,41 @@
+name: 🚀 Deploy Smart Office to Azure
+
+on:
+  push:
+    branches: [ "develop", "main" ]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔑 Login to Azure Container Registry (ACR)
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.ACR_LOGIN_SERVER }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: 🛠️ Build and Push Docker Image
+        run: |
+          docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/smartoffice-web:${{ github.sha }} ./app-reservation
+          docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/smartoffice-web:latest ./app-reservation
+          docker push ${{ secrets.ACR_LOGIN_SERVER }}/smartoffice-web:${{ github.sha }}
+          docker push ${{ secrets.ACR_LOGIN_SERVER }}/smartoffice-web:latest
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔑 Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: 🚀 Deploy to Azure App Service
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'smartoffice-poc'
+          images: '${{ secrets.ACR_LOGIN_SERVER }}/smartoffice-web:latest'

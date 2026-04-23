@@ -40,4 +40,4 @@ EXPOSE 3000
 #    - NPM crée un processus parent supplémentaire qui gère mal les 
 #      signaux systèmes (comme SIGTERM/SIGINT envoyés par Docker pour tuer le conteneur).
 #    - Lancer 'node' directement permet un arrêt propre (graceful shutdown).
-CMD ["node", "server.js"]
+CMD ["node", "src/server.js"]
