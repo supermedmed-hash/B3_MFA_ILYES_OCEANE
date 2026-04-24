@@ -4,45 +4,40 @@ Bienvenue sur le dépôt officiel du projet de fin d'année B3. Ce projet démon
 
 ---
 
+## 👥 L'Équipe & Rôles
+
+| Membre | Rôle | Responsabilités |
+|--------|------|-----------------|
+| **Mehdi** | **Lead DevOps & Data** | **CI/CD, Docker (Multi-container), PostgreSQL, MongoDB, Azure App Service** |
+| **Ilyes** | Lead Infrastructure & Sécurité | Configuration réseau, VLANs, Firewall PfSense, VPN IPsec |
+| **Océane** | Lead Systèmes & Cloud | Windows Server 2019, Active Directory, Azure AD Sync |
+| **Florian** | Lead Supervision | Zabbix, Grafana, Dashboards de performance |
+
+---
+
 ## 🚀 Déploiement "One-Shot" sur Azure
 
 Pour déployer ou mettre à jour l'infrastructure complète sur Azure App Service (Multi-container) :
 
 ### 1. Pré-requis
-- Un **Azure Container Registry (ACR)** pour héberger l'image de l'application.
-- Un **App Service Plan** (Linux B1 minimum recommandé).
-- Les accès CLI Azure configurés.
+- Un **Azure Container Registry (ACR)** pour l'image de l'application.
+- Un **App Service Plan** (Linux B1 minimum).
 
 ### 2. Variables d'Environnement (App Settings)
-Assurez-vous que les variables suivantes sont configurées sur votre Web App Azure :
-- `WEBSITES_PORT`: `3000` (Force le port d'écoute)
-- `WEBSITES_CONTAINER_START_TIME_LIMIT`: `1800` (Laisse le temps aux bases de données de s'initialiser au premier démarrage)
-- `DOCKER_REGISTRY_SERVER_URL`: URL de votre ACR
-- `DOCKER_REGISTRY_SERVER_USERNAME`: Login ACR
-- `DOCKER_REGISTRY_SERVER_PASSWORD`: Password ACR
-
-### 3. Déploiement via GitHub Actions
-Le pipeline est 100% automatisé. Chaque push sur `develop` ou `main` déclenche :
-1. Le build de l'image **smartoffice-web**.
-2. Le push automatique sur l'ACR.
-3. La mise à jour de l'App Service via `docker-compose.azure.yml`.
-
-### 4. Supervision des logs
-Si vous avez besoin de débugger le démarrage :
-```powershell
-az webapp log tail --resource-group "RG-SmartOffice-Prod" --name "smartoffice-poc-app"
-```
+Variables configurées pour la résilience :
+- `WEBSITES_PORT`: `3000`
+- `WEBSITES_CONTAINER_START_TIME_LIMIT`: `1800` (Optimisé pour les bases de données)
+- `DOCKER_REGISTRY_SERVER_URL`, `USERNAME`, `PASSWORD` (Secrets ACR)
 
 ---
 
-## 👥 L'Équipe
+## 🛡️ Optimisations & Résilience (Réalisé)
 
-| Membre | Rôle | Responsabilités |
-|--------|------|-----------------|
-| **Ilyes** | Lead Infrastructure & Sécurité | Configuration réseau, VLANs, Firewall, VPN |
-| **Océane** | Lead Systèmes & Cloud Hybride | Windows Server, Active Directory, Azure |
-| **Florian** | Lead Data & Supervision | PostgreSQL, Zabbix, Grafana |
-| **Mehdi** | Lead DevOps & Gestion de Projet | CI/CD, Docker, MongoDB, GitHub, Planning |
+Dans le cadre du passage au Full Cloud, nous avons implémenté plusieurs optimisations critiques pour garantir la haute disponibilité :
+
+- **Système de Reconnexion Récursif (Retry Logic)** : L'application web intègre désormais une logique de reconnexion automatique. Si PostgreSQL ou MongoDB ne sont pas encore prêts au démarrage, l'application ne crash plus et réessaie toutes les 5 secondes.
+- **Gestion via Connection Pooling (`pg.Pool`)** : Passage d'un client unique à un Pool de connexions pour PostgreSQL. Cela permet de gérer plus de requêtes simultanées et d'éviter les blocages "504 Gateway Timeout" sur Azure.
+- **Standardisation des Images** : Migration vers des images Docker standards (`mongo:6`) pour garantir la compatibilité avec les registres Cloud et éviter les erreurs de manifeste.
 
 ---
 
@@ -53,7 +48,7 @@ az webapp log tail --resource-group "RG-SmartOffice-Prod" --name "smartoffice-po
 | **Réseau** | Cisco (GNS3), PfSense, VPN IPsec |
 | **Système** | Windows Server 2019, Active Directory, Azure AD |
 | **DevOps** | Docker, GitHub Actions, Azure App Service |
-| **Data** | PostgreSQL 15 (SQL), MongoDB 6 (NoSQL) |
+| **Data** | PostgreSQL 15, MongoDB 6 |
 | **Monitoring** | Zabbix, Grafana |
 
 ---
@@ -69,17 +64,6 @@ smart-office-2.0/
 ├── infrastructure/        # 🖧 Configs Réseau & Cloud
 └── monitoring/            # 📊 Supervision
 ```
-
----
-
-## 🤝 Workflow de Collaboration
-
-Nous utilisons **GitFlow simplifié** :
-- `main` : Version stable pour le jury.
-- `develop` : Branche d'intégration (travail quotidien).
-- `feat/*`, `infra/*`, `docs/*` : Branches thématiques.
-
-> ⚠️ **Règle d'or** : Toujours tester en local via `docker-compose up` avant de pousser sur `develop`.
 
 ---
 *Projet réalisé dans le cadre du cursus B3 Infrastructure - 2025/2026*
