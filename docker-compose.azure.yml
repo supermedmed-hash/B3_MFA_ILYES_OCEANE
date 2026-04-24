@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   smartoffice-web:
-    image: smartofficepoc7368.azurecr.io/smartoffice-web:latest
+    image: ${ACR_LOGIN_SERVER}/smartoffice-web:latest
     ports:
       - "3000:3000"
     environment:
