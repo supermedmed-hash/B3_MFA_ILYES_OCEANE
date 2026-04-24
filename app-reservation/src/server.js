@@ -22,11 +22,9 @@ const pgClient = new Client({
 });
 
 let pgStatus = '🔴 Hors ligne';
-pgClient.connect()
-    .then(async () => {
-        console.log('Connecté avec succès à PostgreSQL');
-        pgStatus = '🟢 En ligne';
 
+async function initializePostgres() {
+    try {
         // Création de la table 'users'
         await pgClient.query(`
             CREATE TABLE IF NOT EXISTS users (
@@ -55,8 +53,26 @@ pgClient.connect()
             );
         `);
         console.log('Tables PostgreSQL vérifiées/créées.');
-    })
-    .catch(err => console.error('Erreur de connexion PostgreSQL :', err.message));
+    } catch (err) {
+        console.error('Erreur lors de l\'initialisation des tables PostgreSQL :', err.message);
+    }
+}
+
+const connectPostgresWithRetry = () => {
+    console.log('Tentative de connexion à PostgreSQL...');
+    pgClient.connect()
+        .then(() => {
+            console.log('Connecté avec succès à PostgreSQL');
+            pgStatus = '🟢 En ligne';
+            initializePostgres();
+        })
+        .catch(err => {
+            console.error('Erreur de connexion PostgreSQL, nouvelle tentative dans 5s...', err.message);
+            setTimeout(connectPostgresWithRetry, 5000);
+        });
+};
+
+connectPostgresWithRetry();
 
 // ==========================================
 // 2. CONFIGURATION MONGODB (NoSQL)
@@ -64,12 +80,20 @@ pgClient.connect()
 const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/smartoffice_iot';
 let mongoStatus = '🔴 Hors ligne';
 
-mongoose.connect(mongoUri)
-    .then(() => {
-        console.log('Connecté avec succès à MongoDB');
-        mongoStatus = '🟢 En ligne';
-    })
-    .catch(err => console.error('Erreur de connexion MongoDB :', err.message));
+const connectMongoWithRetry = () => {
+    console.log('Tentative de connexion à MongoDB...');
+    mongoose.connect(mongoUri)
+        .then(() => {
+            console.log('Connecté avec succès à MongoDB');
+            mongoStatus = '🟢 En ligne';
+        })
+        .catch(err => {
+            console.error('Erreur de connexion MongoDB, nouvelle tentative dans 5s...', err.message);
+            setTimeout(connectMongoWithRetry, 5000);
+        });
+};
+
+connectMongoWithRetry();
 
 const IotLogSchema = new mongoose.Schema({
     salle_nom: String,
