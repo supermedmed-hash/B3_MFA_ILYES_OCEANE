@@ -1,69 +1,134 @@
-# 🏢 Projet Smart Office 2.0 - B3 Infrastructure
+# 🏢 Smart Office 2.0 - Solution d'Infrastructure Hybride
 
-Bienvenue sur le dépôt officiel du projet de fin d'année B3. Ce projet démontre la mise en place d'une architecture hybride sécurisée et d'un pipeline DevOps moderne.
+[![Azure](https://img.shields.io/badge/Cloud-Azure-blue?style=flat-square&logo=microsoft-azure)](https://azure.microsoft.com/)
+[![Docker](https://img.shields.io/badge/Container-Docker-2496ED?style=flat-square&logo=docker)](https://www.docker.com/)
+[![GitHub Actions](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-2088FF?style=flat-square&logo=github-actions)](https://github.com/features/actions)
 
----
-
-## 👥 L'Équipe & Rôles
-
-| Membre | Rôle | Responsabilités |
-|--------|------|-----------------|
-| **Mehdi** | **Lead DevOps & Data** | **CI/CD, Docker (Multi-container), PostgreSQL, MongoDB, Azure App Service** |
-| **Ilyes** | Lead Infrastructure & Sécurité | Configuration réseau, VLANs, Firewall PfSense, VPN IPsec |
-| **Océane** | Lead Systèmes & Cloud | Windows Server 2019, Active Directory, Azure AD Sync |
-| **Florian** | Lead Supervision | Zabbix, Grafana, Dashboards de performance |
+Bienvenue sur le dépôt central de la solution **Smart Office 2.0**. Ce projet propose une infrastructure hybride complète pour une entreprise de biotechnologie, intégrant un environnement On-Premise (GNS3), un tunnel sécurisé (VPN IPsec) et une plateforme d'application Cloud (Azure).
 
 ---
 
-## 🚀 Déploiement "One-Shot" sur Azure
+## 👥 L'Équipe Projet
 
-Pour déployer ou mettre à jour l'infrastructure complète sur Azure App Service (Multi-container) :
-
-### 1. Pré-requis
-- Un **Azure Container Registry (ACR)** pour l'image de l'application.
-- Un **App Service Plan** (Linux B1 minimum).
-
-### 2. Variables d'Environnement (App Settings)
-Variables configurées pour la résilience :
-- `WEBSITES_PORT`: `3000`
-- `WEBSITES_CONTAINER_START_TIME_LIMIT`: `1800` (Optimisé pour les bases de données)
-- `DOCKER_REGISTRY_SERVER_URL`, `USERNAME`, `PASSWORD` (Secrets ACR)
+| Membre | Rôle | Expertise Clé |
+|--------|------|---------------|
+| **Mehdi** | **Lead DevOps & Data** | Architecture Multi-container, CI/CD, Optimisation SQL/NoSQL |
+| **Ilyes** | **Lead Infrastructure** | Firewalling, Switching Cisco, Routage Inter-VLAN |
+| **Océane** | **Lead Systèmes** | Windows Server 2019, Active Directory, Azure AD Sync |
+| **Florian** | **Lead Supervision** | Monitoring Zabbix, Dashboards Grafana |
 
 ---
 
-## 🛡️ Optimisations & Résilience (Réalisé)
+## 🏗️ Architecture de la Solution
 
-Dans le cadre du passage au Full Cloud, nous avons implémenté plusieurs optimisations critiques pour garantir la haute disponibilité :
+L'infrastructure repose sur un pont hybride entre un site local et le cloud public Azure :
 
-- **Système de Reconnexion Récursif (Retry Logic)** : L'application web intègre désormais une logique de reconnexion automatique. Si PostgreSQL ou MongoDB ne sont pas encore prêts au démarrage, l'application ne crash plus et réessaie toutes les 5 secondes.
-- **Gestion via Connection Pooling (`pg.Pool`)** : Passage d'un client unique à un Pool de connexions pour PostgreSQL. Cela permet de gérer plus de requêtes simultanées et d'éviter les blocages "504 Gateway Timeout" sur Azure.
-- **Standardisation des Images** : Migration vers des images Docker standards (`mongo:6`) pour garantir la compatibilité avec les registres Cloud et éviter les erreurs de manifeste.
-
----
-
-## 🛠️ Stack Technique
-
-| Domaine | Technologies |
-|---------|-------------|
-| **Réseau** | Cisco (GNS3), PfSense, VPN IPsec |
-| **Système** | Windows Server 2019, Active Directory, Azure AD |
-| **DevOps** | Docker, GitHub Actions, Azure App Service |
-| **Data** | PostgreSQL 15, MongoDB 6 |
-| **Monitoring** | Zabbix, Grafana |
-
----
-
-## 📂 Organisation du Dépôt
-
-```
-smart-office-2.0/
-│
-├── .github/workflows/     # 🔄 Workflows CI/CD
-├── docs/                  # 📚 Documentation (DAT, Biotech guides)
-├── app-reservation/       # 🐳 Application Web (Node.js)
-├── infrastructure/        # 🖧 Configs Réseau & Cloud
-└── monitoring/            # 📊 Supervision
+```mermaid
+graph LR
+    subgraph "Site On-Premise (GNS3)"
+        SW[SW-CORE-BIOTECH] -- Trunk --> FW[pfSense Firewall]
+        AD[AD-SRV-2019] -- VLAN 10 --> SW
+        CLI[PC-EMPLOYEE] -- VLAN 20 --> SW
+    end
+    
+    FW -- Tunnel IPsec --> VPN[Azure VPN Gateway]
+    
+    subgraph "Cloud Azure (PaaS/IaaS)"
+        VPN -- VNet --> APP[Azure App Service]
+        APP -- Multi-container --> WEB[WebApp]
+        WEB -- Database --> DB[(Postgres/Mongo)]
+    end
 ```
 
 ---
-*Projet réalisé dans le cadre du cursus B3 Infrastructure - 2025/2026*
+
+## 🖧 Brique 1 : Infrastructure Réseau (On-Premise)
+
+### 1. Plan d'Adressage & VLANs
+L'adressage est segmenté pour garantir une isolation maximale :
+
+| VLAN | Nom | Réseau | Usage |
+|------|-----|--------|-------|
+| **10** | SERVERS | `10.10.10.0/24` | Contrôleurs de domaine, SQL local |
+| **20** | EMPLOYEES | `10.10.20.0/23` | Postes de travail utilisateurs |
+| **30** | R&D_ZONE | `10.10.30.0/24` | Labos de recherche (Isolé) |
+| **100** | MGMT | `10.10.100.0/24` | Administration des équipements |
+
+### 2. Sécurité (Firewalling Matrix)
+Le pare-feu **pfSense** gère les flux inter-VLAN avec une politique *Deny All* par défaut :
+- **VLAN 30 ⮕ AD (10.10.10.10)** : Ports `445` (SMB) et `1433` (SQL) uniquement.
+- **Isolation** : Aucun trafic autorisé entre VLAN 30 (R&D) et VLAN 20 (Employees).
+
+---
+
+## 🔒 Brique 2 : Hybridation & Connectivité
+
+La connectivité entre le site local et Azure est assurée par un **Tunnel VPN Site-to-Site (IPsec IKEv2)** :
+- **Phase 1** : AES-256, SHA256, DH Group 14.
+- **Réseau Local** : `10.10.0.0/16`
+- **Réseau Azure** : `10.100.0.0/16`
+- **Résilience** : Reconnexion automatique et surveillance du tunnel via pfSense.
+
+---
+
+## 🐳 Brique 3 : DevOps & Cloud App Service
+
+### 1. Architecture Multi-container
+L'application de réservation est conteneurisée et déployée sur **Azure App Service** :
+- **Frontend/API** : Node.js (Express).
+- **Database Relationnelle** : PostgreSQL (Persistance des réservations).
+- **Database NoSQL** : MongoDB (Logs IoT en temps réel).
+
+### 2. Pipeline CI/CD (GitHub Actions)
+Chaque commit déclenche une chaîne de déploiement automatique :
+1. **Linting & Tests** : Validation du code.
+2. **Docker Build** : Création de l'image de production.
+3. **Push ACR** : Stockage sécurisé sur Azure Container Registry.
+4. **Deploy Azure** : Mise à jour à chaud de l'App Service via Docker Compose.
+
+### 3. Optimisations de Résilience (High Availability)
+- **Connection Pooling** : Usage de `pg.Pool` pour éviter les timeouts SQL.
+- **Recursive Retry Logic** : L'app attend que les bases de données soient up avant de servir les requêtes.
+- **Port Tuning** : Utilisation de `WEBSITES_PORT=3000` pour un routage Azure optimal.
+
+---
+
+## 📊 Brique 4 : Supervision & Monitoring
+
+La solution est supervisée 24h/24 pour garantir la disponibilité :
+- **Zabbix** : Monitoring des ressources (CPU, RAM, Disque) et du statut des tunnels VPN.
+- **Grafana** : Dashboards visuels pour les KPIs métier (nombre de réservations/heure, alertes IoT).
+
+---
+
+## 📂 Structure du Dépôt
+
+```bash
+.
+├── .github/workflows/   # Automatisations CI/CD
+├── app-reservation/     # Code source de l'application Web
+├── infrastructure/
+│   ├── cloud/           # Définitions Azure (JSON/Compose)
+│   ├── reseau/          # Configs Switchs & Firewall
+│   └── systeme/         # Scripts PowerShell & GPO
+├── docs/                # Documentation complète & DAT
+└── monitoring/          # Templates Zabbix & Grafana
+```
+
+---
+
+## 🛠️ Instructions pour les Collaborateurs
+
+### Installation Locale (Test)
+```powershell
+git clone https://github.com/supermedmed-hash/B3_MFA_ILYES_OCEANE.git
+cd app-reservation
+docker-compose up -d
+```
+
+### Accès Azure (Production)
+URL : `https://smartoffice-poc-app.azurewebsites.net`  
+*Note : Seuls les membres de l'équipe peuvent accéder aux logs via le CLI Azure.*
+
+---
+*Dépôt officiel du Projet Fil Rouge B3 - Biotech Corp - 2024/2025*
