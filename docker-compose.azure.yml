@@ -29,7 +29,7 @@ services:
       retries: 5
 
   db-mongo:
-    image: mongo:6-alpine
+    image: mongo:6
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 10s
