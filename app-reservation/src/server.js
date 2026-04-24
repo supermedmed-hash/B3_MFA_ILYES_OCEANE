@@ -26,7 +26,7 @@ pgClient.connect()
     .then(async () => {
         console.log('Connecté avec succès à PostgreSQL');
         pgStatus = '🟢 En ligne';
-        
+
         // Création de la table 'users'
         await pgClient.query(`
             CREATE TABLE IF NOT EXISTS users (
@@ -131,7 +131,7 @@ const checkAuth = (req, res, next) => {
 app.post('/api/reserver', checkAuth, async (req, res) => {
     const { salle_nom } = req.body;
     const employe_nom = req.user.username; // Le nom vient de la session, impossible à falsifier
-    
+
     try {
         await pgClient.query(
             'INSERT INTO reservations (employe_nom, salle_nom) VALUES ($1, $2)',
@@ -161,7 +161,7 @@ app.post('/api/supprimer/:id', checkAuth, async (req, res) => {
     try {
         // Obtenir d'abord les infos de la réservation pour les logs IoT
         const getRes = await pgClient.query('SELECT * FROM reservations WHERE id = $1', [id]);
-        
+
         if (getRes.rows.length > 0) {
             const resToDelete = getRes.rows[0];
 
@@ -240,7 +240,7 @@ app.get('/', async (req, res) => {
             pgResult.rows.forEach(row => {
                 const date = new Date(row.date_reservation).toLocaleString('fr-FR');
                 // Seul l'Admin peut voir le bouton Supprimer
-                const deleteBtn = userSession.role === 'admin' 
+                const deleteBtn = userSession.role === 'admin'
                     ? `<form action="/api/supprimer/${row.id}" method="POST" class="d-inline float-end"><button type="submit" class="btn btn-sm btn-outline-danger">Supprimer</button></form>`
                     : '';
 
