@@ -1,8 +1,23 @@
-name: 🚀 Deploy Smart Office to Azure
+# ==============================================================================
+# CI/CD Pipeline - Build, Push & Deploy to Azure App Service (Multi-Container)
+# Responsable: Pipeline unifié (remplace l'ancien docker-build.yml redondant)
+#
+# JURY DEFENSE - CHOIX TECHNIQUES :
+# 1. Pipeline unifié : Un seul workflow au lieu de deux, évite les conflits
+# 2. Filtre "paths" : Ne se déclenche que quand le code ou la config Azure change
+# 3. Double tag (SHA + latest) : Traçabilité + simplicité de déploiement
+# 4. Séparation build/deploy : Le deploy ne se lance que si le build réussit
+# ==============================================================================
+
+name: 🚀 Build & Deploy Smart Office to Azure
 
 on:
   push:
     branches: [ "develop", "main" ]
+    paths:
+      - 'app-reservation/**'
+      - 'docker-compose.azure.yml'
+      - '.github/workflows/deploy-azure.yml'
 
 jobs:
   build-and-push:
@@ -20,8 +35,10 @@ jobs:
 
       - name: 🛠️ Build and Push Docker Image
         run: |
-          docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/smartoffice-web:${{ github.sha }} ./app-reservation
-          docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/smartoffice-web:latest ./app-reservation
+          docker build \
+            -t ${{ secrets.ACR_LOGIN_SERVER }}/smartoffice-web:${{ github.sha }} \
+            -t ${{ secrets.ACR_LOGIN_SERVER }}/smartoffice-web:latest \
+            ./app-reservation
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/smartoffice-web:${{ github.sha }}
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/smartoffice-web:latest
 
@@ -31,6 +48,7 @@ jobs:
     steps:
       - name: ⬇️ Checkout code
         uses: actions/checkout@v4
+
       - name: 🔑 Login to Azure
         uses: azure/login@v1
         with:
