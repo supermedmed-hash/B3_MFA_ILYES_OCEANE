@@ -35,7 +35,14 @@ COPY . .
 #      la lisibilité, le vrai "mapping" se fera dans le docker-compose.yml.
 EXPOSE 3000
 
-# 7. COMMANDE DE DÉMARRAGE :
+# 7. HEALTHCHECK INTÉGRÉ :
+#    - Permet à Docker (et Azure App Service) de vérifier automatiquement
+#      que notre app Node.js répond bien sur le port 3000.
+#    - Si le healthcheck échoue 3 fois, le conteneur est redémarré.
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
+    CMD node -e "require('http').get('http://localhost:3000/', (r) => { process.exit(r.statusCode === 200 ? 0 : 1) })" || exit 1
+
+# 8. COMMANDE DE DÉMARRAGE :
 #    - J'utilise 'node server.js' plutôt que 'npm start'. 
 #    - NPM crée un processus parent supplémentaire qui gère mal les 
 #      signaux systèmes (comme SIGTERM/SIGINT envoyés par Docker pour tuer le conteneur).
