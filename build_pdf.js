@@ -64,12 +64,13 @@ filesToInclude.forEach(file => {
             // Convertir les liens Markdown en texte brut avant parsing
             let processedMd = rawContent.replace(/\[([^\]]+)\]\([^\)]+\)/g, '**$1**');
             
-            // Extraire les blocs mermaid pour éviter que marked les parse (et échappe les caractères >)
+            // Extraire les blocs mermaid pour éviter que marked les parse
             let counter = 0;
             const mermaidBlocks = {};
             processedMd = processedMd.replace(/\`\`\`mermaid\r?\n([\s\S]*?)\`\`\`/g, (match, p1) => {
-                const id = `___MERMAID_BLOCK_${counter++}___`;
+                const id = `MERMAIDBLOCKPLACEHOLDER${counter}ENDPLACEHOLDER`;
                 mermaidBlocks[id] = p1;
+                counter++;
                 return id;
             });
             
