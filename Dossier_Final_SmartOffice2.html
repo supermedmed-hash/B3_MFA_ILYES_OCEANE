@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Dossier Final - Smart Office 2.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: true });
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; color: #333; line-height: 1.6; background-color: white; padding: 40px; margin: 0; }
+        .container { max-width: 1000px; margin: auto; }
+        .page-break { page-break-before: always; margin-top: 50px; }
+        .cover { text-align: center; margin-top: 150px; page-break-after: always; }
+        .cover h1 { font-size: 3em; color: #1a5276; }
+        .cover h2 { font-size: 2em; color: #2980b9; }
+        h1, h2, h3 { color: #1a5276; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 14px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #2980b9; color: white; }
+        tr:nth-child(even) { background-color: #f2f4f4; }
+        .highlight { background-color: #ebf5fb; border-left: 4px solid #3498db; padding: 15px; margin: 20px 0; }
+        a { color: inherit; text-decoration: none; font-weight: bold; } /* Desactive liens cliquables visuellement */
+        img { max-width: 100%; height: auto; }
+        pre { background: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="cover">
+        <h1>Projet Smart Office 2.0</h1>
+        <h2>Dossier Consolidé de Soutenance</h2>
+        <p><strong>Équipe B3</strong></p>
+        <p><em>Généré pour export PDF</em></p>
+    </div>
+
+    <div class="page-break"></div>
+    <!-- SECTION: Dossier d'Architecture Technique (DAT) -->
+    <div class="section-content">
+        
+
+<div class="container">
+    <div class="header">
+        <h1>Dossier d'Architecture Technique (DAT)</h1>
+        <p>Projet : <strong>Smart Office 2.0</strong> | Équipe B3</p>
+        <p><em>Conception d'une infrastructure hybride sécurisée et résiliente</em></p>
+    </div>
+
+    <h2>1. Introduction et Périmètre</h2>
+    <p>Ce Document d'Architecture Technique décrit l'infrastructure cible déployée pour le siège social de Biotech Corp. Le projet "Smart Office 2.0" vise à soutenir l'hyper-croissance de l'entreprise (200 employés cibles) en modernisant ses locaux et son SI via une approche hybride (On-Premise + Azure Cloud).</p>
+
+    <h2>2. Architecture Physique et Réseau</h2>
+    <p>L'infrastructure repose sur un bâtiment de 4 étages avec un cœur de réseau redondé. La sécurité est assurée par une segmentation stricte des flux et l'application d'un modèle Zero Trust au niveau du pare-feu pfSense.</p>
+    
+    <div class="link-card">
+        🏢 <strong>Schéma d'Architecture Physique</strong> (Plans de câblage, inventaire matériel)
+    </div>
+    <div class="link-card">
+        🌐 <strong>Plan d'Adressage IP et VLANs</strong>
+    </div>
+    <div class="link-card">
+        🔀 <strong>Matrice des Flux Réseau (ACLs pfSense)</strong>
+    </div>
+    <div class="link-card">
+        📶 <strong>Architecture WLAN / Wi-Fi d'entreprise</strong>
+    </div>
+
+    <div class="page-break"></div>
+
+    <h2>3. Architecture Système et Stratégie Cloud (IaaS/PaaS)</h2>
+    <p>Le choix d'une architecture hybride a été validé suite à une analyse financière (TCO). L'application métier (Smart Office Web) est déportée sur le Cloud Microsoft Azure (PaaS) pour bénéficier de son élasticité, tandis que les données restent sur site pour des raisons de souveraineté et de contrôle des coûts.</p>
+    
+    <div class="highlight">
+        Le tunnel VPN IPsec (IKEv2) monte une liaison chiffrée permanente entre le pfSense local et la passerelle VPN Azure, permettant à l'application Cloud de requêter nos bases locales.
+    </div>
+
+    <div class="link-card">
+        ☁️ <strong>Analyse Comparative Cloud et TCO (Justification financière)</strong>
+    </div>
+    <div class="link-card">
+        🧩 <strong>Schéma Logique de l'Architecture Hybride</strong>
+    </div>
+
+    <h2>4. Modélisation et Sauvegarde des Données</h2>
+    <p>Nous utilisons une approche polyglotte : PostgreSQL pour garantir l'intégrité transactionnelle des réservations, et MongoDB pour ingérer la masse des logs générés par les capteurs IoT, évitant ainsi un goulot d'étranglement.</p>
+
+    <div class="link-card">
+        📊 <strong>Modèles de Données (UML/Merise PostgreSQL & MongoDB)</strong>
+    </div>
+    <div class="link-card">
+        💾 <strong>Stratégie de Stockage et Plan de Sauvegarde (3-2-1)</strong>
+    </div>
+
+    <div class="page-break"></div>
+
+    <h2>5. Sécurité, Gouvernance et Résilience</h2>
+    <p>La sécurité du SI et la continuité de service sont intégrées By Design. Le projet intègre une gestion complète du cycle de vie des incidents (ITIL) et un Plan de Reprise d'Activité basé sur une analyse des impacts métier.</p>
+
+    <div class="link-card">
+        🛡️ <strong>Politique de Sécurité (PSSI) — Zero Trust & IAM</strong>
+    </div>
+    <div class="link-card">
+        📉 <strong>Analyse d'Impact sur l'Activité (BIA) — Définition RTO/RPO</strong>
+    </div>
+    <div class="link-card">
+        🔄 <strong>Plan de Continuité et de Reprise d'Activité (PCA/PRA)</strong>
+    </div>
+    <div class="link-card">
+        🎫 <strong>Processus ITSM (Gestion des Incidents et Escalade)</strong>
+    </div>
+
+    <h2>6. Démarche DevOps et Suivi de Projet</h2>
+    <p>L'intégralité du code (Infrastructure as Code, Pipeline CI/CD, Application Web) est gérée sous GitHub. Le déploiement vers Azure est totalement automatisé (Zero Downtime Deployment).</p>
+
+    <div class="link-card">
+        📅 <strong>Suivi de Projet Agile (Sprints et Backlog)</strong>
+    </div>
+
+    <div class="footer">
+        <p>Smart Office 2.0 — DAT Consolidé — Valide l'ensemble des livrables de la grille UF INFRA B3</p>
+    </div>
+</div>
+
+
+    </div>
+        
+    <div class="page-break"></div>
+    <!-- SECTION: Architecture Physique -->
+    <div class="section-content">
+        <script>document.write(marked.parse(`# 🏢 Schéma d'Architecture Physique — Smart Office 2.0
+**Auteur :** Ilyes (Lead Réseau) | **Statut :** Validé  
+**Contexte :** Immeuble de 4 étages — Biotech Corp (siège social — 200 employés cible)
+
+---
+
+## 1. Vue Physique de l'Immeuble
+
+<div class="mermaid">
+graph TD
+    subgraph "🏢 Immeuble Biotech Corp — 4 Étages"
+
+        subgraph "Étage 4 — Direction & R&D"
+            E4_AP["📶 AP Wi-Fi x2"]
+            E4_SW["🔲 Switch Accès Cisco 2960 (24p)"]
+            E4_PC["💻 15 Postes (VLAN 30 R&D)"]
+            E4_PC2["💻 5 Postes Direction (VLAN 20)"]
+        end
+
+        subgraph "Étage 3 — Espaces Collaboratifs"
+            E3_AP["📶 AP Wi-Fi x3"]
+            E3_SW["🔲 Switch Accès Cisco 2960 (48p)"]
+            E3_PC["💻 40 Postes (VLAN 20 Employés)"]
+            E3_IOT["📡 Capteurs IoT salles (VLAN 50)"]
+            E3_VOIP["📞 Téléphones IP x10 (VLAN 40)"]
+        end
+
+        subgraph "Étage 2 — Open Space"
+            E2_AP["📶 AP Wi-Fi x4"]
+            E2_SW["🔲 Switch Accès Cisco 2960 (48p)"]
+            E2_PC["💻 80 Postes (VLAN 20 Employés)"]
+            E2_VOIP["📞 Téléphones IP x20 (VLAN 40)"]
+            E2_PRINT["🖨️ Imprimantes x4 (VLAN 50)"]
+        end
+
+        subgraph "Étage 1 — Accueil & Salle Serveurs"
+            E1_AP["📶 AP Wi-Fi x2 (VLAN 99 Guest)"]
+            E1_SW_CORE["⭐ Switch Cœur Cisco 3650 (L3)"]
+            E1_SW_ACC["🔲 Switch Accès Cisco 2960 (24p)"]
+            E1_PC["💻 10 Postes Accueil (VLAN 20)"]
+
+            subgraph "🔒 Salle Serveurs (Baie 42U)"
+                SRV_AD["🖥️ SRV-AD-LOCAL<br/>Windows Server 2019<br/>AD / DNS / DHCP<br/>10.10.10.10"]
+                SRV_DOCKER["🐳 SRV-DOCKER<br/>Ubuntu 22.04<br/>Docker Host<br/>10.10.10.20"]
+                SRV_ZABBIX["📊 SRV-ZABBIX<br/>Zabbix + Grafana<br/>10.10.100.10"]
+                FW_PFS["🛡️ FIREWALL<br/>pfSense (2x NIC)<br/>WAN: DHCP FAI<br/>LAN: 10.10.10.1"]
+                UPS["🔋 Onduleur APC 1500VA"]
+                NAS_BKP["💾 NAS Synology<br/>Backups BDD<br/>10.10.10.30"]
+            end
+        end
+    end
+
+    %% Câblage vertical (Backbone fibre)
+    E4_SW ---|"🔗 Fibre 10G (Trunk)"| E1_SW_CORE
+    E3_SW ---|"🔗 Fibre 10G (Trunk)"| E1_SW_CORE
+    E2_SW ---|"🔗 Fibre 10G (Trunk)"| E1_SW_CORE
+    E1_SW_ACC ---|"🔗 Cuivre 1G"| E1_SW_CORE
+
+    %% Connexions salle serveurs
+    E1_SW_CORE ---|"Trunk"| FW_PFS
+    E1_SW_CORE ---|"VLAN 10"| SRV_AD
+    E1_SW_CORE ---|"VLAN 10"| SRV_DOCKER
+    E1_SW_CORE ---|"VLAN 100"| SRV_ZABBIX
+    E1_SW_CORE ---|"VLAN 10"| NAS_BKP
+
+    %% Lien WAN
+    FW_PFS ---|"🌐 Fibre FAI 500Mbps"| INTERNET["☁️ Internet"]
+    FW_PFS -.-|"🔐 VPN IPsec"| AZURE["🟦 Azure Cloud"]
+
+    %% Styling
+    style FW_PFS fill:#e74c3c,color:#fff
+    style E1_SW_CORE fill:#f39c12,color:#fff
+    style AZURE fill:#0078d4,color:#fff
+    style INTERNET fill:#95a5a6,color:#fff
+</div>
+
+---
+
+## 2. Inventaire Matériel
+
+### 2.1 Équipements Réseau
+
+| Équipement | Modèle | Quantité | Localisation | Rôle |
+|:---|:---|:---:|:---|:---|
+| **Switch Cœur (L3)** | Cisco Catalyst 3650-48PS | 1 | Étage 1 — Baie serveurs | Routage inter-VLAN, agrégation trunk, PoE+ |
+| **Switch Accès (L2)** | Cisco Catalyst 2960-X 48p | 2 | Étages 2 et 3 | Distribution des ports, 802.1Q, PoE |
+| **Switch Accès (L2)** | Cisco Catalyst 2960-X 24p | 2 | Étages 1 et 4 | Distribution des ports, 802.1Q |
+| **Pare-feu** | pfSense (appliance) | 1 | Étage 1 — Baie serveurs | Firewall, VPN IPsec, NAT, filtrage |
+| **Bornes Wi-Fi** | Cisco Aironet / Meraki | 11 | Tous les étages | Accès WLAN, SSID par VLAN |
+| **Contrôleur WLAN** | Cisco WLC 2504 | 1 | Étage 1 — Baie serveurs | Gestion centralisée des AP |
+
+### 2.2 Serveurs
+
+| Serveur | OS | IP | RAM | Disque | Rôle |
+|:---|:---|:---|:---:|:---|:---|
+| **SRV-AD-LOCAL** | Windows Server 2019 | 10.10.10.10 | 8 Go | 120 Go SSD | AD DS, DNS, DHCP, GPO |
+| **SRV-DOCKER** | Ubuntu 22.04 LTS | 10.10.10.20 | 16 Go | 500 Go SSD | Docker Host (App, PostgreSQL, MongoDB) |
+| **SRV-ZABBIX** | Ubuntu 22.04 LTS | 10.10.100.10 | 8 Go | 250 Go SSD | Zabbix Server, Grafana |
+| **NAS-BACKUP** | Synology DS220+ | 10.10.10.30 | 2 Go | 2×4 To (RAID 1) | Sauvegarde BDD, configs pfSense |
+
+### 2.3 Câblage
+
+| Type | Usage | Débit | Localisation |
+|:---|:---|:---:|:---|
+| **Fibre OM4 (10 Gbps)** | Backbone vertical (inter-étages) | 10 Gbps | Gaines techniques |
+| **Cat 6A (Cuivre)** | Distribution horizontale (postes, AP, téléphones) | 1-10 Gbps | Chaque étage — faux plancher/chemin de câble |
+| **Fibre FAI** | Lien Internet | 500 Mbps | Étage 1 → NRO FAI |
+
+---
+
+## 3. Répartition des VLANs par Étage
+
+| Étage | VLANs actifs | Nombre de prises |
+|:---|:---|:---:|
+| **Étage 1** (Accueil + Salle serveurs) | VLAN 10 (Serveurs), VLAN 20 (Employés), VLAN 99 (Guest), VLAN 100 (Mgmt) | 40 |
+| **Étage 2** (Open Space) | VLAN 20 (Employés), VLAN 40 (VoIP), VLAN 50 (IoT/Imprimantes) | 120 |
+| **Étage 3** (Collaboratif) | VLAN 20 (Employés), VLAN 40 (VoIP), VLAN 50 (IoT capteurs) | 60 |
+| **Étage 4** (Direction + R&D) | VLAN 20 (Employés), VLAN 30 (R&D isolé) | 30 |
+
+---
+
+## 4. Alimentation Électrique et Redondance
+
+| Composant | Protection | Autonomie |
+|:---|:---|:---|
+| Baie serveurs | Onduleur APC Smart-UPS 1500VA | ~20 min en charge complète |
+| Switchs PoE | Alimentation redondante interne | N/A (PoE pour AP + téléphones) |
+| Lien FAI | Backup 4G via interface OPT1 pfSense | Illimité (forfait data) |
+
+---
+
+*Document rédigé par Ilyes (Lead Réseau & Sécurité) — Juin 2026*
+`));</script>
+    </div>
+        
+    <div class="page-break"></div>
+    <!-- SECTION: Architecture Hybride (Détail) -->
+    <div class="section-content">
+        <script>document.write(marked.parse(`# 🌐 Architecture Hybride Détaillée - Smart Office 2.0
+
+Ce schéma présente l'interconnexion entre l'infrastructure locale (On-Premise) et le Cloud Azure, avec un focus sur la segmentation réseau (VLANs/Subnets) et le placement des instances.
+
+## 📊 Schéma des Réseaux et Instances
+
+<div class="mermaid">
+graph TD
+    subgraph "🟦 CLOUD AZURE (VNet - 172.16.0.0/16)"
+        subgraph "Identity Subnet (172.16.1.0/24)"
+            DC_AZ["VM: DC-CLOUD\n(Replica AD)"]
+        end
+
+        subgraph "App Subnet (172.16.2.0/24)"
+            AZ_APP["Azure App Service\n(Node.js App)"]
+        end
+
+        subgraph "Data Subnet (172.16.3.0/24)"
+            AZ_PG["Azure DB PostgreSQL\n(Managed)"]
+        end
+
+        VGW["Azure VPN Gateway"]
+    end
+
+    subgraph "🏢 SITE LOCAL (10.10.0.0/16)"
+        subgraph "🛡️ Firewall & Gateway"
+            PFS["PfSense Firewall"]
+        end
+
+        subgraph "🖧 Segmentation VLANs"
+            subgraph "VLAN 20: Serveurs (10.10.20.0/24)"
+                DC_LOC["SRV-AD-LOCAL\n(Windows Server)"]
+                DKR["Docker Host\n(PoC Application)"]
+            SW["Switch Core"]
+        end
+
+        subgraph VLANS ["VLANs"]
+            V10["🖥️ Srv (AD, DBs, Zabbix) - VLAN 10"]
+            V20["👥 Employés - VLAN 20"]
+            V30["🧪 R&D Isolé - VLAN 30"]
+            V40["📞 VoIP - VLAN 40"]
+            V50["📡 IoT - VLAN 50"]
+            V99["🛜 Guest Wi-Fi - VLAN 99"]
+            V100["🔧 Management - VLAN 100"]
+        end
+    end
+
+    %% Interconnexions
+    PFS <== "Tunnel IPsec (S2S VPN)" ==> VGW
+    
+    PFS --- SW
+    SW --- V10
+    SW --- V20
+    SW --- V30
+    SW --- V40
+    SW --- V50
+    SW --- V99
+    SW --- V100
+    
+    %% Flux Cloud
+    VGW --- DC_AZ
+    VGW --- AZ_APP
+    AZ_APP --- AZ_PG
+    DC_AZ <-. "Réplication AD" .-> V10
+
+    %% FLUX TRANSVERSES
+    V100 -. "Supervision" .-> V10
+    AZ_APP -. "Requêtes BDD" .-> V10
+
+    %% Styling
+    style PFS fill:#f96,stroke:#333
+    style VGW fill:#f96,stroke:#333
+    style AZ_APP fill:#0078d4,stroke:#fff,color:#fff
+    style AZ_PG fill:#0078d4,stroke:#fff,color:#fff
+    style DC_AZ fill:#9f9,stroke:#333
+</div>
+
+## 📋 Inventaire Technique
+
+### 1. Documentation Applicative et Données
+*   **Bases de données polyglottes** : <strong>Modèle de données UML/Merise</strong> justifiant Postgres (relationnel) + Mongo (Time-Series).
+*   **Stratégie de stockage et sauvegarde** : NAS en local avec réplication, script automatisé, Règle du 3-2-1. Voir <strong>Stratégie de Stockage</strong>.
+
+### 2. Couche Réseau et Sécurité (Ilyes)
+*   **Plan d'adressage** : Plan IPv4 avec 8 VLANs isolés. Voir <strong>Plan d'Adressage</strong>.
+*   **Architecture Physique** : Bâtiment de 4 étages avec backbone fibre 10G. Voir <strong>Schéma Physique</strong>.
+*   **Flux et ACLs** : Politique Deny All sur pfSense, matrice de flux validée. Voir <strong>Matrice des Flux Réseau</strong>.
+*   **Réseau Sans Fil (WLAN)** : Architecture centralisée avec WLC, SSID par VLAN, sécurité 802.1X. Voir <strong>Architecture Wi-Fi</strong>.
+*   **Politique de Sécurité (PSSI)** : Zero Trust, NAC, IAM. Voir <strong>Politique de Sécurité</strong>.
+
+### 3. Couche Système & Cloud (Océane)
+*   **Hybridation Active Directory** : GPO et contrôle d'accès local sur Windows Server 2019.
+*   **Choix du Cloud** : Azure App Service + ACR, justifié par une analyse complète (TCO). Voir <strong>Analyse Comparative Cloud</strong>.
+*   **VPN IPSec** : Tunnel sécurisé IKEv2 entre pfSense et Azure VPN Gateway. Résolution de noms unifiée via Split-DNS entre le domaine local et les ressources Cloud.
+`));</script>
+    </div>
+        
+    <div class="page-break"></div>
+    <!-- SECTION: Matrice des Flux Réseau -->
+    <div class="section-content">
+        <script>document.write(marked.parse(`# 🔀 Matrice des Flux Réseau — Smart Office 2.0
+**Auteur :** Ilyes (Lead Réseau) | **Statut :** Validé
+**Contexte :** Implémentation du pare-feu pfSense en politique "Deny All" par défaut.
+
+Cette matrice documente l'ensemble des flux autorisés (ACLs) entre les différents sous-réseaux (VLANs) et les environnements extérieurs (Internet, Cloud Azure). 
+**Tout flux non explicitement autorisé dans ce tableau est bloqué par défaut.**
+
+---
+
+## 1. Plan d'Adressage (Rappel)
+
+| Zone | Sous-réseau | Description |
+|:---|:---|:---|
+| **VLAN 10** | \`10.10.10.0/24\` | Serveurs & Administration |
+| **VLAN 20** | \`10.10.20.0/24\` | Employés (Data) |
+| **VLAN 30** | \`10.10.30.0/24\` | R&D (Isolé) |
+| **VLAN 40** | \`10.10.40.0/24\` | Téléphonie IP (VoIP) |
+| **VLAN 50** | \`10.10.50.0/24\` | IoT & Imprimantes |
+| **VLAN 99** | \`10.10.99.0/24\` | Guest (Wi-Fi public) |
+| **VLAN 100** | \`10.10.100.0/24\` | Management Réseau (Zabbix, AP) |
+| **Azure VNet** | \`172.16.0.0/16\` | Ressources Cloud Azure |
+
+---
+
+## 2. Matrice des Flux Autorisés (ACLs pfSense)
+
+*Légende :* ✅ Autorisé | ❌ Bloqué par défaut
+
+| ID | Source | Destination | Port / Protocole | Action | Description / Justification |
+|:---|:---|:---|:---|:---:|:---|
+| **DNS-01** | Tous les VLANs locaux | VLAN 10 (\`10.10.10.10\` - AD) | 53 (UDP/TCP) | ✅ | Résolution DNS locale vers le contrôleur de domaine |
+| **DNS-02** | VLAN 10 (\`10.10.10.10\` - AD) | Internet (Ex: \`8.8.8.8\`) | 53 (UDP) | ✅ | Forwarding DNS pour les requêtes externes |
+| **AD-01** | VLAN 20, VLAN 30 | VLAN 10 (\`10.10.10.10\` - AD) | 88, 389, 445, 636, 3268 (TCP/UDP) | ✅ | Authentification Kerberos, LDAP, SMB (GPO) pour les postes clients |
+| **WEB-01** | VLAN 20, VLAN 30 | Internet | 80, 443 (TCP) | ✅ | Navigation Web standard pour les employés et R&D |
+| **WEB-02** | VLAN 99 (Guest) | Internet | 80, 443 (TCP) | ✅ | Accès Internet uniquement pour les invités (Isolé du LAN) |
+| **APP-01** | Tous les VLANs locaux | Azure App Service | 443 (TCP) | ✅ | Accès à l'application web Smart Office (HTTPS) |
+| **DB-01** | Azure VNet (App Web) | VLAN 10 (\`10.10.10.20\` - SRV-DOCKER) | 5432 (TCP) | ✅ | L'application cloud accède à PostgreSQL via le tunnel VPN |
+| **DB-02** | Azure VNet (App Web) | VLAN 10 (\`10.10.10.20\` - SRV-DOCKER) | 27017 (TCP) | ✅ | L'application cloud pousse les logs IoT vers MongoDB via VPN |
+| **IOT-01** | VLAN 50 (Capteurs) | VLAN 10 (\`10.10.10.20\` - SRV-DOCKER) | 27017 (TCP) | ✅ | Envoi direct de données MQTT/Mongo par les capteurs internes |
+| **MGT-01** | VLAN 10, VLAN 20 | VLAN 100 (\`10.10.100.10\` - Zabbix) | 80, 443 (TCP) | ✅ | Accès au dashboard Grafana/Zabbix par les admins |
+| **ZBX-01** | VLAN 100 (\`10.10.100.10\`) | Tous les VLANs locaux | 10050 (TCP), ICMP | ✅ | Collecte des métriques Zabbix Agent et ping |
+| **ZBX-02** | VLAN 100 (\`10.10.100.10\`) | Azure VNet (VMs) | 10050 (TCP), ICMP | ✅ | Collecte des métriques Cloud via le tunnel VPN |
+| **VOIP-01** | VLAN 40 (Téléphones) | Internet (SIP Trunk FAI) | 5060, 10000-20000 (UDP) | ✅ | Flux SIP et RTP pour la téléphonie externe |
+| **VPN-01** | pfSense (WAN) | Azure VPN Gateway (IP Pub) | 500, 4500 (UDP), ESP | ✅ | Établissement et maintien du tunnel VPN IPsec (IKEv2) |
+| **BKP-01** | VLAN 10 (\`10.10.10.20\`) | VLAN 10 (\`10.10.10.30\` - NAS) | 445, 2049, 873 (TCP) | ✅ | Dépôt des sauvegardes BDD (SMB/NFS/Rsync) sur le NAS local |
+| **BKP-02** | VLAN 10 (\`10.10.10.30\` - NAS) | Internet (Azure Blob) | 443 (TCP) | ✅ | Externalisation des sauvegardes vers le Cloud Azure |
+| **ISOL-01**| VLAN 99 (Guest) | LAN (\`10.10.0.0/16\`) | Tous (Any) | ❌ | Blocage strict des invités vers les réseaux internes |
+| **ISOL-02**| VLAN 30 (R&D) | VLAN 20 (Employés) | Tous (Any) | ❌ | Isolement du trafic R&D par rapport au reste de l'entreprise |
+
+---
+
+## 3. Paramètres Avancés pfSense
+
+### 3.1 NAT (Network Address Translation)
+- **Outbound NAT** : Activé en mode "Hybrid".
+- Translation (PAT) configurée pour les réseaux \`10.10.20.0/24\` (Employés), \`10.10.30.0/24\` (R&D), \`10.10.40.0/24\` (VoIP) et \`10.10.99.0/24\` (Guest) vers l'IP publique WAN du pfSense pour l'accès Internet.
+- **PAS de NAT** entre les réseaux locaux (VLAN 10 à 100) et le réseau Azure (\`172.16.0.0/16\`) car le tunnel IPsec gère le routage réseau-à-réseau pur (Phase 2 configurée sur ces subnets).
+
+### 3.2 Filtrage applicatif (Layer 7)
+- Utilisation de pfBlockerNG (optionnel) envisagée pour la phase de production pour bloquer les IP malveillantes connues et le trafic publicitaire/P2P sur le VLAN 99 (Guest).
+
+---
+*Fin du document.*
+`));</script>
+    </div>
+        
+    <div class="page-break"></div>
+    <!-- SECTION: Architecture Wi-Fi -->
+    <div class="section-content">
+        <script>document.write(marked.parse(`# 📶 Architecture WLAN (Wi-Fi) — Smart Office 2.0
+**Auteur :** Ilyes | **Statut :** Validé
+
+Cette section documente l'architecture du réseau sans-fil de l'entreprise, indispensable pour le travail hybride et la mobilité des collaborateurs.
+
+---
+
+## 1. Topologie Matérielle
+
+L'infrastructure Wi-Fi repose sur une architecture **centralisée** (Contrôleur WLAN) pour faciliter le roaming (itinérance) entre les étages et unifier les politiques de sécurité.
+
+*   **Contrôleur WLAN (WLC)** : 1x Cisco WLC 2504 (ou équivalent Meraki) hébergé dans la baie serveur (Étage 1) sur le VLAN de Management (VLAN 100).
+*   **Points d'Accès (Access Points - AP)** : 11x APs Cisco Aironet répartis sur les 4 étages.
+*   **Alimentation** : Tous les APs sont alimentés en **PoE+ (Power over Ethernet - 802.3at)** par les switchs d'accès Cisco 2960. Pas d'alimentation secteur nécessaire.
+
+---
+
+## 2. Radios et Canaux (Planification RF)
+
+Pour éviter les interférences (Overlap) entre les étages et offrir une haute densité :
+*   **Bande 2.4 GHz (IoT/Legacy)** : Uniquement les canaux non-recouvrants 1, 6, 11 en alternance. Puissance d'émission réduite.
+*   **Bande 5 GHz (Collaborateurs)** : Privilégiée. Utilisation de canaux larges (40 MHz) en DFS pour garantir des débits élevés aux PC portables.
+*   **Band Steering** : Activé sur le WLC pour forcer les clients compatibles à utiliser la bande 5 GHz (plus rapide, moins saturée).
+
+---
+
+## 3. Configuration des SSIDs et Sécurité
+
+Le contrôleur diffuse différents SSIDs mappés directement sur les VLANs filaires de l'entreprise.
+
+| SSID (Nom du réseau) | Bande | Authentification | Chiffrement | VLAN assigné | Rôle |
+|:---|:---:|:---|:---|:---:|:---|
+| \`Biotech-Corp\` | 5 GHz | **WPA2-Enterprise** (802.1X via RADIUS AD) | AES | VLAN 20 (Employés) | Réseau principal sécurisé. L'utilisateur utilise ses identifiants Windows. |
+| \`Biotech-R&D\` | 5 GHz | **WPA2-Enterprise** (Filtrage Groupe AD) | AES | VLAN 30 (R&D) | Réseau ultra-isolé. Seuls les membres du groupe AD "R&D" peuvent s'y connecter. |
+| \`Biotech-IoT\` | 2.4 GHz | **WPA2-PSK** (Clé pré-partagée complexe) | AES | VLAN 50 (IoT) | Pour les capteurs de présence/température ne gérant pas le 802.1X. Caches (SSID masqué). |
+| \`Biotech-Guest\` | 2.4 / 5 GHz | **Portail Captif** (Open) | None (Chiffré via HTTPS sur le Web) | VLAN 99 (Guest) | Réseau invité isolé (Accès Internet uniquement). Isolation client activée. |
+
+### 3.1 Explication du 802.1X (WPA2-Enterprise)
+Lorsqu'un employé se connecte à \`Biotech-Corp\` :
+1. Son PC contacte l'AP.
+2. L'AP relaie la requête (EAP) au serveur RADIUS (Hébergé sur le Windows Server AD local).
+3. L'AD valide le couple *Nom d'utilisateur / Mot de passe*.
+4. Si valide, l'AP autorise la connexion et place le trafic du client dans le **VLAN 20**.
+
+Cette méthode garantit la traçabilité complète des connexions et empêche le vol de clés Wi-Fi partagées.
+`));</script>
+    </div>
+        
+    <div class="page-break"></div>
+    <!-- SECTION: Analyse Comparative Cloud -->
+    <div class="section-content">
+        <script>document.write(marked.parse(`# ☁️ Analyse Comparative Cloud et TCO — Smart Office 2.0
+**Auteur :** Océane (Lead Système & Cloud) | **Statut :** Validé
+**Contexte :** Justification du choix du Cloud Provider pour l'hébergement de l'application Web (App Service) et le Registre de Conteneurs (ACR) dans le cadre de l'architecture hybride de Biotech Corp.
+
+---
+
+## 1. Analyse Comparative (Azure vs AWS vs GCP)
+
+Pour répondre au besoin d'héberger une application Node.js conteneurisée avec un VPN Site-à-Site vers notre infrastructure locale (GNS3), nous avons évalué les trois principaux fournisseurs de cloud public.
+
+| Critère | 🟦 Microsoft Azure | 🟧 Amazon Web Services (AWS) | 🟩 Google Cloud (GCP) |
+|:---|:---|:---|:---|
+| **PaaS Conteneur** | **Azure App Service** (Web App for Containers) | **Elastic Beanstalk** / ECS Fargate | **Cloud Run** |
+| Facilité de déploiement | ⭐⭐⭐⭐⭐ (Intégration native Docker Compose) | ⭐⭐⭐ (Nécessite configuration ECS/Task Definitions) | ⭐⭐⭐⭐ (Très orienté Serverless/Knative) |
+| **Registre d'images** | Azure Container Registry (ACR) | Elastic Container Registry (ECR) | Artifact Registry |
+| **VPN Site-to-Site** | Azure VPN Gateway | AWS Site-to-Site VPN | Cloud VPN |
+| Intégration AD / Identité | **Excellente** (Entra ID natif) | Bonne (AWS Directory Service) | Moyenne (Cloud Identity) |
+| **Courbe d'apprentissage** | Rapide (Documentation claire, Portail intuitif) | Lente (Interface complexe, concepts très spécifiques) | Moyenne |
+
+### 🏆 Justification du Choix : Microsoft Azure
+**Pourquoi Azure a été retenu pour le projet Smart Office 2.0 :**
+1. **PaaS App Service pour Docker Compose :** Azure propose la fonctionnalité \`Web App for Containers\` qui supporte nativement un fichier \`docker-compose.yml\`. Cela correspond parfaitement à notre architecture applicative sans avoir à basculer vers Kubernetes (trop lourd pour ce PoC).
+2. **Écosystème Microsoft :** Notre infrastructure réseau On-Premise reposant sur Windows Server 2019 (AD DS), Azure offre le meilleur potentiel d'évolution (migration future vers Entra ID hybride).
+3. **Simplicité du VPN :** Azure VPN Gateway s'intègre très facilement avec pfSense en IKEv2.
+
+---
+
+## 2. Analyse TCO (Total Cost of Ownership) sur 3 ans
+
+L'objectif de cette section est de comparer le coût de maintien d'une architecture locale (On-Premise) versus l'architecture Hybride actuelle (Serveurs locaux + App Web sur Azure).
+
+### Hypothèse de Dimensionnement (Biotech Corp)
+*   Besoin de haute disponibilité pour l'application Web (accessible 24/7 de l'extérieur).
+*   Besoin de sécurité et souveraineté pour les bases de données (restent en local).
+
+### 2.1 Option A : 100% On-Premise (Garder l'App Web en local)
+Nécessite l'achat de serveurs supplémentaires, de licences, et d'un routeur/firewall capable de gérer une forte charge externe (DMZ exposée).
+
+| Poste de dépense | Coût Année 1 (CAPEX + OPEX) | Coût Année 2 & 3 (OPEX) | Total sur 3 ans |
+|:---|:---|:---|:---|
+| Matériel (2x Serveurs Dell PowerEdge - Redondance) | 12 000 € (CAPEX) | 0 € | 12 000 € |
+| Licences (VMware/Hyper-V, Windows, Firewall avancé) | 3 500 € | 3 500 € / an | 10 500 € |
+| Énergie & Refroidissement supplémentaire | 1 800 € | 1 800 € / an | 5 400 € |
+| Bande passante Fibre (Garantie GTR 4h) | 3 600 € | 3 600 € / an | 10 800 € |
+| Temps Homme (MCO : Maintien en Condition Opérat.) | 10 000 € | 10 000 € / an | 30 000 € |
+| **TOTAL OPTION A** | **30 900 €** | **18 900 € / an** | **68 700 €** |
+
+### 2.2 Option B : Architecture Hybride (Choix du projet)
+Les bases de données restent sur l'infrastructure locale existante. Seule l'application Web et le VPN sont hébergés sur Azure (PaaS). L'investissement matériel initial est très faible.
+
+| Poste de dépense (Azure Pay-As-You-Go) | Coût Mensuel Estimé | Coût Annuel (OPEX) | Total sur 3 ans |
+|:---|:---|:---|:---|
+| **App Service Plan** (Linux B1 - Basic, scale manual) | ~12 € / mois | 144 € | 432 € |
+| **Container Registry** (Basic, 10GB storage) | ~5 € / mois | 60 € | 180 € |
+| **VPN Gateway** (VpnGw1 - 650 Mbps) | ~130 € / mois | 1 560 € | 4 680 € |
+| **Bande Passante Sortante** (Egress ~100GB/mo) | ~8 € / mois | 96 € | 288 € |
+| Temps Homme (Gestion Cloud, CI/CD automatisé) | (Inclus, réduit grâce au PaaS) | 4 000 € / an | 12 000 € |
+| **TOTAL OPTION B (Cloud Part)** | **~155 € / mois** | **5 860 € / an** | **17 580 €** |
+
+*Note : Les serveurs locaux pour l'AD et les BDD (Option B) utilisent l'infrastructure matérielle déjà amortie de l'entreprise. Le TCO met en évidence le coût de la brique "Web/Application".*
+
+### 2.3 Bilan de l'analyse TCO
+
+<div class="mermaid">
+pie title Répartition TCO (3 ans) - Économie Hybride
+    "Option A: 100% On-Premise" : 68700
+    "Option B: Hybride (Azure PaaS)" : 17580
+</div>
+
+**Conclusion de l'analyse financière :**
+L'adoption de l'architecture Hybride pour l'application Smart Office 2.0 permet une économie estimée à **74% sur 3 ans** (soit environ 51 000 € économisés) par rapport à un hébergement 100% On-Premise. 
+Les gains s'expliquent par :
+1.  **L'élimination du CAPEX** (pas de serveurs Web frontaux à acheter).
+2.  **La réduction du MCO** grâce aux services managés (PaaS), Azure gérant la maintenance de l'OS sous-jacent et du moteur Docker.
+3.  **L'agilité** : La facturation au mois permet d'arrêter les environnements de test lorsqu'ils ne sont pas utilisés.
+`));</script>
+    </div>
+        
+    <div class="page-break"></div>
+    <!-- SECTION: Modèle de Données -->
+    <div class="section-content">
+        <script>document.write(marked.parse(`# 📊 Modèles de Données UML/Merise — Smart Office 2.0
+**Auteur :** Florian (Lead Data) | **Statut :** Validé
+**Contexte :** Application de réservation de salles et de suivi de logs IoT
+
+Afin de répondre aux exigences métiers d'intégrité (réservations) et de performance (logs temps réel), l'architecture s'appuie sur un système de base de données polyglotte :
+1. **PostgreSQL** : Pour les données structurées et relationnelles (Employés, Salles, Réservations).
+2. **MongoDB** : Pour les données non structurées et les flux volumineux (Logs capteurs IoT).
+
+---
+
+## 1. Modélisation Relationnelle (PostgreSQL)
+
+Cette base de données garantit l'intégrité référentielle, la cohérence des réservations et la gestion stricte des rôles d'authentification.
+
+### 1.1 Diagramme de Classes (UML)
+
+<div class="mermaid">
+classDiagram
+    class User {
+        +Integer id
+        +String username
+        +String password
+        +String role
+        +login()
+        +logout()
+    }
+    
+    class Salle {
+        +Integer id
+        +String nom
+        +Integer capacite
+        +Boolean equipement_visio
+    }
+
+    class Reservation {
+        +Integer id
+        +String employe_nom
+        +String salle_nom
+        +DateTime date_reservation
+        +creer()
+        +annuler()
+    }
+
+    User "1" -- "*" Reservation : effectue >
+    Salle "1" -- "*" Reservation : concerne >
+</div>
+
+### 1.2 Modèle Logique de Données (MLD)
+
+*   **users** (<u>id</u>: SERIAL, username: VARCHAR(50) UNIQUE, password: VARCHAR(50), role: VARCHAR(20))
+*   **salles** (<u>id</u>: SERIAL, nom: VARCHAR(50) UNIQUE, capacite: INT, equipement_visio: BOOLEAN) *(Note : Les salles sont actuellement codées en dur dans le PoC Node.js, mais ceci représente l'évolution cible de la DB).*
+*   **reservations** (<u>id</u>: SERIAL, employe_nom: VARCHAR(100), salle_nom: VARCHAR(50), date_reservation: TIMESTAMP)
+    *   *Constraint* : FOREIGN KEY (employe_nom) REFERENCES users(username)
+    *   *Constraint* : FOREIGN KEY (salle_nom) REFERENCES salles(nom)
+
+---
+
+## 2. Modélisation NoSQL Document (MongoDB)
+
+Cette base de données est conçue pour l'ingestion à haute fréquence (High Throughput) des capteurs IoT des salles de réunion, et conserve l'historique des actions applicatives sans impacter les performances de la base transactionnelle.
+
+### 2.1 Structure du Document JSON (IotLogSchema)
+
+En NoSQL, il n'y a pas de schéma strict forcé par la base de données, mais l'application impose la structure \`Mongoose\` suivante :
+
+\`\`\`json
+{
+  "_id": "ObjectId('648a12b...9d')",
+  "salle_nom": "String (ex: 'Salle Da Vinci')",
+  "action": "String (ex: 'Création', 'Suppression', 'Mouvement Détecté')",
+  "utilisateur": "String (ex: 'employe', 'admin', 'capteur_iot_01')",
+  "timestamp": "Date (ex: ISODate('2026-06-23T14:32:00.000Z'))",
+  "__v": 0
+}
+\`\`\`
+
+### 2.2 Stratégie d'Indexation
+
+Pour optimiser l'affichage sur le Dashboard (Grafana ou interface Web) et filtrer rapidement les anomalies, les index suivants sont créés (ou recommandés) dans MongoDB :
+
+1.  **Index sur \`timestamp\` (DESC)** : Pour afficher rapidement les 10 derniers logs chronologiques dans le frontend Node.js.
+2.  **Index Composé \`[salle_nom, action]\`** : Pour permettre à Zabbix ou Grafana de compter rapidement le nombre de "Créations" pour une salle spécifique sur une période donnée.
+
+---
+
+## 3. Flux de Données et Cohérence Polyglotte
+
+<div class="mermaid">
+sequenceDiagram
+    participant User
+    participant WebApp as Application Web (Node.js)
+    participant Postgres as PostgreSQL (Relationnel)
+    participant Mongo as MongoDB (Time-Series / Logs)
+
+    User->>WebApp: 1. Demande de réservation
+    WebApp->>Postgres: 2. INSERT INTO reservations (...)
+    Postgres-->>WebApp: 3. Succès (Intégrité vérifiée)
+    
+    WebApp->>Mongo: 4. mongoose.save(IotLog: 'Création')
+    Mongo-->>WebApp: 5. Succès (Log asynchrone enregistré)
+    
+    WebApp-->>User: 6. Réservation confirmée
+</div>
+
+**Justification du choix technique :**
+En séparant les logs (Mongo) des transactions métier (Postgres), nous assurons que si le composant IoT s'emballe et génère 10 000 logs par seconde (attaque DDoS ou capteur défectueux), la base de données de réservation métier (Postgres) ne subit aucun ralentissement (Locks).
+`));</script>
+    </div>
+        
+    <div class="page-break"></div>
+    <!-- SECTION: Stratégie de Stockage -->
+    <div class="section-content">
+        <script>document.write(marked.parse(`# 🗄️ Stratégie de Stockage et de Sauvegarde
+**Auteur :** Océane & Florian | **Statut :** Validé
+
+La protection du capital de données de Biotech Corp (Comptes utilisateurs, logs IoT, historiques de réservations) nécessite une stratégie de stockage résiliente et un plan de sauvegarde automatisé.
+
+---
+
+## 1. Stratégie de Stockage
+
+### 1.1 Emplacement et Technologies
+
+L'infrastructure repose sur deux environnements de stockage distincts :
+
+| Type de Données | Localisation (On-Premise) | Technologie sous-jacente |
+|:---|:---|:---|
+| **OS et Hyperviseur (GNS3 VM)** | Serveur physique local (Host) | Disques SSD NVMe (Hautes performances, boot rapide) |
+| **Bases de données (PostgreSQL, Mongo)** | VM Docker (Volumes Persistants) | Stockage Bloc (Block Storage) local |
+| **Fichiers de sauvegarde & Configs pfSense** | NAS Synology (VLAN 10) | **NAS (Network Attached Storage)** — Disques HDD en RAID 1 (Miroir) |
+| **Images Docker (Application Web)** | Azure Container Registry (Cloud) | **Stockage Objet (Object Storage)** managé par Azure |
+
+### 1.2 Justification du choix NAS Local + Cloud
+*   **NAS Synology Local** : Offre une grande capacité de stockage à faible coût (HDD) pour les sauvegardes de premier niveau. Permet une restauration très rapide (RTO bas) en réseau local (10 Gbps). Le RAID 1 protège contre la panne d'un disque physique.
+*   **Externalisation Cloud** : Protège contre les sinistres majeurs sur le site local (Incendie, vol, ransomware qui chiffrerait le NAS).
+
+---
+
+## 2. Plan de Sauvegarde (Backup)
+
+### 2.1 Règle du "3-2-1" Appliquée
+*   **3 copies** des données (1 en production, 1 sur le NAS, 1 dans Azure Blob).
+*   **2 supports différents** (Stockage Bloc SSD local et NAS HDD).
+*   **1 sauvegarde hors-site** (Cloud Azure Storage, "Air-Gapped").
+
+### 2.2 Planification (Chron)
+
+| Ressource | Type de Sauvegarde | Fréquence | Rétention (Durée de vie) | Outil Utilisé |
+|:---|:---|:---|:---|:---|
+| **PostgreSQL** (Réservations, Users) | Complète (Dump SQL) | Quotidienne (01:00 AM) | 30 jours | \`pg_dump\` |
+| **MongoDB** (Logs IoT) | Complète (Dump BSON) | Quotidienne (02:00 AM) | 7 jours (Logs non critiques) | \`mongodump\` |
+| **pfSense** | Configuration (XML) | Hebdomadaire (Dimanche) | 3 mois | Script Auto-Backup pfSense |
+| **Active Directory** | System State (VSS) | Hebdomadaire | 4 semaines | Windows Server Backup |
+
+---
+
+## 3. Procédure Technique d'Automatisation
+
+Un script PowerShell (détaillé dans \`scripts/backup_databases.ps1\`) est exécuté chaque nuit par le Planificateur de Tâches Windows ou un Cronjob Linux sur la VM Docker.
+
+**Processus du script :**
+1.  Connexion aux conteneurs Docker (\`docker exec\`).
+2.  Génération des fichiers \`.sql\` (Postgres) et de l'archive tar.gz (Mongo).
+3.  Compression ZIP des fichiers avec un horodatage (\`YYYY-MM-DD\`).
+4.  Copie des archives sur le lecteur réseau NAS (partage SMB/NFS \`\\NAS-BACKUP\Backups\`).
+5.  *Optionnel/Évolution : Synchronisation du dossier NAS vers Azure Blob Storage.*
+`));</script>
+    </div>
+        
+    <div class="page-break"></div>
+    <!-- SECTION: Politique de Sécurité (PSSI) -->
+    <div class="section-content">
+        
+
+<div class="container">
+    <div class="header">
+        <h1>Politique de Sécurité des Systèmes d'Information (PSSI)</h1>
+        <p>Projet : <strong>Smart Office 2.0</strong> | Biotech Corp</p>
+        <p><em>Version 1.0 — Validée par la DSI</em></p>
+    </div>
+
+    <h2>1. Objectifs de la Politique de Sécurité</h2>
+    <p>Cette politique a pour but de garantir la Confidentialité, l'Intégrité, et la Disponibilité (CIA) des données et des systèmes de Biotech Corp. Elle s'appuie sur les concepts de défense en profondeur, de Zero Trust, et de moindre privilège.</p>
+
+    <h2>2. Identité et Gestion des Accès (IAM)</h2>
+    
+    <h3>2.1 Authentification Active Directory (AD)</h3>
+    <p>L'ensemble des identités des collaborateurs est géré de manière centralisée par le contrôleur de domaine Windows Server 2019 local.</p>
+    <ul>
+        <li><strong>Stratégie de Mots de passe (GPO) :</strong> Minimum 12 caractères, complexité activée (majuscules, minuscules, chiffres, caractères spéciaux), renouvellement tous les 90 jours.</li>
+        <li><strong>Verrouillage de compte :</strong> Le compte AD est verrouillé après 5 tentatives infructueuses (durée : 30 minutes).</li>
+        <li><strong>Multi-Factor Authentication (MFA) :</strong> En cours d'étude pour les accès distants via VPN client. Actuellement mis en œuvre via Azure pour l'accès aux ressources Cloud d'administration.</li>
+    </ul>
+
+    <h3>2.2 Contrôle d'Accès Basé sur les Rôles (RBAC)</h3>
+    <p>Les accès aux ressources sont strictement limités au besoin d'en connaître (Need-to-Know).</p>
+    <table>
+        <tr>
+            <th>Rôle Applicatif</th>
+            <th>Droits d'accès</th>
+            <th>Authentification</th>
+        </tr>
+        <tr>
+            <td><strong>Utilisateur (Employé)</strong></td>
+            <td>Consultation et création de réservations de salles. Accès internet filtré.</td>
+            <td>AD Local + Base de données Web</td>
+        </tr>
+        <tr>
+            <td><strong>Administrateur IT</strong></td>
+            <td>Suppression des réservations, accès Zabbix, accès serveurs via SSH/RDP.</td>
+            <td>AD Local (Groupe Admins du domaine)</td>
+        </tr>
+        <tr>
+            <td><strong>Invité (Guest)</strong></td>
+            <td>Aucun accès interne. Accès Web limité uniquement.</td>
+            <td>Portail Captif (Wi-Fi)</td>
+        </tr>
+    </table>
+
+    <div class="page-break"></div>
+
+    <h2>3. Sécurité Réseau (Approche Zero Trust)</h2>
+
+    <h3>3.1 Segmentation (VLANs) et Pare-feu</h3>
+    <div class="rule-box">
+        <strong>Règle d'Or :</strong> Le pfSense est configuré avec une règle de base <strong>"Deny All"</strong>. Tout trafic non explicitement autorisé par une ACL est bloqué et journalisé.
+    </div>
+    <p>Le réseau est micro-segmenté selon les usages métier :</p>
+    <ul>
+        <li><strong>VLAN 10 (Serveurs) :</strong> Accessible uniquement par les Administrateurs (VLAN 100).</li>
+        <li><strong>VLAN 30 (R&D) :</strong> Totalement isolé du reste de l'entreprise (VLAN 20) pour protéger la propriété intellectuelle Biotech.</li>
+        <li><strong>VLAN 50 (IoT) :</strong> Ne peut communiquer qu'avec le serveur MongoDB. Pas d'accès Internet pour éviter le piratage des capteurs.</li>
+    </ul>
+
+    <h3>3.2 Contrôle d'Accès Réseau (NAC / 802.1X)</h3>
+    <p>Les ports des switchs Cisco sont sécurisés :</p>
+    <ul>
+        <li>Authentification 802.1X via le serveur RADIUS (intégré à l'AD) avant d'attribuer le port au VLAN approprié.</li>
+        <li>Un appareil inconnu branché sur une prise murale est placé par défaut dans un VLAN de quarantaine ou le port est désactivé (port-security).</li>
+    </ul>
+
+    <h2>4. Sécurité des Données et Cryptographie</h2>
+
+    <h3>4.1 Chiffrement en Transit</h3>
+    <ul>
+        <li><strong>Flux Web :</strong> L'application web Smart Office n'est accessible que via HTTPS (TLS 1.2 minimum), certificat généré par Azure App Service.</li>
+        <li><strong>Flux Inter-Sites :</strong> Le lien entre le site local et le Cloud Azure est encapsulé dans un tunnel VPN IPsec IKEv2 avec chiffrement AES-256.</li>
+    </ul>
+
+    <h3>4.2 Chiffrement au Repos (Data at Rest)</h3>
+    <ul>
+        <li><strong>Bases de données :</strong> Les disques virtuels de la VM Docker (PostgreSQL et Mongo) sont chiffrés.</li>
+        <li><strong>Cloud :</strong> Les sauvegardes envoyées vers Azure Blob Storage sont chiffrées par défaut par la plateforme Azure (SSE - Storage Service Encryption).</li>
+    </ul>
+
+    <h2>5. Supervision et Détection (SIEM / IDS)</h2>
+    
+    <p>Afin d'identifier proactivement les menaces :</p>
+    <ul>
+        <li><strong>Monitoring :</strong> Zabbix surveille la disponibilité et la charge (CPU/RAM).</li>
+        <li><strong>Analyse de logs :</strong> pfSense journalise tous les paquets bloqués (Deny). Ces logs sont centralisés.</li>
+        <li><strong>Détection d'intrusion (IDS) :</strong> Le module Suricata (intégré au pfSense) analyse le trafic WAN/LAN en temps réel avec des signatures (Emerging Threats) pour alerter en cas de flux suspect (malware, scan de ports).</li>
+    </ul>
+
+    <h2>6. Sécurité Applicative (DevSecOps)</h2>
+
+    <p>La sécurité est intégrée au cycle de vie de développement :</p>
+    <ul>
+        <li><strong>Protection Injections SQL :</strong> L'application Node.js utilise des requêtes paramétrées (ex: <code>$1</code>) via la bibliothèque <code>pg</code>, rendant l'injection impossible.</li>
+        <li><strong>Sécurité Docker :</strong> Images construites sur Alpine (surface d'attaque réduite), ne s'exécutant pas en mode "privileged".</li>
+        <li><strong>Gestion des Secrets :</strong> Mots de passe et chaînes de connexion ne sont jamais codés en dur dans le dépôt GitHub, mais injectés en tant que variables d'environnement via GitHub Secrets et Azure App Settings.</li>
+    </ul>
+
+    <div class="footer">
+        <p>Smart Office 2.0 — Politique de Sécurité (PSSI) — Approche Zero Trust</p>
+    </div>
+</div>
+
+
+    </div>
+        
+    <div class="page-break"></div>
+    <!-- SECTION: Analyse BIA -->
+    <div class="section-content">
+        
+
+<div class="container">
+    <div class="header">
+        <h1>Analyse d'Impact sur l'Activité (BIA)</h1>
+        <p>Projet : <strong>Smart Office 2.0</strong> | Business Impact Analysis</p>
+        <p><em>Référentiel : ISO 22301 — Continuité d'activité</em></p>
+    </div>
+
+    <h2>1. Objectif de l'Analyse</h2>
+    <p>L'analyse BIA (Business Impact Analysis) a pour objectif d'identifier les processus critiques de Biotech Corp, de quantifier l'impact d'une interruption de service, et de définir les objectifs de reprise (RTO/RPO) qui guideront notre Plan de Continuité d'Activité (PCA) et notre Plan de Reprise d'Activité (PRA).</p>
+
+    <h2>2. Périmètre de l'Analyse</h2>
+    <p>L'analyse couvre l'ensemble de l'infrastructure Smart Office 2.0 :</p>
+    <ul>
+        <li><strong>Site On-Premise</strong> : Infrastructure GNS3 (Active Directory, bases de données, supervision)</li>
+        <li><strong>Site Cloud</strong> : Azure (App Service, Container Registry, pipeline CI/CD)</li>
+        <li><strong>Interconnexion</strong> : Tunnel VPN IPsec entre les deux sites</li>
+    </ul>
+
+    <h2>3. Inventaire et Classification des Actifs</h2>
+
+    <h3>3.1 Matrice de Criticité des Actifs</h3>
+    <table>
+        <tr>
+            <th>Actif</th>
+            <th>Localisation</th>
+            <th>Fonction Métier</th>
+            <th>Criticité</th>
+            <th>Impact Financier (par heure d'arrêt)</th>
+        </tr>
+        <tr>
+            <td><strong>Active Directory (Windows Server 2019)</strong></td>
+            <td>On-Premise (VLAN 10)</td>
+            <td>Authentification des employés, gestion des accès, GPO</td>
+            <td class="critical">Critique</td>
+            <td>Élevé — Aucun employé ne peut s'authentifier</td>
+        </tr>
+        <tr>
+            <td><strong>Application Web (Node.js)</strong></td>
+            <td>Azure App Service</td>
+            <td>Réservation de salles, interface métier principale</td>
+            <td class="critical">Critique</td>
+            <td>Élevé — Processus métier interrompu</td>
+        </tr>
+        <tr>
+            <td><strong>Base PostgreSQL</strong></td>
+            <td>On-Premise (Docker)</td>
+            <td>Données structurées : utilisateurs, réservations, planning</td>
+            <td class="critical">Critique</td>
+            <td>Élevé — Perte de données métier</td>
+        </tr>
+        <tr>
+            <td><strong>Tunnel VPN IPsec</strong></td>
+            <td>pfSense ↔ Azure VPN GW</td>
+            <td>Lien entre l'app Cloud et les données locales</td>
+            <td class="high">Haute</td>
+            <td>Moyen — L'app fonctionne en mode dégradé</td>
+        </tr>
+        <tr>
+            <td><strong>Base MongoDB</strong></td>
+            <td>On-Premise (Docker)</td>
+            <td>Logs IoT, historique temps-réel des événements</td>
+            <td class="medium">Moyenne</td>
+            <td>Faible — Perte de logs non critiques</td>
+        </tr>
+        <tr>
+            <td><strong>Pare-feu pfSense</strong></td>
+            <td>On-Premise</td>
+            <td>Routage inter-VLAN, sécurité périmétrique, VPN</td>
+            <td class="critical">Critique</td>
+            <td>Élevé — Isolation réseau complète</td>
+        </tr>
+        <tr>
+            <td><strong>Supervision (Zabbix + Grafana)</strong></td>
+            <td>On-Premise (Docker)</td>
+            <td>Monitoring de l'infrastructure, alertes</td>
+            <td class="medium">Moyenne</td>
+            <td>Faible — Perte de visibilité, pas d'impact direct</td>
+        </tr>
+        <tr>
+            <td><strong>Switch Cisco (Cœur de réseau)</strong></td>
+            <td>On-Premise</td>
+            <td>Switching L2/L3, trunk VLANs</td>
+            <td class="critical">Critique</td>
+            <td>Élevé — Aucune communication réseau locale</td>
+        </tr>
+        <tr>
+            <td><strong>Azure Container Registry (ACR)</strong></td>
+            <td>Azure</td>
+            <td>Stockage des images Docker de production</td>
+            <td class="low">Basse</td>
+            <td>Nul en fonctionnement — Impact uniquement sur les déploiements</td>
+        </tr>
+        <tr>
+            <td><strong>Pipeline CI/CD (GitHub Actions)</strong></td>
+            <td>GitHub Cloud</td>
+            <td>Automatisation du déploiement</td>
+            <td class="low">Basse</td>
+            <td>Nul — Déploiement manuel possible en fallback</td>
+        </tr>
+    </table>
+
+    <div class="page-break"></div>
+
+    <h2>4. Objectifs de Reprise</h2>
+
+    <h3>4.1 Définitions</h3>
+    <div class="highlight">
+        <strong>RTO (Recovery Time Objective)</strong> : Durée maximale acceptable d'interruption d'un service avant que l'impact ne devienne inacceptable.<br><br>
+        <strong>RPO (Recovery Point Objective)</strong> : Quantité maximale de données que l'on accepte de perdre, exprimée en temps (ex: RPO = 1h signifie qu'on accepte de perdre au maximum 1h de données).
+    </div>
+
+    <h3>4.2 Objectifs par Actif</h3>
+    <table>
+        <tr>
+            <th>Actif</th>
+            <th>RTO</th>
+            <th>RPO</th>
+            <th>Stratégie de Reprise</th>
+        </tr>
+        <tr>
+            <td><strong>Active Directory</strong></td>
+            <td>30 minutes</td>
+            <td>24 heures</td>
+            <td>Restauration depuis snapshot VM. Redémarrage du service ADDS.</td>
+        </tr>
+        <tr>
+            <td><strong>Application Web</strong></td>
+            <td>&lt; 5 minutes</td>
+            <td>0 (stateless)</td>
+            <td>Script <code>setup_azure.ps1</code> + redéploiement CI/CD automatique depuis l'ACR.</td>
+        </tr>
+        <tr>
+            <td><strong>PostgreSQL</strong></td>
+            <td>15 minutes</td>
+            <td>1 heure</td>
+            <td>Restauration depuis dump planifié (<code>pg_dump</code>) + volumes Docker persistants.</td>
+        </tr>
+        <tr>
+            <td><strong>MongoDB</strong></td>
+            <td>30 minutes</td>
+            <td>4 heures</td>
+            <td>Restauration depuis <code>mongodump</code>. Perte de logs IoT récents acceptée.</td>
+        </tr>
+        <tr>
+            <td><strong>Tunnel VPN</strong></td>
+            <td>10 minutes</td>
+            <td>N/A</td>
+            <td>Reconnexion automatique pfSense. Fallback : reconfiguration manuelle Phase 1/2.</td>
+        </tr>
+        <tr>
+            <td><strong>pfSense</strong></td>
+            <td>30 minutes</td>
+            <td>N/A</td>
+            <td>Restauration depuis backup XML de configuration.</td>
+        </tr>
+        <tr>
+            <td><strong>Zabbix / Grafana</strong></td>
+            <td>2 heures</td>
+            <td>24 heures</td>
+            <td><code>docker-compose up -d</code> — les données historiques sont secondaires.</td>
+        </tr>
+    </table>
+
+    <h2>5. Analyse des Scénarios de Risque</h2>
+
+    <h3>5.1 Scénario 1 : Panne du serveur On-Premise</h3>
+    <div class="alert">Probabilité : Moyenne | Impact : Critique</div>
+    <p><strong>Description</strong> : Le serveur hébergeant l'AD, Docker (PostgreSQL, MongoDB, Zabbix) tombe en panne matérielle.</p>
+    <p><strong>Impact</strong> :</p>
+    <ul>
+        <li>Authentification locale impossible (AD hors ligne)</li>
+        <li>L'app Cloud perd l'accès aux BDD → mode dégradé (retry loop)</li>
+        <li>Supervision interrompue</li>
+    </ul>
+    <p><strong>Mitigation</strong> : L'application Cloud continue de tourner grâce au mécanisme de retry. Les utilisateurs déjà authentifiés conservent leur session (cookie). Restauration via les backups et volumes Docker persistants.</p>
+
+    <h3>5.2 Scénario 2 : Cyberattaque (Ransomware)</h3>
+    <div class="alert">Probabilité : Faible | Impact : Critique</div>
+    <p><strong>Description</strong> : Un ransomware chiffre les données du serveur local.</p>
+    <p><strong>Impact</strong> : Perte totale des données si les backups sont également compromis.</p>
+    <p><strong>Mitigation</strong> :</p>
+    <ul>
+        <li>Sauvegardes externalisées (hors réseau local) sur Azure Blob Storage</li>
+        <li>Segmentation réseau (les VLANs limitent la propagation latérale)</li>
+        <li>pfSense en politique Deny All réduit la surface d'attaque</li>
+        <li>Restauration depuis les dumps externalisés (RPO selon fréquence de backup)</li>
+    </ul>
+
+    <h3>5.3 Scénario 3 : Panne du fournisseur Cloud (Azure)</h3>
+    <div class="alert">Probabilité : Très faible | Impact : Haute</div>
+    <p><strong>Description</strong> : La région Azure France Central subit une panne majeure.</p>
+    <p><strong>Impact</strong> : L'application web est inaccessible. Les données locales restent intactes.</p>
+    <p><strong>Mitigation</strong> : Le script <code>setup_azure.ps1</code> permet de recréer l'infrastructure sur une autre région en &lt; 5 minutes. L'image Docker est stockée dans l'ACR (répliqué par Azure).</p>
+
+    <h3>5.4 Scénario 4 : Coupure du lien VPN</h3>
+    <div class="alert">Probabilité : Haute | Impact : Moyenne</div>
+    <p><strong>Description</strong> : Le tunnel IPsec entre pfSense et Azure tombe.</p>
+    <p><strong>Impact</strong> : L'app Cloud ne peut plus joindre les bases de données locales. Les requêtes sont mises en attente (retry logic).</p>
+    <p><strong>Mitigation</strong> : Reconnexion automatique configurée sur pfSense. DPD (Dead Peer Detection) avec intervalle de 10 secondes. Le service reprend automatiquement dès le rétablissement du tunnel.</p>
+
+    <h3>5.5 Scénario 5 : Panne FAI (perte de connectivité Internet)</h3>
+    <div class="alert">Probabilité : Moyenne | Impact : Haute</div>
+    <p><strong>Description</strong> : Le fournisseur d'accès Internet du siège est en panne.</p>
+    <p><strong>Impact</strong> : Le VPN tombe (même impact que le scénario 4). Les employés sur site perdent l'accès à Internet et à l'application Cloud. L'AD local reste fonctionnel pour l'authentification interne.</p>
+    <p><strong>Mitigation</strong> : Prévoir un lien FAI secondaire (4G/5G backup) sur le pfSense. L'application locale (Docker Compose) peut être activée en mode standalone.</p>
+
+    <div class="page-break"></div>
+
+    <h2>6. Matrice des Risques</h2>
+    <table>
+        <tr>
+            <th>Scénario</th>
+            <th>Probabilité</th>
+            <th>Impact</th>
+            <th>Niveau de Risque</th>
+            <th>Traitement</th>
+        </tr>
+        <tr>
+            <td>Panne serveur On-Premise</td>
+            <td>Moyenne</td>
+            <td>Critique</td>
+            <td class="high">Élevé</td>
+            <td>Réduction (backups, volumes persistants)</td>
+        </tr>
+        <tr>
+            <td>Cyberattaque (Ransomware)</td>
+            <td>Faible</td>
+            <td>Critique</td>
+            <td class="high">Élevé</td>
+            <td>Réduction (segmentation, backups externalisés)</td>
+        </tr>
+        <tr>
+            <td>Panne Azure</td>
+            <td>Très faible</td>
+            <td>Haute</td>
+            <td class="medium">Moyen</td>
+            <td>Transfert (IaC multi-région)</td>
+        </tr>
+        <tr>
+            <td>Coupure VPN</td>
+            <td>Haute</td>
+            <td>Moyenne</td>
+            <td class="medium">Moyen</td>
+            <td>Réduction (reconnexion auto, retry logic)</td>
+        </tr>
+        <tr>
+            <td>Panne FAI</td>
+            <td>Moyenne</td>
+            <td>Haute</td>
+            <td class="high">Élevé</td>
+            <td>Réduction (lien 4G backup)</td>
+        </tr>
+    </table>
+
+    <h2>7. Synthèse et Recommandations</h2>
+    <ul>
+        <li><strong>Priorité 1</strong> : Mettre en place des sauvegardes automatisées externalisées (pg_dump + mongodump vers Azure Blob Storage) pour respecter les RPO définis.</li>
+        <li><strong>Priorité 2</strong> : Documenter et tester les procédures de restauration au moins une fois par trimestre.</li>
+        <li><strong>Priorité 3</strong> : Envisager un lien FAI secondaire (4G) pour la haute disponibilité du tunnel VPN.</li>
+        <li><strong>Priorité 4</strong> : Mettre en place un outil de détection des anomalies (Suricata/Wazuh) pour anticiper les cyberattaques.</li>
+    </ul>
+
+    <div class="footer">
+        <p>Smart Office 2.0 — Analyse BIA (Business Impact Analysis) — Conforme ISO 22301</p>
+    </div>
+</div>
+
+
+    </div>
+        
+    <div class="page-break"></div>
+    <!-- SECTION: PCA / PRA -->
+    <div class="section-content">
+        
+
+<div class="container">
+    <div class="header">
+        <h1>Plan de Continuité & Reprise d'Activité</h1>
+        <p>Projet : <strong>Smart Office 2.0</strong> | Basé sur les Scripts d'Automatisation Existants</p>
+    </div>
+
+    <h2>1. Contexte Hybride et Analyse des Risques</h2>
+    <p>Notre architecture scinde l'application en deux zones physiques : le Node.js sur Azure et les bases PostgreSQL/MongoDB sur notre réseau GNS3 On-Premise. Le point de faiblesse principal est le tunnel VPN IPsec reliant ces deux zones.</p>
+    <div class="highlight">
+        <strong>Document de Référence :</strong> Les scénarios de risque, l'inventaire des actifs critiques et les objectifs de reprise (RTO/RPO) sont détaillés dans l'<strong><strong>Analyse d'Impact sur l'Activité (BIA)</strong></strong>.
+    </div>
+    
+    <h2>2. Plan de Continuité d'Activité (PCA)</h2>
+    <p>Le PCA documente la résilience (comment le système survit aux pannes transitoires) :</p>
+    
+    <h3>2.1 Résilience au niveau de l'Application (Node.js)</h3>
+    <ul>
+        <li><strong>Infrastructure as Code Cloud :</strong> Si l'Azure App Service subit un crash matériel chez Microsoft, l'image Docker hébergée en sécurité dans l'ACR est automatiquement relancée par la plateforme (Zero Downtime).</li>
+        <li><strong>Gestion des coupures VPN (Recursive Retry) :</strong> Le code source Node.js de l'équipe contient des mécanismes de "Retry". Si le VPN est instable et que le conteneur perd l'accès au PostgreSQL local (VLAN 10), l'API ne crashe pas définitivement mais boucle en attente du retour de la liaison.</li>
+    </ul>
+
+    <h3>2.2 Sauvegarde Automatisée des Coûts (FinOps)</h3>
+    <p>Notre PCA inclut aussi une continuité financière. L'équipe a codé des scripts PowerShell (<code>pause_azure.ps1</code> et <code>resume_azure.ps1</code>) permettant de geler les ressources Cloud la nuit pour économiser le budget sans perdre la configuration du Web App.</p>
+
+    <div class="page-break"></div>
+
+    <h2>3. Plan de Reprise d'Activité (PRA)</h2>
+    <p>En cas de sinistre majeur affectant l'intégrité de nos deux environnements (Cloud et Local).</p>
+
+    <div class="alert">
+        PRA - Incident Majeur Azure (Ex: Suppression accidentelle du Resource Group)
+    </div>
+    <p>Si la zone Cloud Azure est totalement détruite, le RTO (Recovery Time Objective) est de <strong>moins de 5 minutes</strong>. Procédure :</p>
+    <ol>
+        <li>Un administrateur lance le script <code>.\scripts\setup_azure.ps1</code> fourni dans le dépôt GitHub.</li>
+        <li>Ce script utilise Azure CLI pour re-créer instantanément le Resource Group, le Container Registry (ACR), l'App Service Plan (B1 Linux) et le Web App.</li>
+        <li>Il relance le workflow GitHub Actions pour re-pousser la dernière image Docker valide dans le nouvel ACR. L'application est de nouveau en ligne.</li>
+    </ol>
+
+    <div class="alert">
+        PRA - Incident Majeur On-Premise (Corruption BDD)
+    </div>
+    <p>Puisque nos bases PostgreSQL et MongoDB tournent sur nos serveurs locaux, nos données ne dépendent pas d'Azure.</p>
+    <div class="highlight">
+        Procédure de Restauration Locale :
+        Nous utilisons des dumps planifiés localement via le <strong>Plan de Sauvegarde Automatisé</strong>. Si la base PostgreSQL locale crashe, l'administrateur restaure le volume Docker local (`pgdata`) ou réinjecte un fichier SQL de dump compressé provenant du NAS de sauvegarde.
+    </div>
+
+    <h2>4. Gestion des Incidents Majeurs</h2>
+    <p>Toute activation du PRA doit suivre la procédure d'escalade définie dans notre référentiel ITSM.</p>
+    <div class="highlight">
+        <strong>Document de Référence :</strong> Le flux de résolution, la classification des incidents (P1 à P4) et la chaîne d'escalade sont documentés dans le <strong><strong>Processus de Gestion des Incidents (ITSM)</strong></strong>.
+    </div>
+
+    <div class="footer">
+        <p>Smart Office 2.0 - Gestion des Risques et Résilience - Mise à jour Factuelle</p>
+    </div>
+</div>
+
+
+    </div>
+        
+    <div class="page-break"></div>
+    <!-- SECTION: Processus ITSM -->
+    <div class="section-content">
+        
+
+<div class="container">
+    <div class="header">
+        <h1>Processus de Gestion des Incidents (ITSM)</h1>
+        <p>Projet : <strong>Smart Office 2.0</strong> | Référentiel ITIL v4</p>
+        <p><em>Gestion des incidents, escalade et tableau de bord</em></p>
+    </div>
+
+    <h2>1. Cadre et Objectifs</h2>
+    <p>Ce document décrit le processus de gestion des incidents de l'infrastructure Smart Office 2.0, conforme aux bonnes pratiques <strong>ITIL v4</strong>. L'objectif est de restaurer le service normal le plus rapidement possible en minimisant l'impact sur les activités métier de Biotech Corp.</p>
+
+    <h3>1.1 Périmètre</h3>
+    <ul>
+        <li>Infrastructure réseau On-Premise (GNS3 / pfSense / Switch Cisco)</li>
+        <li>Services systèmes (Active Directory, DNS, DHCP)</li>
+        <li>Infrastructure Cloud Azure (App Service, ACR, VPN Gateway)</li>
+        <li>Bases de données (PostgreSQL, MongoDB)</li>
+        <li>Monitoring (Zabbix, Grafana)</li>
+    </ul>
+
+    <h2>2. Classification des Incidents</h2>
+
+    <h3>2.1 Niveaux de Priorité</h3>
+    <table>
+        <tr>
+            <th>Priorité</th>
+            <th>Nom</th>
+            <th>Définition</th>
+            <th>Temps de Réponse</th>
+            <th>Temps de Résolution</th>
+            <th>Exemple</th>
+        </tr>
+        <tr>
+            <td class="p1">P1</td>
+            <td><strong>Critique</strong></td>
+            <td>Service complètement indisponible. Impact sur l'ensemble des utilisateurs.</td>
+            <td>15 minutes</td>
+            <td>1 heure</td>
+            <td>AD hors ligne, pfSense en panne, app web down</td>
+        </tr>
+        <tr>
+            <td class="p2">P2</td>
+            <td><strong>Majeur</strong></td>
+            <td>Service dégradé. Fonctionnalités principales impactées.</td>
+            <td>30 minutes</td>
+            <td>4 heures</td>
+            <td>VPN coupé, PostgreSQL lent, CI/CD cassé</td>
+        </tr>
+        <tr>
+            <td class="p3">P3</td>
+            <td><strong>Mineur</strong></td>
+            <td>Impact limité sur un nombre réduit d'utilisateurs.</td>
+            <td>2 heures</td>
+            <td>8 heures</td>
+            <td>Grafana indisponible, logs MongoDB manquants</td>
+        </tr>
+        <tr>
+            <td class="p4">P4</td>
+            <td><strong>Information</strong></td>
+            <td>Demande d'information ou amélioration. Pas d'impact immédiat.</td>
+            <td>24 heures</td>
+            <td>5 jours</td>
+            <td>Demande de nouveau compte, ajout d'un VLAN</td>
+        </tr>
+    </table>
+
+    <h3>2.2 Matrice Urgence × Impact</h3>
+    <table>
+        <tr>
+            <th></th>
+            <th>Impact Critique</th>
+            <th>Impact Élevé</th>
+            <th>Impact Moyen</th>
+            <th>Impact Faible</th>
+        </tr>
+        <tr>
+            <td><strong>Urgence Haute</strong></td>
+            <td class="p1">P1</td>
+            <td class="p1">P1</td>
+            <td class="p2">P2</td>
+            <td class="p3">P3</td>
+        </tr>
+        <tr>
+            <td><strong>Urgence Moyenne</strong></td>
+            <td class="p1">P1</td>
+            <td class="p2">P2</td>
+            <td class="p3">P3</td>
+            <td class="p4">P4</td>
+        </tr>
+        <tr>
+            <td><strong>Urgence Basse</strong></td>
+            <td class="p2">P2</td>
+            <td class="p3">P3</td>
+            <td class="p4">P4</td>
+            <td class="p4">P4</td>
+        </tr>
+    </table>
+
+    <div class="page-break"></div>
+
+    <h2>3. Workflow de Gestion d'un Incident</h2>
+
+    <div class="workflow">
+        <strong>Flux de traitement d'un incident :</strong><br><br>
+        <code>📩 Détection</code> → <code>📋 Enregistrement</code> → <code>🏷️ Classification</code> → <code>🔍 Diagnostic</code> → <code>🔧 Résolution</code> → <code>✅ Clôture</code><br><br>
+        En cas d'échec au diagnostic : <code>⬆️ Escalade</code> vers le niveau supérieur.
+    </div>
+
+    <h3>3.1 Détection</h3>
+    <p>Les incidents peuvent être détectés par :</p>
+    <ul>
+        <li><strong>Automatiquement</strong> : Alertes Zabbix (CPU &gt; 90%, service down, perte de ping), triggers configurés</li>
+        <li><strong>Manuellement</strong> : Signalement par un utilisateur via email ou Teams</li>
+        <li><strong>Proactivement</strong> : Revue des dashboards Grafana lors des rondes quotidiennes</li>
+    </ul>
+
+    <h3>3.2 Enregistrement (Ticketing)</h3>
+    <p>Chaque incident est enregistré dans un système de ticketing avec les informations suivantes :</p>
+    <table>
+        <tr>
+            <th>Champ</th>
+            <th>Description</th>
+            <th>Exemple</th>
+        </tr>
+        <tr><td>ID Ticket</td><td>Identifiant unique auto-généré</td><td>INC-2026-0042</td></tr>
+        <tr><td>Date/Heure</td><td>Horodatage de la détection</td><td>2026-06-23 14:32:00</td></tr>
+        <tr><td>Source</td><td>Zabbix / Utilisateur / Ronde</td><td>Zabbix (trigger #1205)</td></tr>
+        <tr><td>Catégorie</td><td>Réseau / Système / Application / BDD</td><td>Application</td></tr>
+        <tr><td>Description</td><td>Détail du symptôme observé</td><td>App web retourne HTTP 502</td></tr>
+        <tr><td>Priorité</td><td>P1 / P2 / P3 / P4</td><td>P1 - Critique</td></tr>
+        <tr><td>Assigné à</td><td>Membre de l'équipe responsable</td><td>Mehdi (DevOps)</td></tr>
+        <tr><td>Statut</td><td>Ouvert / En cours / Résolu / Clos</td><td>Ouvert</td></tr>
+    </table>
+
+    <h3>3.3 Procédure d'Escalade</h3>
+    <table>
+        <tr>
+            <th>Niveau</th>
+            <th>Responsable</th>
+            <th>Compétences</th>
+            <th>Conditions d'Escalade</th>
+        </tr>
+        <tr>
+            <td><strong>Niveau 1 (N1)</strong><br>Support de proximité</td>
+            <td>Tout membre de l'équipe en astreinte</td>
+            <td>Diagnostic initial, redémarrage de services, vérification des logs</td>
+            <td>Escalade vers N2 si non résolu en 15 min (P1) ou 1h (P2)</td>
+        </tr>
+        <tr>
+            <td><strong>Niveau 2 (N2)</strong><br>Support spécialisé</td>
+            <td>Expert du domaine concerné :
+                <br>• <strong>Mehdi</strong> : App, Docker, CI/CD
+                <br>• <strong>Ilyes</strong> : Réseau, pfSense, VPN
+                <br>• <strong>Océane</strong> : AD, Systèmes, Azure
+                <br>• <strong>Florian</strong> : BDD, Monitoring
+            </td>
+            <td>Analyse approfondie, modification de configuration, restauration de service</td>
+            <td>Escalade vers N3 si non résolu dans les délais SLA</td>
+        </tr>
+        <tr>
+            <td><strong>Niveau 3 (N3)</strong><br>Escalade hiérarchique</td>
+            <td>Chef de projet + équipe complète</td>
+            <td>Décision d'activer le PRA, communication de crise, coordination multi-équipes</td>
+            <td>Activation du PRA si l'impact dépasse le RTO défini dans le BIA</td>
+        </tr>
+    </table>
+
+    <div class="page-break"></div>
+
+    <h2>4. Tableau de Bord de Suivi des Incidents</h2>
+
+    <h3>4.1 KPIs (Indicateurs Clés de Performance)</h3>
+    <table>
+        <tr>
+            <th>KPI</th>
+            <th>Description</th>
+            <th>Objectif</th>
+            <th>Fréquence de mesure</th>
+        </tr>
+        <tr>
+            <td><strong>MTTR</strong> (Mean Time To Repair)</td>
+            <td>Temps moyen de résolution d'un incident</td>
+            <td>&lt; 2 heures (P1/P2)</td>
+            <td>Mensuelle</td>
+        </tr>
+        <tr>
+            <td><strong>MTBF</strong> (Mean Time Between Failures)</td>
+            <td>Temps moyen entre deux pannes d'un même composant</td>
+            <td>&gt; 720 heures (30 jours)</td>
+            <td>Mensuelle</td>
+        </tr>
+        <tr>
+            <td><strong>Taux de disponibilité</strong></td>
+            <td>Pourcentage de temps où le service est fonctionnel</td>
+            <td>&gt; 99.5%</td>
+            <td>Mensuelle</td>
+        </tr>
+        <tr>
+            <td><strong>Taux de résolution N1</strong></td>
+            <td>Pourcentage d'incidents résolus sans escalade</td>
+            <td>&gt; 60%</td>
+            <td>Mensuelle</td>
+        </tr>
+        <tr>
+            <td><strong>Nombre d'incidents / mois</strong></td>
+            <td>Volume total d'incidents enregistrés</td>
+            <td>Tendance à la baisse</td>
+            <td>Mensuelle</td>
+        </tr>
+    </table>
+
+    <h3>4.2 Exemple de Tableau de Bord Mensuel</h3>
+    <table>
+        <tr>
+            <th>Mois</th>
+            <th>Incidents P1</th>
+            <th>Incidents P2</th>
+            <th>Incidents P3/P4</th>
+            <th>MTTR (P1)</th>
+            <th>Disponibilité</th>
+        </tr>
+        <tr><td>Avril 2026</td><td>1</td><td>3</td><td>7</td><td>45 min</td><td>99.7%</td></tr>
+        <tr><td>Mai 2026</td><td>0</td><td>2</td><td>5</td><td>N/A</td><td>99.9%</td></tr>
+        <tr><td>Juin 2026</td><td>1</td><td>1</td><td>4</td><td>22 min</td><td>99.8%</td></tr>
+    </table>
+
+    <h2>5. Exemple de Traitement d'Incident</h2>
+
+    <div class="highlight">
+        <strong>🎫 INC-2026-0042 — Application Web inaccessible (HTTP 502)</strong><br><br>
+        <strong>Détection</strong> : 23/06/2026 14:32 — Alerte Zabbix : "Web check failed on smartoffice-poc-app.azurewebsites.net"<br>
+        <strong>Classification</strong> : P1 — Impact Critique / Urgence Haute<br>
+        <strong>Assignation N1</strong> : Florian (astreinte) — Vérification des logs → App Service redémarré, problème persiste<br>
+        <strong>Escalade N2</strong> : 14:47 — Mehdi (DevOps) — Analyse des logs Docker → Image corrompue dans l'ACR<br>
+        <strong>Résolution</strong> : 14:58 — Redéploiement de l'image précédente via <code>az webapp config set --docker-custom-image-name smartofficepoc7368.azurecr.io/smartoffice-web:previous</code><br>
+        <strong>Clôture</strong> : 15:05 — Service restauré. Durée totale : 33 minutes. RTO respecté (&lt; 1h).<br>
+        <strong>Post-mortem</strong> : Ajout d'un test de santé dans le pipeline CI/CD pour valider l'image avant déploiement.
+    </div>
+
+    <h2>6. Outils Utilisés</h2>
+    <table>
+        <tr>
+            <th>Fonction</th>
+            <th>Outil</th>
+            <th>Rôle dans le processus ITSM</th>
+        </tr>
+        <tr>
+            <td>Détection</td>
+            <td>Zabbix + Grafana</td>
+            <td>Monitoring proactif, alertes automatiques, dashboards</td>
+        </tr>
+        <tr>
+            <td>Ticketing</td>
+            <td>GitHub Issues / Trello</td>
+            <td>Enregistrement, suivi et historique des incidents</td>
+        </tr>
+        <tr>
+            <td>Communication</td>
+            <td>Microsoft Teams</td>
+            <td>Canal #incidents pour la coordination en temps réel</td>
+        </tr>
+        <tr>
+            <td>Documentation</td>
+            <td>Dépôt Git (docs/)</td>
+            <td>Base de connaissances, procédures de résolution</td>
+        </tr>
+    </table>
+
+    <div class="footer">
+        <p>Smart Office 2.0 — Processus ITSM (Gestion des Incidents) — Référentiel ITIL v4</p>
+    </div>
+</div>
+
+
+    </div>
+        
+</div>
+</body>
+</html>

@@ -136,7 +136,7 @@ services:
       - ZBX_SERVER_HOST=zabbix-server
       - PHP_TZ=Europe/Paris
     ports:
-      - "8080:8080" # Interface web Zabbix sur http://localhost:8080
+      - "8085:8080" # Interface web Zabbix sur http://localhost:8085
     networks:
       - smartoffice-net
     restart: unless-stopped
