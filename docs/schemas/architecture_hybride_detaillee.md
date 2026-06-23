@@ -31,6 +31,7 @@ graph TD
             subgraph "VLAN 20: Serveurs (10.10.20.0/24)"
                 DC_LOC["SRV-AD-LOCAL\n(Windows Server)"]
                 DKR["Docker Host\n(PoC Application)"]
+            end
             SW["Switch Core"]
         end
 
