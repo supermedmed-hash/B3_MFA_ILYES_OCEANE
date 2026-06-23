@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Smart Office 2.0 - Keynote B3</title>
+  
+  <!-- Reveal.js CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.min.css">
+  
+  <!-- Apple-like Font (Inter) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Custom Apple Style Design */
+    .reveal {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #000000; /* Deep black */
+    }
+    
+    .reveal h1, .reveal h2, .reveal h3 {
+      font-family: 'Inter', -apple-system, sans-serif;
+      font-weight: 800;
+      text-transform: none;
+      letter-spacing: -0.03em;
+      margin-bottom: 10px;
+    }
+    
+    /* Apple Gradient Text */
+    .gradient-text {
+      background: -webkit-linear-gradient(45deg, #0A84FF, #30D158);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+    }
+    
+    .gradient-text-red {
+      background: -webkit-linear-gradient(45deg, #FF453A, #FF9F0A);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+    }
+
+    .apple-subtitle {
+      color: #86868b;
+      font-weight: 500;
+      font-size: 1.3em;
+      margin-top: 10px;
+      letter-spacing: -0.01em;
+    }
+    
+    .slide-image {
+      border-radius: 20px;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+      transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+      margin-top: 40px !important;
+    }
+    
+    .slide-image:hover {
+      transform: scale(1.03);
+    }
+    
+    .reveal ul {
+      list-style-type: none;
+      text-align: center;
+      margin-top: 40px;
+    }
+    
+    .reveal li {
+      color: #F5F5F7;
+      font-weight: 500;
+      font-size: 1.4em;
+      margin-bottom: 25px;
+      padding: 15px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+    }
+    
+    .big-number {
+      font-size: 4em !important;
+      font-weight: 900;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- Slide 1: Intro -->
+      <section data-auto-animate data-transition="fade">
+        <h1 style="font-size: 4.5em;">Smart Office <span class="gradient-text">2.0</span></h1>
+        <p class="apple-subtitle fragment fade-up">L'infrastructure de demain, aujourd'hui.</p>
+        <p class="fragment fade-up" style="font-size: 0.6em; color: #555; margin-top: 60px;">Océane, Florian, Ilyes, Mehdi</p>
+        <aside class="notes">
+          [Océane] Bonjour à tous et merci de nous recevoir. Nous sommes l'équipe en charge de la transformation numérique de Biotech Corp. Aujourd'hui, nous allons vous présenter le socle technologique du projet 'Smart Office 2.0'. L'entreprise passant de 50 à 200 collaborateurs avec une forte culture du télétravail, notre mission a été de concevoir une infrastructure à la fois scalable, hyper-sécurisée et résiliente. Nous allons vous démontrer comment nous avons répondu à ce cahier des charges exigeant.
+        </aside>
+      </section>
+
+      <!-- Slide 2: Hybride -->
+      <section data-auto-animate data-transition="slide">
+        <h2>L'Architecture <span class="gradient-text">Hybride</span></h2>
+        <p class="apple-subtitle fragment fade-up">Le meilleur des deux mondes.</p>
+        <img src="hybrid_cloud_concept.png" class="slide-image fragment fade-up" style="max-height: 400px;">
+        <aside class="notes">
+          [Océane] Face à l'hyper-croissance de Biotech Corp, le 100% local n'était plus viable financièrement, et le 100% Cloud posait des problèmes de souveraineté des données de R&D. Nous avons donc opté pour une approche Hybride.
+Comme vous le voyez sur ce schéma conceptuel, nous conservons nos serveurs critiques 'On-Premise' pour la sécurité. En revanche, l'application métier Web est déportée sur le Cloud Microsoft Azure via le service PaaS 'App Service'. Notre analyse TCO le prouve : cette hybridation nous fait économiser près de 74% des coûts.
+        </aside>
+      </section>
+
+      <!-- Slide 3: Réseau -->
+      <section data-auto-animate data-transition="slide">
+        <h2>Réseau & <span class="gradient-text">Connectivité</span></h2>
+        <ul>
+          <li class="fragment fade-up">Tunnel VPN IPsec IKEv2</li>
+          <li class="fragment fade-up">Segmentation VLANs (Employés, R&D)</li>
+          <li class="fragment fade-up">Wi-Fi 802.1X & Active Directory</li>
+        </ul>
+        <aside class="notes">
+          [Ilyes] Merci Océane. Le cœur de notre hybridation repose sur un tunnel VPN IPsec IKEv2 monté entre notre pare-feu local pfSense et la passerelle Azure. C'est ce tunnel qui permet à l'application Cloud de requêter nos bases locales de manière transparente et sécurisée.
+Côté LAN, nous avons structuré le réseau en VLANs stricts : le VLAN 20 pour les employés, et un VLAN 30 ultra-isolé pour la R&D.
+        </aside>
+      </section>
+
+      <!-- Slide 4: Zero Trust -->
+      <section data-auto-animate data-transition="slide">
+        <h2 style="font-size: 3.5em;">Zero <span class="gradient-text-red">Trust</span></h2>
+        <p class="apple-subtitle fragment fade-in">Never trust, always verify.</p>
+        <ul style="margin-top: 50px;">
+          <li class="fragment fade-left" style="background: rgba(255,69,58,0.1);">Pare-feu pfSense en 'Default Deny'</li>
+          <li class="fragment fade-left" style="background: rgba(255,69,58,0.1);">Aucune communication Employés ➔ R&D</li>
+          <li class="fragment fade-left" style="background: rgba(255,69,58,0.1);">Accès distants VPN chiffrés de bout en bout</li>
+        </ul>
+        <aside class="notes">
+          [Ilyes] Notre politique de sécurité est dictée par le modèle Zero Trust. Le pare-feu pfSense agit en 'Default Deny'. Par exemple, le réseau des employés ne peut techniquement pas atteindre le réseau de la R&D.
+De plus, face aux risques de cyberattaques et aux exigences du télétravail, nous avons implémenté des accès distants sécurisés via OpenVPN pour nos collaborateurs, avec une authentification forte.
+        </aside>
+      </section>
+
+      <!-- Slide 5: DevOps -->
+      <section data-auto-animate data-transition="slide">
+        <h2>L'Usine <span class="gradient-text">DevOps</span></h2>
+        <img src="smart_office_infra.png" class="slide-image fragment zoom-in" style="max-height: 400px;">
+        <p class="fragment fade-up apple-subtitle" style="margin-top: 20px;">Zero Downtime Deployment via GitHub & Azure.</p>
+        <aside class="notes">
+          [Mehdi] Pour soutenir cette infrastructure moderne, nous avons adopté une démarche DevOps complète. Notre application métier est conteneurisée avec Docker. Cela garantit une portabilité parfaite.
+Le déploiement est entièrement automatisé via des pipelines CI/CD sur GitHub Actions. À chaque commit, une nouvelle image est générée, poussée dans notre registre Azure (ACR), et déployée en 'Zero Downtime' sur l'App Service Azure.
+        </aside>
+      </section>
+
+      <!-- Slide 6: Data -->
+      <section data-auto-animate data-transition="slide">
+        <h2>Data & <span class="gradient-text">Sauvegarde</span></h2>
+        <p class="apple-subtitle fragment fade-up">PostgreSQL & MongoDB</p>
+        <h3 class="fragment zoom-in big-number gradient-text-red">3-2-1</h3>
+        <p class="fragment fade-up apple-subtitle">La règle d'or de la résilience.</p>
+        <aside class="notes">
+          [Mehdi] Côté données, nous utilisons une approche polyglotte : PostgreSQL pour garantir l'intégrité de nos réservations, et MongoDB pour absorber le flux massif de logs de nos capteurs IoT.
+Pour protéger ces données vitales, nous appliquons la règle de sauvegarde du 3-2-1 : 3 copies des données, sur 2 supports différents (NAS Synology en RAID et disques SSD locaux), dont 1 copie externalisée et immuable sur un stockage Cloud Azure.
+        </aside>
+      </section>
+
+      <!-- Slide 7: Supervision -->
+      <section data-auto-animate data-transition="slide">
+        <h2>Le <span class="gradient-text">Cockpit</span></h2>
+        <p class="apple-subtitle">Supervision & Observabilité</p>
+        <img src="supervision_dashboard.png" class="slide-image fragment fade-up" style="max-height: 400px; width: 800px; object-fit: cover;">
+        <aside class="notes">
+          [Florian] Bien sûr, une telle infrastructure nécessite un monitoring proactif. Nous avons déployé une stack de supervision double : Zabbix pour l'IT, et Grafana pour le management et la data.
+Comme vous le voyez sur cette maquette, Zabbix scrute l'état du tunnel VPN et la charge de nos VM. Si le tunnel VPN IPsec tombe, des alertes sont remontées automatiquement. Grafana, quant à lui, est directement pluggé sur notre base MongoDB pour afficher en temps réel l'utilisation des locaux connectés.
+        </aside>
+      </section>
+
+      <!-- Slide 8: ITSM -->
+      <section data-auto-animate data-transition="slide">
+        <h2>Résilience & <span class="gradient-text">PRA</span></h2>
+        <ul style="margin-top: 50px;">
+          <li class="fragment fade-up">Analyse d'Impact (BIA)</li>
+          <li class="fragment fade-up">Objectif RTO : <strong class="gradient-text-red">4 heures</strong></li>
+          <li class="fragment fade-up">Processus structurés ITSM</li>
+        </ul>
+        <aside class="notes">
+          [Florian] Enfin, la technique ne suffit pas sans processus. Nous avons structuré la gestion des incidents (ITSM) et réalisé une Analyse d'Impact sur l'Activité (BIA).
+Ce BIA a conduit à notre Plan de Reprise d'Activité (PRA). Par exemple, en cas de sinistre majeur sur notre baie serveur principale On-Premise, notre objectif de délai de reprise (RTO) est fixé à 4 heures. L'application Azure, elle, restera en ligne.
+        </aside>
+      </section>
+
+      <!-- Slide 9: Conclusion -->
+      <section data-transition="zoom">
+        <h1 style="font-size: 5em;">Merci.</h1>
+        <p class="apple-subtitle fragment fade-in">Place à la Démonstration.</p>
+        <aside class="notes">
+          [Équipe] Pour conclure, le projet Smart Office 2.0 répond à tous les enjeux de Biotech Corp : une base locale souveraine et sécurisée, propulsée par la flexibilité du Cloud pour absorber la croissance. Nous vous remercions pour votre attention et sommes maintenant à votre disposition pour la démonstration.
+        </aside>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Reveal.js Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/notes/notes.min.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: true,
+      controls: false,
+      progress: true,
+      center: true,
+      transition: 'slide', // none/fade/slide/convex/concave/zoom
+      backgroundTransition: 'fade',
+      plugins: [ RevealNotes ]
+    });
+  </script>
+</body>
+</html>
