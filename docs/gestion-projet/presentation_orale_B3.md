@@ -1,105 +1,95 @@
-# 🎓 Soutenance Orale B3 - Smart Office 2.0 (Script & PowerPoint)
+# 🎓 Soutenance Orale B3 - Smart Office 2.0 (Script Étendu)
 
-Ce document contient la structure de votre présentation PowerPoint (axée sur les visuels) et le script détaillé pour les 4 intervenants, calibré pour **25 minutes d'oral**.
+Ce document contient le script complet et détaillé pour les 4 intervenants, calibré pour environ **6 minutes par personne** (25 minutes d'oral au total). Il doit être utilisé en complément de la présentation `Keynote_Apple_Style.html` (où ces textes sont intégrés dans les notes de présentateur).
 
 *Rôles :*
 - 👩‍💻 **Océane** : Lead Système & Cloud (~6 min)
 - 🔒 **Ilyes** : Lead Réseau & Sécurité (~6 min)
 - 🚀 **Mehdi** : Lead DevOps & BDD (~6 min)
 - 📊 **Florian** : Lead Supervision & Data (~6 min)
-- ⏱️ **Conclusion/Démo** : Commune (~1 min)
 
 ---
 
 ## 🎨 Slide 1 : Titre & Introduction
-**Visuel à produire** : Un titre épuré, logo "Biotech Corp" / "Smart Office 2.0", et les prénoms de l'équipe B3. Design minimaliste, fond sombre.
-
-> **🗣️ Océane (00:00 - 01:00)**
-> "Bonjour à tous et merci de nous recevoir. Nous sommes l'équipe en charge de la transformation numérique de Biotech Corp. Aujourd'hui, nous allons vous présenter le socle technologique du projet 'Smart Office 2.0'. L'entreprise passant de 50 à 200 collaborateurs avec une forte culture du télétravail, notre mission a été de concevoir une infrastructure à la fois scalable, hyper-sécurisée et résiliente. Nous allons vous démontrer comment nous avons répondu à ce cahier des charges exigeant."
+> **🗣️ Océane (Env. 2 min 30)**
+> "Bonjour à toutes et à tous, et merci de nous recevoir aujourd'hui. Nous sommes l'équipe d'ingénieurs en charge de la refonte du système d'information de Biotech Corp.
+> Notre mission : concevoir le socle technologique du projet 'Smart Office 2.0'.
+> Pour vous donner un peu de contexte, Biotech Corp est une startup en hyper-croissance. Ils vont passer de 50 à 200 collaborateurs d'ici 18 mois. Leur infrastructure réseau et système actuelle était vieillissante, mal documentée, et totalement incapable d'encaisser cette charge, surtout avec l'instauration d'une politique de télétravail flexible.
+> Notre cahier des charges était donc très clair, mais très ambitieux : l'infrastructure doit être scalable, c'est-à-dire pouvoir grandir avec l'entreprise sans tout recasser, hyper-sécurisée car nous manipulons des données R&D sensibles, et résiliente pour garantir une continuité de service. Durant les prochaines 25 minutes, Florian, Ilyes, Mehdi et moi-même allons vous démontrer comment nos choix techniques ont répondu à tous ces défis."
 
 ---
 
 ## 🎨 Slide 2 : Le Choix Stratégique - L'Architecture Hybride
-**Visuel à afficher** : 
-![Architecture Hybride Cloud](./hybrid_cloud_concept.png)
-*(Un visuel contrasté montrant le On-Premise d'un côté, Azure de l'autre, reliés par un tunnel chiffré brillant).*
-
-> **🗣️ Océane (01:00 - 06:00)**
-> "Face à l'hyper-croissance de Biotech Corp, le 100% local n'était plus viable financièrement, et le 100% Cloud posait des problèmes de souveraineté des données de R&D. Nous avons donc opté pour une approche **Hybride**. 
-> Comme vous le voyez sur ce schéma conceptuel, nous conservons nos serveurs critiques (Active Directory, Bases de données) 'On-Premise' pour la sécurité. En revanche, l'application métier Web est déportée sur le Cloud Microsoft Azure via le service PaaS 'App Service'. 
-> Notre analyse TCO (Total Cost of Ownership) sur 3 ans le prouve : cette hybridation nous fait économiser près de 74% des coûts par rapport à l'achat de nouveaux serveurs locaux, tout en bénéficiant de la haute disponibilité d'Azure. Pour lier ces deux mondes, je laisse la parole à Ilyes."
+> **🗣️ Océane (Env. 3 min 30)**
+> "Le premier grand choix stratégique que nous avons dû faire concerne l'hébergement. Face à l'hyper-croissance de l'entreprise, conserver une infrastructure 100% On-Premise (tout en local) impliquait d'acheter énormément de serveurs physiques, avec un coût d'investissement (CAPEX) faramineux. À l'inverse, migrer à 100% dans le Cloud public nous posait un énorme problème de souveraineté pour les données de recherche et développement.
+>
+> Nous avons donc opté pour une approche 'Hybride'. Le principe est simple : nous gardons le contrôle de nos données critiques. Les serveurs de bases de données et notre annuaire Active Directory restent physiquement dans nos locaux (On-Premise). En revanche, toute la partie 'Application Web', celle qui est accédée par les employés pour réserver leurs bureaux, est déportée sur le Cloud Microsoft Azure via le service PaaS 'App Service'. 
+>
+> Pourquoi Azure ? Parce que son intégration native avec nos environnements Windows Server et Active Directory est inégalée sur le marché. De plus, notre analyse financière (le TCO sur 3 ans) a prouvé que cette approche nous fait économiser près de 74% des coûts par rapport à un achat de serveurs physiques équivalents. Nous avons l'agilité du Cloud, sans sacrifier la sécurité. Je passe maintenant la parole à Ilyes pour vous expliquer comment nous avons sécurisé ce lien."
 
 ---
 
 ## 🎨 Slide 3 : Architecture Réseau & Connectivité
-**Visuel à afficher** : Le Schéma logique du réseau (Matrice des flux) ou le plan d'adressage mis en valeur avec de belles icônes Cisco/pfSense.
-
-> **🗣️ Ilyes (06:00 - 09:00)**
-> "Merci Océane. Le cœur de notre hybridation repose sur un tunnel VPN IPsec IKEv2 monté entre notre pare-feu local pfSense et la passerelle Azure. C'est ce tunnel qui permet à l'application Cloud de requêter nos bases locales de manière totalement transparente et sécurisée.
-> Côté LAN, nous avons structuré le réseau en VLANs stricts : le VLAN 20 pour les employés, et un VLAN 30 ultra-isolé pour la R&D. Le réseau Wi-Fi d'entreprise s'appuie sur des points d'accès contrôlés, avec une authentification 802.1X reliée à l'Active Directory. Chaque connexion est tracée, aucun mot de passe partagé n'est utilisé pour le réseau principal."
+> **🗣️ Ilyes (Env. 3 min)**
+> "Merci Océane. Effectivement, avoir des serveurs d'un côté et le Cloud de l'autre soulève une question majeure : comment les faire communiquer en toute sécurité ?
+> Le cœur de notre hybridation repose sur un tunnel VPN Site-à-Site. Il est monté grâce au protocole IPsec en IKEv2 entre notre pare-feu local pfSense et la passerelle virtuelle d'Azure. Ce tunnel est chiffré de bout en bout avec des algorithmes robustes de type AES-256. Grâce à lui, l'application Web sur Azure peut requêter nos bases de données locales de manière totalement transparente, comme si elle était dans le bureau d'à côté.
+>
+> Ensuite, au sein même du bâtiment physique, nous avons repensé tout le routage. Nous avons structuré le réseau en VLANs stricts. Par exemple, le VLAN 20 héberge les employés standards, tandis que le VLAN 30 est une bulle ultra-isolée réservée exclusivement à la R&D.
+> Pour le Wi-Fi, finies les clés partagées que l'on se passe sur des bouts de papier ! Nous avons déployé une architecture centralisée avec un contrôleur Wi-Fi utilisant la norme 802.1X. Lorsqu'un collaborateur veut se connecter, le point d'accès interroge le serveur RADIUS couplé à notre Active Directory. Chaque connexion est individuelle et tracée."
 
 ---
 
 ## 🎨 Slide 4 : Sécurité & Zero Trust
-**Visuel à afficher** : Un bouclier design protégeant les différents réseaux, avec la mention "Never Trust, Always Verify".
-
-> **🗣️ Ilyes (09:00 - 12:00)**
-> "Notre politique de sécurité est dictée par le modèle **Zero Trust**. Le pare-feu pfSense agit en 'Default Deny'. Par exemple, le réseau des employés ne peut techniquement pas atteindre le réseau de la R&D. 
-> De plus, face aux risques de cyberattaques et aux exigences du télétravail, nous avons implémenté des accès distants sécurisés via OpenVPN pour nos collaborateurs, avec une authentification forte. La surface d'attaque est réduite au strict minimum."
+> **🗣️ Ilyes (Env. 3 min)**
+> "Toute cette architecture réseau s'inscrit dans une philosophie globale que nous avons implémentée : le 'Zero Trust'. Aujourd'hui, être à l'intérieur du bâtiment ne signifie plus que l'on est digne de confiance.
+> Notre pare-feu pfSense est configuré en mode 'Default Deny'. Par défaut, tout est bloqué, y compris entre les VLANs internes. Nous n'avons autorisé que les flux strictement nécessaires (la matrice des flux). Typiquement, il est techniquement impossible pour le poste d'un employé du marketing de 'ping' ou d'atteindre le réseau de la R&D.
+>
+> De plus, pour répondre à la politique de télétravail jusqu'à 3 jours par semaine, nous avons implémenté des accès distants sécurisés via OpenVPN. Les collaborateurs s'authentifient avec des certificats uniques. Si un ordinateur portable est volé ou infecté, il suffit de révoquer son certificat sur le pfSense pour lui couper tout accès, réduisant ainsi drastiquement notre surface d'attaque."
 
 ---
 
 ## 🎨 Slide 5 : L'Usine Logicielle (DevOps) & Données
-**Visuel à afficher** : 
-![Infrastructure DevOps](./smart_office_infra.png)
-*(Un pipeline infini CI/CD (logo GitHub -> Docker -> Azure) flottant au dessus d'un bâtiment moderne).*
-
-> **🗣️ Mehdi (12:00 - 15:30)**
-> "Pour soutenir cette infrastructure moderne, nous avons adopté une démarche DevOps complète. Notre application métier est conteneurisée avec Docker. Cela garantit une portabilité parfaite.
-> Le déploiement est entièrement automatisé via des pipelines CI/CD sur GitHub Actions. À chaque commit, une nouvelle image est générée, poussée dans notre registre Azure (ACR), et déployée en 'Zero Downtime' sur l'App Service Azure. L'erreur humaine lors des mises en production est quasiment éliminée."
+> **🗣️ Mehdi (Env. 3 min)**
+> "Pour que l'infrastructure réseau d'Ilyes et Cloud d'Océane puisse être exploitée par les développeurs, nous avons adopté une véritable démarche DevOps. L'époque où l'on déployait des fichiers manuellement par FTP est révolue.
+>
+> D'abord, notre application métier a été conteneurisée avec Docker. Cela permet de packager le code avec toutes ses dépendances. On évite enfin le fameux syndrome du 'Ça marchait très bien sur ma machine !'.
+> Ensuite, l'intégralité du cycle de vie du code est gérée via un pipeline CI/CD automatisé sur GitHub Actions. Le processus est fluide : à chaque fois qu'un développeur valide une fonctionnalité, GitHub Actions compile le code, lance les tests, construit la nouvelle image Docker, et l'envoie dans notre 'bibliothèque' sécurisée sur le Cloud, l'Azure Container Registry (ACR).
+> Enfin, via des Webhooks, Azure est notifié et déploie la nouvelle version de l'application en 'Zero Downtime'. L'utilisateur final ne subit aucune coupure de service pendant la mise à jour, et l'erreur humaine liée à l'administration système est quasiment éliminée."
 
 ---
 
 ## 🎨 Slide 6 : Stratégie Data & Sauvegarde
-**Visuel à afficher** : Schéma d'une base de données SQL et NoSQL (PostgreSQL / MongoDB) avec une illustration de la règle de backup "3-2-1".
-
-> **🗣️ Mehdi (15:30 - 18:00)**
-> "Côté données, nous utilisons une approche polyglotte : PostgreSQL pour garantir l'intégrité de nos réservations, et MongoDB pour absorber le flux massif de logs de nos capteurs IoT.
-> Pour protéger ces données vitales, nous appliquons la règle de sauvegarde du 3-2-1 : 3 copies des données, sur 2 supports différents (NAS Synology en RAID et disques SSD locaux), dont 1 copie externalisée et immuable sur un stockage Cloud (Azure Blob Storage). Nos scripts PowerShell automatisent l'ensemble de ces dumps chaque nuit."
+> **🗣️ Mehdi (Env. 3 min)**
+> "Mais une application n'est rien sans ses données. Au niveau des bases de données, nous avons fait le choix judicieux d'une approche polyglotte. Nous utilisons une base SQL, PostgreSQL, pour gérer tout ce qui requiert une intégrité transactionnelle absolue, comme la gestion des utilisateurs et la réservation des bureaux. En parallèle, nous avons déployé une base NoSQL, MongoDB, qui est parfaite pour ingérer massivement et sans goulot d'étranglement les logs générés par les milliers de capteurs IoT du bâtiment.
+>
+> Cependant, la donnée est le véritable capital de l'entreprise. Pour la protéger, nous n'avons rien laissé au hasard et appliqué la règle d'or de la sauvegarde : le 3-2-1.
+> Nous conservons 3 copies de toutes nos données. Celles-ci sont stockées sur 2 supports de stockage différents (les disques SSD ultra-rapides des serveurs locaux, et des disques haute capacité HDD sur un NAS Synology en RAID dédié aux backups). Enfin, 1 copie est systématiquement externalisée 'hors-site' (Air-Gapped) vers un stockage Azure Blob. Ainsi, même en cas de rançongiciel ou de destruction physique du NAS, l'entreprise ne perd rien."
 
 ---
 
 ## 🎨 Slide 7 : Supervision & Observabilité (Le Cockpit)
-**Visuel à afficher** : 
-![Dashboard de Supervision](./supervision_dashboard.png)
-*(Une interface sombre de monitoring très visuelle avec des graphiques en temps réel).*
-
-> **🗣️ Florian (18:00 - 21:00)**
-> "Bien sûr, une telle infrastructure nécessite un monitoring proactif. Nous avons déployé une stack de supervision double : **Zabbix** pour l'IT, et **Grafana** pour le management et la data.
-> Comme vous le voyez sur cette maquette, Zabbix scrute l'état du tunnel VPN, l'espace disque de l'AD, et la charge de nos VM via SNMP et agents. Si le tunnel VPN IPsec tombe ou si le CPU sature, des alertes sont remontées automatiquement sur nos canaux Slack dédiés. Grafana, quant à lui, est directement pluggé sur notre base MongoDB pour afficher en temps réel l'utilisation des locaux connectés."
+> **🗣️ Florian (Env. 3 min)**
+> "Merci Mehdi. Une infrastructure aussi riche nécessite de pouvoir lire en permanence ses 'signes vitaux'. C'est là qu'intervient mon rôle sur la supervision et l'observabilité. Nous ne voulions pas d'un système aveugle, nous avons donc déployé une double stack.
+>
+> D'un côté, nous avons Zabbix. C'est l'outil technique par excellence. Il communique via SNMP avec nos switchs Cisco et notre pare-feu pfSense, et utilise des agents sur nos machines virtuelles. Zabbix va vérifier chaque seconde si notre fameux tunnel VPN IPsec est debout, surveiller l'espace disque de l'Active Directory, ou la charge CPU des conteneurs. Si une métrique franchit un seuil critique, Zabbix déclenche automatiquement une alerte et notifie l'administrateur d'astreinte sur un canal Slack sécurisé.
+>
+> De l'autre côté, nous avons Grafana. C'est notre vitrine de la donnée métier. Grafana se connecte en direct à la base MongoDB de Mehdi, et transforme des millions de lignes de logs JSON brutes issues des capteurs IoT en graphiques magnifiques et compréhensibles. Le management peut voir en temps réel l'occupation des salles de réunion, la température ou la qualité de l'air de chaque étage."
 
 ---
 
 ## 🎨 Slide 8 : Résilience et ITSM
-**Visuel à afficher** : Schéma temporel d'un incident (RTO/RPO), avec un logo ITSM/ITIL.
-
-> **🗣️ Florian (21:00 - 24:00)**
-> "Enfin, la technique ne suffit pas sans processus. Nous avons structuré la gestion des incidents (ITSM) et réalisé une Analyse d'Impact sur l'Activité (BIA). 
-> Ce BIA a conduit à notre Plan de Reprise d'Activité (PRA). Par exemple, en cas de sinistre majeur sur notre baie serveur principale On-Premise, notre objectif de délai de reprise (RTO) est fixé à 4 heures, temps nécessaire pour remonter les VMs depuis les sauvegardes NAS ou Cloud. L'application Azure, elle, restera en ligne."
+> **🗣️ Florian (Env. 3 min)**
+> "Pour terminer, l'infrastructure la plus robuste du monde ne sert à rien si les humains ne savent pas réagir en cas de crise. Nous avons donc mis en place des processus forts basés sur le référentiel ITSM (ITIL).
+> Nous avons réalisé un BIA (Business Impact Analysis). Ce document a permis d'évaluer concrètement ce que coûterait à l'entreprise la panne de tel ou tel service.
+>
+> À partir de cette analyse, nous avons rédigé le Plan de Reprise d'Activité (PRA). Par exemple, imaginons le pire scénario : un dégât des eaux ou un incendie détruit totalement la baie de serveurs physiques au rez-de-chaussée du siège social.
+> Grâce à nos choix d'hybridation, l'application Web sur Azure ne tombera pas. Le site restera affiché. Pour relancer la base de données interne, notre PRA définit un objectif de RTO (Recovery Time Objective) de 4 heures. C'est le temps maximum que nous nous accordons pour louer un nouveau serveur, rapatrier la fameuse sauvegarde externalisée Azure Blob (le '1' du 3-2-1 de Mehdi), et restaurer le service. Tout est documenté et prêt à être éprouvé."
 
 ---
 
 ## 🎨 Slide 9 : Bilan & Démonstration
-**Visuel à afficher** : Architecture globale finale, avec le mot "Démonstration" ou "Questions".
-
-> **🗣️ Équipe (Florian ou Océane) (24:00 - 25:00)**
-> "Pour conclure, le projet Smart Office 2.0 répond à tous les enjeux de Biotech Corp : une base locale souveraine et sécurisée, propulsée par la flexibilité du Cloud pour absorber la croissance. Nous avons respecté le budget, sécurisé les accès via du Zero Trust, et automatisé les tâches chronophages avec du CI/CD.
-> Nous vous remercions pour votre attention et sommes maintenant à votre disposition pour la démonstration ou répondre à vos questions."
-
----
-
-### 💡 Conseils pour le PowerPoint :
-- **Règle du 6x6** : Pas plus de 6 puces par slide, pas plus de 6 mots par puce. Vos slides ne doivent pas être un prompteur, mais un support visuel à votre discours.
-- Utilisez un thème sombre (Dark Mode) pour faire ressortir les couleurs "Cloud" (Bleu cyan, violet), ça donne un côté très tech et premium.
-- Intégrez les 3 images IA que j'ai générées dans les slides 2, 5 et 7 pour apporter un véritable effet "Wahou" au jury.
-- Ne lisez pas vos notes, regardez le jury. Le script ci-dessus est fait pour être assimilé et reformulé avec vos propres mots.
+> **🗣️ Équipe [Océane ou Florian] (Env. 1 min)**
+> "Pour conclure, le projet Smart Office 2.0 a permis de doter Biotech Corp d'une infrastructure digne d'une multinationale, tout en respectant un budget de startup.
+> Nous avons combiné la sécurité intransigeante du modèle Zero Trust en local, la résilience et la scalabilité du Cloud Azure, et l'agilité de la philosophie DevOps pour nos développeurs. Le système d'information n'est plus un frein, mais un puissant moteur pour la croissance de l'entreprise.
+>
+> Nous vous remercions sincèrement pour votre écoute. C'est avec un immense plaisir que nous sommes maintenant à votre disposition pour répondre à toutes vos questions ou pour passer à la démonstration technique de notre maquette."
