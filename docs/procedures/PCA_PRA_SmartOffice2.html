@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCA / PRA - Smart Office 2.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; color: #333; line-height: 1.6; background-color: #f4f7f6; padding: 40px; margin: 0; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 50px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-radius: 8px; }
+        .header { text-align: center; border-bottom: 3px solid #d9534f; padding-bottom: 20px; margin-bottom: 40px; }
+        .header h1 { margin: 0; color: #a94442; font-size: 2.5em; }
+        .header p { color: #555; font-size: 1.1em; }
+        h2 { color: #d9534f; border-bottom: 2px solid #f2dede; padding-bottom: 8px; margin-top: 40px; }
+        h3 { color: #c9302c; margin-top: 30px; }
+        p, li { font-size: 15px; color: #4a5568; }
+        .highlight { background-color: #fdfaee; border-left: 4px solid #f0ad4e; padding: 15px; margin: 20px 0; }
+        .alert { background-color: #f2dede; border-left: 4px solid #d9534f; padding: 15px; margin: 20px 0; color: #a94442; font-weight: 600;}
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #d9534f; color: white; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        .footer { text-align: center; margin-top: 50px; font-size: 0.9em; color: #888; }
+        
+        @media print {
+            body { background-color: white; padding: 0; }
+            .container { box-shadow: none; padding: 0; }
+            .page-break { page-break-before: always; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Plan de Continuité & Reprise d'Activité</h1>
+        <p>Projet : <strong>Smart Office 2.0</strong> | Basé sur les Scripts d'Automatisation Existants</p>
+    </div>
+
+    <h2>1. Contexte Hybride et Analyse des Risques</h2>
+    <p>Notre architecture scinde l'application en deux zones physiques : le Node.js sur Azure et les bases PostgreSQL/MongoDB sur notre réseau GNS3 On-Premise. Le point de faiblesse principal est le tunnel VPN IPsec reliant ces deux zones.</p>
+    <div class="highlight">
+        <strong>Document de Référence :</strong> Les scénarios de risque, l'inventaire des actifs critiques et les objectifs de reprise (RTO/RPO) sont détaillés dans l'<strong><a href="analyse_BIA.html">Analyse d'Impact sur l'Activité (BIA)</a></strong>.
+    </div>
+    
+    <h2>2. Plan de Continuité d'Activité (PCA)</h2>
+    <p>Le PCA documente la résilience (comment le système survit aux pannes transitoires) :</p>
+    
+    <h3>2.1 Résilience au niveau de l'Application (Node.js)</h3>
+    <ul>
+        <li><strong>Infrastructure as Code Cloud :</strong> Si l'Azure App Service subit un crash matériel chez Microsoft, l'image Docker hébergée en sécurité dans l'ACR est automatiquement relancée par la plateforme (Zero Downtime).</li>
+        <li><strong>Gestion des coupures VPN (Recursive Retry) :</strong> Le code source Node.js de l'équipe contient des mécanismes de "Retry". Si le VPN est instable et que le conteneur perd l'accès au PostgreSQL local (VLAN 10), l'API ne crashe pas définitivement mais boucle en attente du retour de la liaison.</li>
+    </ul>
+
+    <h3>2.2 Sauvegarde Automatisée des Coûts (FinOps)</h3>
+    <p>Notre PCA inclut aussi une continuité financière. L'équipe a codé des scripts PowerShell (<code>pause_azure.ps1</code> et <code>resume_azure.ps1</code>) permettant de geler les ressources Cloud la nuit pour économiser le budget sans perdre la configuration du Web App.</p>
+
+    <div class="page-break"></div>
+
+    <h2>3. Plan de Reprise d'Activité (PRA)</h2>
+    <p>En cas de sinistre majeur affectant l'intégrité de nos deux environnements (Cloud et Local).</p>
+
+    <div class="alert">
+        PRA - Incident Majeur Azure (Ex: Suppression accidentelle du Resource Group)
+    </div>
+    <p>Si la zone Cloud Azure est totalement détruite, le RTO (Recovery Time Objective) est de <strong>moins de 5 minutes</strong>. Procédure :</p>
+    <ol>
+        <li>Un administrateur lance le script <code>.\scripts\setup_azure.ps1</code> fourni dans le dépôt GitHub.</li>
+        <li>Ce script utilise Azure CLI pour re-créer instantanément le Resource Group, le Container Registry (ACR), l'App Service Plan (B1 Linux) et le Web App.</li>
+        <li>Il relance le workflow GitHub Actions pour re-pousser la dernière image Docker valide dans le nouvel ACR. L'application est de nouveau en ligne.</li>
+    </ol>
+
+    <div class="alert">
+        PRA - Incident Majeur On-Premise (Corruption BDD)
+    </div>
+    <p>Puisque nos bases PostgreSQL et MongoDB tournent sur nos serveurs locaux, nos données ne dépendent pas d'Azure.</p>
+    <div class="highlight">
+        Procédure de Restauration Locale :
+        Nous utilisons des dumps planifiés localement via le <a href="../dat/strategie_stockage.md">Plan de Sauvegarde Automatisé</a>. Si la base PostgreSQL locale crashe, l'administrateur restaure le volume Docker local (`pgdata`) ou réinjecte un fichier SQL de dump compressé provenant du NAS de sauvegarde.
+    </div>
+
+    <h2>4. Gestion des Incidents Majeurs</h2>
+    <p>Toute activation du PRA doit suivre la procédure d'escalade définie dans notre référentiel ITSM.</p>
+    <div class="highlight">
+        <strong>Document de Référence :</strong> Le flux de résolution, la classification des incidents (P1 à P4) et la chaîne d'escalade sont documentés dans le <strong><a href="processus_ITSM.html">Processus de Gestion des Incidents (ITSM)</a></strong>.
+    </div>
+
+    <div class="footer">
+        <p>Smart Office 2.0 - Gestion des Risques et Résilience - Mise à jour Factuelle</p>
+    </div>
+</div>
+
+</body>
+</html>

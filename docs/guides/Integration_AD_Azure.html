@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide d'Intégration Active Directory et Azure</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; color: #333; line-height: 1.6; background-color: #f4f7f6; padding: 40px; margin: 0; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 50px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-radius: 8px; }
+        .header { text-align: center; border-bottom: 3px solid #28a745; padding-bottom: 20px; margin-bottom: 40px; }
+        .header h1 { margin: 0; color: #1e7e34; font-size: 2.5em; }
+        .header p { color: #555; font-size: 1.1em; }
+        h2 { color: #28a745; border-bottom: 2px solid #d4edda; padding-bottom: 8px; margin-top: 40px; }
+        h3 { color: #155724; margin-top: 30px; }
+        p, li { font-size: 15px; color: #4a5568; }
+        .step { background-color: #e9ecef; border-radius: 50%; width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; color: #495057; margin-right: 10px; }
+        .footer { text-align: center; margin-top: 50px; font-size: 0.9em; color: #888; }
+        
+        @media print {
+            body { background-color: white; padding: 0; }
+            .container { box-shadow: none; padding: 0; }
+            .page-break { page-break-before: always; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Explication Pédagogique : Active Directory et Identité Hybride</h1>
+        <p><strong>Note pour le Jury de Soutenance</strong></p>
+    </div>
+
+    <h2>1. Notre Contexte de Projet</h2>
+    <p>Dans notre infrastructure Smart Office 2.0, l'annuaire d'entreprise (Active Directory) est hébergé localement sur un serveur Windows 2019 dans la zone GNS3 gérée par Océane.</p>
+    <p>Dans la configuration actuelle de notre MVP (Proof of Concept), l'application Node.js s'appuie sur une table <code>users</code> dans la base PostgreSQL locale (pour démontrer le fonctionnement du backend métier) plutôt que d'être jointe informatiquement à l'AD pour chaque requête.</p>
+
+    <h2>2. Évolution vers la Synchronisation Azure AD (Entra ID)</h2>
+    <p>Cependant, notre architecture hybride (VPN IPsec) nous offre une voie d'évolution "Enterprise-Grade" pour l'identité. Voici comment l'AD On-Premise interagit avec le Cloud dans un scénario de production :</p>
+    
+    <p><span class="step">1</span> <strong>Mise en place de l'Agent de synchronisation :</strong> Au lieu d'ouvrir les ports LDAP (389) au travers du VPN de pfSense (ce qui est une mauvaise pratique de sécurité pour une WebApp exposée sur internet), on installe l'outil <strong>Azure AD Connect</strong> sur le serveur Windows 2019 local.</p>
+    
+    <p><span class="step">2</span> <strong>Réplication unilatérale :</strong> Cet outil synchronise les comptes AD locaux vers le tenant Microsoft Azure (Entra ID). Le flux est sortant du réseau local vers le Cloud.</p>
+
+    <h2>3. Haute Disponibilité de l'Authentification</h2>
+    <p>Comme précisé dans notre <code>strategie_deploiement_azure.md</code> : <em>"Grâce à la réplication AD entre Océane et Azure, si le site local tombe, l'authentification cloud reste possible."</em></p>
+    <p>C'est tout le but de cette architecture. L'application Web hébergée dans l'Azure App Service pourrait interroger le tenant Azure Entra ID directement via des Tokens (OAuth). Même si le routeur pfSense coupe le VPN (perdant l'accès aux bases SQL métiers locales), la fonction d'authentification des employés survivrait, prouvant l'intérêt du Cloud Hybride en matière de continuité de service de l'identité.</p>
+
+    <div class="footer">
+        <p>Smart Office 2.0 - Note sur l'Architecture d'Identité - Mise à jour Factuelle</p>
+    </div>
+</div>
+
+</body>
+</html>

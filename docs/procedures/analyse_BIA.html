@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyse BIA - Smart Office 2.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; color: #333; line-height: 1.6; background-color: #f4f7f6; padding: 40px; margin: 0; }
+        .container { max-width: 950px; margin: auto; background: white; padding: 50px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-radius: 8px; }
+        .header { text-align: center; border-bottom: 3px solid #e67e22; padding-bottom: 20px; margin-bottom: 40px; }
+        .header h1 { margin: 0; color: #d35400; font-size: 2.2em; }
+        .header p { color: #555; font-size: 1.1em; }
+        h2 { color: #e67e22; border-bottom: 2px solid #fdebd0; padding-bottom: 8px; margin-top: 40px; }
+        h3 { color: #a04000; margin-top: 30px; }
+        p, li { font-size: 15px; color: #4a5568; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 14px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #e67e22; color: white; }
+        tr:nth-child(even) { background-color: #fdf2e9; }
+        .critical { background-color: #e74c3c; color: white; font-weight: bold; text-align: center; }
+        .high { background-color: #f39c12; color: white; font-weight: bold; text-align: center; }
+        .medium { background-color: #f1c40f; color: #333; font-weight: bold; text-align: center; }
+        .low { background-color: #27ae60; color: white; font-weight: bold; text-align: center; }
+        .highlight { background-color: #fef9e7; border-left: 4px solid #f0ad4e; padding: 15px; margin: 20px 0; }
+        .alert { background-color: #fdedec; border-left: 4px solid #e74c3c; padding: 15px; margin: 20px 0; color: #922b21; font-weight: 600; }
+        .footer { text-align: center; margin-top: 50px; font-size: 0.9em; color: #888; }
+        @media print {
+            body { background-color: white; padding: 0; }
+            .container { box-shadow: none; padding: 0; }
+            .page-break { page-break-before: always; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Analyse d'Impact sur l'Activité (BIA)</h1>
+        <p>Projet : <strong>Smart Office 2.0</strong> | Business Impact Analysis</p>
+        <p><em>Référentiel : ISO 22301 — Continuité d'activité</em></p>
+    </div>
+
+    <h2>1. Objectif de l'Analyse</h2>
+    <p>L'analyse BIA (Business Impact Analysis) a pour objectif d'identifier les processus critiques de Biotech Corp, de quantifier l'impact d'une interruption de service, et de définir les objectifs de reprise (RTO/RPO) qui guideront notre Plan de Continuité d'Activité (PCA) et notre Plan de Reprise d'Activité (PRA).</p>
+
+    <h2>2. Périmètre de l'Analyse</h2>
+    <p>L'analyse couvre l'ensemble de l'infrastructure Smart Office 2.0 :</p>
+    <ul>
+        <li><strong>Site On-Premise</strong> : Infrastructure GNS3 (Active Directory, bases de données, supervision)</li>
+        <li><strong>Site Cloud</strong> : Azure (App Service, Container Registry, pipeline CI/CD)</li>
+        <li><strong>Interconnexion</strong> : Tunnel VPN IPsec entre les deux sites</li>
+    </ul>
+
+    <h2>3. Inventaire et Classification des Actifs</h2>
+
+    <h3>3.1 Matrice de Criticité des Actifs</h3>
+    <table>
+        <tr>
+            <th>Actif</th>
+            <th>Localisation</th>
+            <th>Fonction Métier</th>
+            <th>Criticité</th>
+            <th>Impact Financier (par heure d'arrêt)</th>
+        </tr>
+        <tr>
+            <td><strong>Active Directory (Windows Server 2019)</strong></td>
+            <td>On-Premise (VLAN 10)</td>
+            <td>Authentification des employés, gestion des accès, GPO</td>
+            <td class="critical">Critique</td>
+            <td>Élevé — Aucun employé ne peut s'authentifier</td>
+        </tr>
+        <tr>
+            <td><strong>Application Web (Node.js)</strong></td>
+            <td>Azure App Service</td>
+            <td>Réservation de salles, interface métier principale</td>
+            <td class="critical">Critique</td>
+            <td>Élevé — Processus métier interrompu</td>
+        </tr>
+        <tr>
+            <td><strong>Base PostgreSQL</strong></td>
+            <td>On-Premise (Docker)</td>
+            <td>Données structurées : utilisateurs, réservations, planning</td>
+            <td class="critical">Critique</td>
+            <td>Élevé — Perte de données métier</td>
+        </tr>
+        <tr>
+            <td><strong>Tunnel VPN IPsec</strong></td>
+            <td>pfSense ↔ Azure VPN GW</td>
+            <td>Lien entre l'app Cloud et les données locales</td>
+            <td class="high">Haute</td>
+            <td>Moyen — L'app fonctionne en mode dégradé</td>
+        </tr>
+        <tr>
+            <td><strong>Base MongoDB</strong></td>
+            <td>On-Premise (Docker)</td>
+            <td>Logs IoT, historique temps-réel des événements</td>
+            <td class="medium">Moyenne</td>
+            <td>Faible — Perte de logs non critiques</td>
+        </tr>
+        <tr>
+            <td><strong>Pare-feu pfSense</strong></td>
+            <td>On-Premise</td>
+            <td>Routage inter-VLAN, sécurité périmétrique, VPN</td>
+            <td class="critical">Critique</td>
+            <td>Élevé — Isolation réseau complète</td>
+        </tr>
+        <tr>
+            <td><strong>Supervision (Zabbix + Grafana)</strong></td>
+            <td>On-Premise (Docker)</td>
+            <td>Monitoring de l'infrastructure, alertes</td>
+            <td class="medium">Moyenne</td>
+            <td>Faible — Perte de visibilité, pas d'impact direct</td>
+        </tr>
+        <tr>
+            <td><strong>Switch Cisco (Cœur de réseau)</strong></td>
+            <td>On-Premise</td>
+            <td>Switching L2/L3, trunk VLANs</td>
+            <td class="critical">Critique</td>
+            <td>Élevé — Aucune communication réseau locale</td>
+        </tr>
+        <tr>
+            <td><strong>Azure Container Registry (ACR)</strong></td>
+            <td>Azure</td>
+            <td>Stockage des images Docker de production</td>
+            <td class="low">Basse</td>
+            <td>Nul en fonctionnement — Impact uniquement sur les déploiements</td>
+        </tr>
+        <tr>
+            <td><strong>Pipeline CI/CD (GitHub Actions)</strong></td>
+            <td>GitHub Cloud</td>
+            <td>Automatisation du déploiement</td>
+            <td class="low">Basse</td>
+            <td>Nul — Déploiement manuel possible en fallback</td>
+        </tr>
+    </table>
+
+    <div class="page-break"></div>
+
+    <h2>4. Objectifs de Reprise</h2>
+
+    <h3>4.1 Définitions</h3>
+    <div class="highlight">
+        <strong>RTO (Recovery Time Objective)</strong> : Durée maximale acceptable d'interruption d'un service avant que l'impact ne devienne inacceptable.<br><br>
+        <strong>RPO (Recovery Point Objective)</strong> : Quantité maximale de données que l'on accepte de perdre, exprimée en temps (ex: RPO = 1h signifie qu'on accepte de perdre au maximum 1h de données).
+    </div>
+
+    <h3>4.2 Objectifs par Actif</h3>
+    <table>
+        <tr>
+            <th>Actif</th>
+            <th>RTO</th>
+            <th>RPO</th>
+            <th>Stratégie de Reprise</th>
+        </tr>
+        <tr>
+            <td><strong>Active Directory</strong></td>
+            <td>30 minutes</td>
+            <td>24 heures</td>
+            <td>Restauration depuis snapshot VM. Redémarrage du service ADDS.</td>
+        </tr>
+        <tr>
+            <td><strong>Application Web</strong></td>
+            <td>&lt; 5 minutes</td>
+            <td>0 (stateless)</td>
+            <td>Script <code>setup_azure.ps1</code> + redéploiement CI/CD automatique depuis l'ACR.</td>
+        </tr>
+        <tr>
+            <td><strong>PostgreSQL</strong></td>
+            <td>15 minutes</td>
+            <td>1 heure</td>
+            <td>Restauration depuis dump planifié (<code>pg_dump</code>) + volumes Docker persistants.</td>
+        </tr>
+        <tr>
+            <td><strong>MongoDB</strong></td>
+            <td>30 minutes</td>
+            <td>4 heures</td>
+            <td>Restauration depuis <code>mongodump</code>. Perte de logs IoT récents acceptée.</td>
+        </tr>
+        <tr>
+            <td><strong>Tunnel VPN</strong></td>
+            <td>10 minutes</td>
+            <td>N/A</td>
+            <td>Reconnexion automatique pfSense. Fallback : reconfiguration manuelle Phase 1/2.</td>
+        </tr>
+        <tr>
+            <td><strong>pfSense</strong></td>
+            <td>30 minutes</td>
+            <td>N/A</td>
+            <td>Restauration depuis backup XML de configuration.</td>
+        </tr>
+        <tr>
+            <td><strong>Zabbix / Grafana</strong></td>
+            <td>2 heures</td>
+            <td>24 heures</td>
+            <td><code>docker-compose up -d</code> — les données historiques sont secondaires.</td>
+        </tr>
+    </table>
+
+    <h2>5. Analyse des Scénarios de Risque</h2>
+
+    <h3>5.1 Scénario 1 : Panne du serveur On-Premise</h3>
+    <div class="alert">Probabilité : Moyenne | Impact : Critique</div>
+    <p><strong>Description</strong> : Le serveur hébergeant l'AD, Docker (PostgreSQL, MongoDB, Zabbix) tombe en panne matérielle.</p>
+    <p><strong>Impact</strong> :</p>
+    <ul>
+        <li>Authentification locale impossible (AD hors ligne)</li>
+        <li>L'app Cloud perd l'accès aux BDD → mode dégradé (retry loop)</li>
+        <li>Supervision interrompue</li>
+    </ul>
+    <p><strong>Mitigation</strong> : L'application Cloud continue de tourner grâce au mécanisme de retry. Les utilisateurs déjà authentifiés conservent leur session (cookie). Restauration via les backups et volumes Docker persistants.</p>
+
+    <h3>5.2 Scénario 2 : Cyberattaque (Ransomware)</h3>
+    <div class="alert">Probabilité : Faible | Impact : Critique</div>
+    <p><strong>Description</strong> : Un ransomware chiffre les données du serveur local.</p>
+    <p><strong>Impact</strong> : Perte totale des données si les backups sont également compromis.</p>
+    <p><strong>Mitigation</strong> :</p>
+    <ul>
+        <li>Sauvegardes externalisées (hors réseau local) sur Azure Blob Storage</li>
+        <li>Segmentation réseau (les VLANs limitent la propagation latérale)</li>
+        <li>pfSense en politique Deny All réduit la surface d'attaque</li>
+        <li>Restauration depuis les dumps externalisés (RPO selon fréquence de backup)</li>
+    </ul>
+
+    <h3>5.3 Scénario 3 : Panne du fournisseur Cloud (Azure)</h3>
+    <div class="alert">Probabilité : Très faible | Impact : Haute</div>
+    <p><strong>Description</strong> : La région Azure France Central subit une panne majeure.</p>
+    <p><strong>Impact</strong> : L'application web est inaccessible. Les données locales restent intactes.</p>
+    <p><strong>Mitigation</strong> : Le script <code>setup_azure.ps1</code> permet de recréer l'infrastructure sur une autre région en &lt; 5 minutes. L'image Docker est stockée dans l'ACR (répliqué par Azure).</p>
+
+    <h3>5.4 Scénario 4 : Coupure du lien VPN</h3>
+    <div class="alert">Probabilité : Haute | Impact : Moyenne</div>
+    <p><strong>Description</strong> : Le tunnel IPsec entre pfSense et Azure tombe.</p>
+    <p><strong>Impact</strong> : L'app Cloud ne peut plus joindre les bases de données locales. Les requêtes sont mises en attente (retry logic).</p>
+    <p><strong>Mitigation</strong> : Reconnexion automatique configurée sur pfSense. DPD (Dead Peer Detection) avec intervalle de 10 secondes. Le service reprend automatiquement dès le rétablissement du tunnel.</p>
+
+    <h3>5.5 Scénario 5 : Panne FAI (perte de connectivité Internet)</h3>
+    <div class="alert">Probabilité : Moyenne | Impact : Haute</div>
+    <p><strong>Description</strong> : Le fournisseur d'accès Internet du siège est en panne.</p>
+    <p><strong>Impact</strong> : Le VPN tombe (même impact que le scénario 4). Les employés sur site perdent l'accès à Internet et à l'application Cloud. L'AD local reste fonctionnel pour l'authentification interne.</p>
+    <p><strong>Mitigation</strong> : Prévoir un lien FAI secondaire (4G/5G backup) sur le pfSense. L'application locale (Docker Compose) peut être activée en mode standalone.</p>
+
+    <div class="page-break"></div>
+
+    <h2>6. Matrice des Risques</h2>
+    <table>
+        <tr>
+            <th>Scénario</th>
+            <th>Probabilité</th>
+            <th>Impact</th>
+            <th>Niveau de Risque</th>
+            <th>Traitement</th>
+        </tr>
+        <tr>
+            <td>Panne serveur On-Premise</td>
+            <td>Moyenne</td>
+            <td>Critique</td>
+            <td class="high">Élevé</td>
+            <td>Réduction (backups, volumes persistants)</td>
+        </tr>
+        <tr>
+            <td>Cyberattaque (Ransomware)</td>
+            <td>Faible</td>
+            <td>Critique</td>
+            <td class="high">Élevé</td>
+            <td>Réduction (segmentation, backups externalisés)</td>
+        </tr>
+        <tr>
+            <td>Panne Azure</td>
+            <td>Très faible</td>
+            <td>Haute</td>
+            <td class="medium">Moyen</td>
+            <td>Transfert (IaC multi-région)</td>
+        </tr>
+        <tr>
+            <td>Coupure VPN</td>
+            <td>Haute</td>
+            <td>Moyenne</td>
+            <td class="medium">Moyen</td>
+            <td>Réduction (reconnexion auto, retry logic)</td>
+        </tr>
+        <tr>
+            <td>Panne FAI</td>
+            <td>Moyenne</td>
+            <td>Haute</td>
+            <td class="high">Élevé</td>
+            <td>Réduction (lien 4G backup)</td>
+        </tr>
+    </table>
+
+    <h2>7. Synthèse et Recommandations</h2>
+    <ul>
+        <li><strong>Priorité 1</strong> : Mettre en place des sauvegardes automatisées externalisées (pg_dump + mongodump vers Azure Blob Storage) pour respecter les RPO définis.</li>
+        <li><strong>Priorité 2</strong> : Documenter et tester les procédures de restauration au moins une fois par trimestre.</li>
+        <li><strong>Priorité 3</strong> : Envisager un lien FAI secondaire (4G) pour la haute disponibilité du tunnel VPN.</li>
+        <li><strong>Priorité 4</strong> : Mettre en place un outil de détection des anomalies (Suricata/Wazuh) pour anticiper les cyberattaques.</li>
+    </ul>
+
+    <div class="footer">
+        <p>Smart Office 2.0 — Analyse BIA (Business Impact Analysis) — Conforme ISO 22301</p>
+    </div>
+</div>
+
+</body>
+</html>

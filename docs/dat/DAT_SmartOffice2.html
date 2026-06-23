@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dossier d'Architecture Technique - Smart Office 2.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; color: #333; line-height: 1.6; background-color: #f4f7f6; padding: 40px; margin: 0; }
+        .container { max-width: 1000px; margin: auto; background: white; padding: 50px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-radius: 8px; }
+        .header { text-align: center; border-bottom: 4px solid #2980b9; padding-bottom: 20px; margin-bottom: 40px; }
+        .header h1 { margin: 0; color: #1a5276; font-size: 2.5em; }
+        .header p { color: #555; font-size: 1.1em; }
+        h2 { color: #2980b9; border-bottom: 2px solid #d4e6f1; padding-bottom: 8px; margin-top: 40px; }
+        h3 { color: #154360; margin-top: 30px; }
+        p, li { font-size: 15px; color: #4a5568; }
+        .highlight { background-color: #ebf5fb; border-left: 4px solid #3498db; padding: 15px; margin: 20px 0; }
+        .alert { background-color: #fdedec; border-left: 4px solid #e74c3c; padding: 15px; margin: 20px 0; color: #922b21; }
+        .link-card { background-color: #f9f9f9; border: 1px solid #ddd; padding: 15px; border-radius: 5px; margin-bottom: 15px; display: flex; align-items: center; }
+        .link-card a { color: #2980b9; text-decoration: none; font-weight: bold; margin-left: 10px; }
+        .link-card a:hover { text-decoration: underline; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 14px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #2980b9; color: white; }
+        tr:nth-child(even) { background-color: #f2f4f4; }
+        .footer { text-align: center; margin-top: 50px; font-size: 0.9em; color: #888; border-top: 1px solid #ddd; padding-top: 20px; }
+        
+        @media print {
+            body { background-color: white; padding: 0; }
+            .container { box-shadow: none; padding: 0; }
+            .page-break { page-break-before: always; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Dossier d'Architecture Technique (DAT)</h1>
+        <p>Projet : <strong>Smart Office 2.0</strong> | Équipe B3</p>
+        <p><em>Conception d'une infrastructure hybride sécurisée et résiliente</em></p>
+    </div>
+
+    <h2>1. Introduction et Périmètre</h2>
+    <p>Ce Document d'Architecture Technique décrit l'infrastructure cible déployée pour le siège social de Biotech Corp. Le projet "Smart Office 2.0" vise à soutenir l'hyper-croissance de l'entreprise (200 employés cibles) en modernisant ses locaux et son SI via une approche hybride (On-Premise + Azure Cloud).</p>
+
+    <h2>2. Architecture Physique et Réseau</h2>
+    <p>L'infrastructure repose sur un bâtiment de 4 étages avec un cœur de réseau redondé. La sécurité est assurée par une segmentation stricte des flux et l'application d'un modèle Zero Trust au niveau du pare-feu pfSense.</p>
+    
+    <div class="link-card">
+        🏢 <a href="../schemas/schema_physique.md">Schéma d'Architecture Physique</a> (Plans de câblage, inventaire matériel)
+    </div>
+    <div class="link-card">
+        🌐 <a href="../procedures/plan_adressage_biotech.md">Plan d'Adressage IP et VLANs</a>
+    </div>
+    <div class="link-card">
+        🔀 <a href="../schemas/matrice_flux_reseau.md">Matrice des Flux Réseau (ACLs pfSense)</a>
+    </div>
+    <div class="link-card">
+        📶 <a href="architecture_wifi.md">Architecture WLAN / Wi-Fi d'entreprise</a>
+    </div>
+
+    <div class="page-break"></div>
+
+    <h2>3. Architecture Système et Stratégie Cloud (IaaS/PaaS)</h2>
+    <p>Le choix d'une architecture hybride a été validé suite à une analyse financière (TCO). L'application métier (Smart Office Web) est déportée sur le Cloud Microsoft Azure (PaaS) pour bénéficier de son élasticité, tandis que les données restent sur site pour des raisons de souveraineté et de contrôle des coûts.</p>
+    
+    <div class="highlight">
+        Le tunnel VPN IPsec (IKEv2) monte une liaison chiffrée permanente entre le pfSense local et la passerelle VPN Azure, permettant à l'application Cloud de requêter nos bases locales.
+    </div>
+
+    <div class="link-card">
+        ☁️ <a href="analyse_comparative_cloud.md">Analyse Comparative Cloud et TCO (Justification financière)</a>
+    </div>
+    <div class="link-card">
+        🧩 <a href="../schemas/architecture_hybride_detaillee.md">Schéma Logique de l'Architecture Hybride</a>
+    </div>
+
+    <h2>4. Modélisation et Sauvegarde des Données</h2>
+    <p>Nous utilisons une approche polyglotte : PostgreSQL pour garantir l'intégrité transactionnelle des réservations, et MongoDB pour ingérer la masse des logs générés par les capteurs IoT, évitant ainsi un goulot d'étranglement.</p>
+
+    <div class="link-card">
+        📊 <a href="../schemas/modele_donnees_UML.md">Modèles de Données (UML/Merise PostgreSQL & MongoDB)</a>
+    </div>
+    <div class="link-card">
+        💾 <a href="strategie_stockage.md">Stratégie de Stockage et Plan de Sauvegarde (3-2-1)</a>
+    </div>
+
+    <div class="page-break"></div>
+
+    <h2>5. Sécurité, Gouvernance et Résilience</h2>
+    <p>La sécurité du SI et la continuité de service sont intégrées By Design. Le projet intègre une gestion complète du cycle de vie des incidents (ITIL) et un Plan de Reprise d'Activité basé sur une analyse des impacts métier.</p>
+
+    <div class="link-card">
+        🛡️ <a href="../procedures/politique_securite.html">Politique de Sécurité (PSSI) — Zero Trust & IAM</a>
+    </div>
+    <div class="link-card">
+        📉 <a href="../procedures/analyse_BIA.html">Analyse d'Impact sur l'Activité (BIA) — Définition RTO/RPO</a>
+    </div>
+    <div class="link-card">
+        🔄 <a href="../procedures/PCA_PRA_SmartOffice2.html">Plan de Continuité et de Reprise d'Activité (PCA/PRA)</a>
+    </div>
+    <div class="link-card">
+        🎫 <a href="../procedures/processus_ITSM.html">Processus ITSM (Gestion des Incidents et Escalade)</a>
+    </div>
+
+    <h2>6. Démarche DevOps et Suivi de Projet</h2>
+    <p>L'intégralité du code (Infrastructure as Code, Pipeline CI/CD, Application Web) est gérée sous GitHub. Le déploiement vers Azure est totalement automatisé (Zero Downtime Deployment).</p>
+
+    <div class="link-card">
+        📅 <a href="../gestion-projet/suivi_sprints.md">Suivi de Projet Agile (Sprints et Backlog)</a>
+    </div>
+
+    <div class="footer">
+        <p>Smart Office 2.0 — DAT Consolidé — Valide l'ensemble des livrables de la grille UF INFRA B3</p>
+    </div>
+</div>
+
+</body>
+</html>
