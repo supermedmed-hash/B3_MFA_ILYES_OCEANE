@@ -132,73 +132,8 @@
 <p><strong>Auteur :</strong> Ilyes (Lead Réseau) | <strong>Statut :</strong> Validé<br><strong>Contexte :</strong> Immeuble de 4 étages — Biotech Corp (siège social — 200 employés cible)</p>
 <hr>
 <h2>1. Vue Physique de l&#39;Immeuble</h2>
-<pre class="mermaid">
-graph TD
-    subgraph "🏢 Immeuble Biotech Corp — 4 Étages"
-
-        subgraph "Étage 4 — Direction & R&D"
-            E4_AP["📶 AP Wi-Fi x2"]
-            E4_SW["🔲 Switch Accès Cisco 2960 (24p)"]
-            E4_PC["💻 15 Postes (VLAN 30 R&D)"]
-            E4_PC2["💻 5 Postes Direction (VLAN 20)"]
-        end
-
-        subgraph "Étage 3 — Espaces Collaboratifs"
-            E3_AP["📶 AP Wi-Fi x3"]
-            E3_SW["🔲 Switch Accès Cisco 2960 (48p)"]
-            E3_PC["💻 40 Postes (VLAN 20 Employés)"]
-            E3_IOT["📡 Capteurs IoT salles (VLAN 50)"]
-            E3_VOIP["📞 Téléphones IP x10 (VLAN 40)"]
-        end
-
-        subgraph "Étage 2 — Open Space"
-            E2_AP["📶 AP Wi-Fi x4"]
-            E2_SW["🔲 Switch Accès Cisco 2960 (48p)"]
-            E2_PC["💻 80 Postes (VLAN 20 Employés)"]
-            E2_VOIP["📞 Téléphones IP x20 (VLAN 40)"]
-            E2_PRINT["🖨️ Imprimantes x4 (VLAN 50)"]
-        end
-
-        subgraph "Étage 1 — Accueil & Salle Serveurs"
-            E1_AP["📶 AP Wi-Fi x2 (VLAN 99 Guest)"]
-            E1_SW_CORE["⭐ Switch Cœur Cisco 3650 (L3)"]
-            E1_SW_ACC["🔲 Switch Accès Cisco 2960 (24p)"]
-            E1_PC["💻 10 Postes Accueil (VLAN 20)"]
-
-            subgraph "🔒 Salle Serveurs (Baie 42U)"
-                SRV_AD["🖥️ SRV-AD-LOCAL<br/>Windows Server 2019<br/>AD / DNS / DHCP<br/>10.10.10.10"]
-                SRV_DOCKER["🐳 SRV-DOCKER<br/>Ubuntu 22.04<br/>Docker Host<br/>10.10.10.20"]
-                SRV_ZABBIX["📊 SRV-ZABBIX<br/>Zabbix + Grafana<br/>10.10.100.10"]
-                FW_PFS["🛡️ FIREWALL<br/>pfSense (2x NIC)<br/>WAN: DHCP FAI<br/>LAN: 10.10.10.1"]
-                UPS["🔋 Onduleur APC 1500VA"]
-                NAS_BKP["💾 NAS Synology<br/>Backups BDD<br/>10.10.10.30"]
-            end
-        end
-    end
-
-    %% Câblage vertical (Backbone fibre)
-    E4_SW ---|"🔗 Fibre 10G (Trunk)"| E1_SW_CORE
-    E3_SW ---|"🔗 Fibre 10G (Trunk)"| E1_SW_CORE
-    E2_SW ---|"🔗 Fibre 10G (Trunk)"| E1_SW_CORE
-    E1_SW_ACC ---|"🔗 Cuivre 1G"| E1_SW_CORE
-
-    %% Connexions salle serveurs
-    E1_SW_CORE ---|"Trunk"| FW_PFS
-    E1_SW_CORE ---|"VLAN 10"| SRV_AD
-    E1_SW_CORE ---|"VLAN 10"| SRV_DOCKER
-    E1_SW_CORE ---|"VLAN 100"| SRV_ZABBIX
-    E1_SW_CORE ---|"VLAN 10"| NAS_BKP
-
-    %% Lien WAN
-    FW_PFS ---|"🌐 Fibre FAI 500Mbps"| INTERNET["☁️ Internet"]
-    FW_PFS -.-|"🔐 VPN IPsec"| AZURE["🟦 Azure Cloud"]
-
-    %% Styling
-    style FW_PFS fill:#e74c3c,color:#fff
-    style E1_SW_CORE fill:#f39c12,color:#fff
-    style AZURE fill:#0078d4,color:#fff
-    style INTERNET fill:#95a5a6,color:#fff
-</pre><hr>
+<p><em><strong>MERMAID_BLOCK_0</strong></em></p>
+<hr>
 <h2>2. Inventaire Matériel</h2>
 <h3>2.1 Équipements Réseau</h3>
 <table>
@@ -396,76 +331,8 @@ graph TD
         <h1>🌐 Architecture Hybride Détaillée - Smart Office 2.0</h1>
 <p>Ce schéma présente l&#39;interconnexion entre l&#39;infrastructure locale (On-Premise) et le Cloud Azure, avec un focus sur la segmentation réseau (VLANs/Subnets) et le placement des instances.</p>
 <h2>📊 Schéma des Réseaux et Instances</h2>
-<pre class="mermaid">
-graph TD
-    subgraph "🟦 CLOUD AZURE (VNet - 172.16.0.0/16)"
-        subgraph "Identity Subnet (172.16.1.0/24)"
-            DC_AZ["VM: DC-CLOUD\n(Replica AD)"]
-        end
-
-        subgraph "App Subnet (172.16.2.0/24)"
-            AZ_APP["Azure App Service\n(Node.js App)"]
-        end
-
-        subgraph "Data Subnet (172.16.3.0/24)"
-            AZ_PG["Azure DB PostgreSQL\n(Managed)"]
-        end
-
-        VGW["Azure VPN Gateway"]
-    end
-
-    subgraph "🏢 SITE LOCAL (10.10.0.0/16)"
-        subgraph "🛡️ Firewall & Gateway"
-            PFS["PfSense Firewall"]
-        end
-
-        subgraph "🖧 Segmentation VLANs"
-            subgraph "VLAN 20: Serveurs (10.10.20.0/24)"
-                DC_LOC["SRV-AD-LOCAL\n(Windows Server)"]
-                DKR["Docker Host\n(PoC Application)"]
-            SW["Switch Core"]
-        end
-
-        subgraph VLANS ["VLANs"]
-            V10["🖥️ Srv (AD, DBs, Zabbix) - VLAN 10"]
-            V20["👥 Employés - VLAN 20"]
-            V30["🧪 R&D Isolé - VLAN 30"]
-            V40["📞 VoIP - VLAN 40"]
-            V50["📡 IoT - VLAN 50"]
-            V99["🛜 Guest Wi-Fi - VLAN 99"]
-            V100["🔧 Management - VLAN 100"]
-        end
-    end
-
-    %% Interconnexions
-    PFS <== "Tunnel IPsec (S2S VPN)" ==> VGW
-    
-    PFS --- SW
-    SW --- V10
-    SW --- V20
-    SW --- V30
-    SW --- V40
-    SW --- V50
-    SW --- V99
-    SW --- V100
-    
-    %% Flux Cloud
-    VGW --- DC_AZ
-    VGW --- AZ_APP
-    AZ_APP --- AZ_PG
-    DC_AZ <-. "Réplication AD" .-> V10
-
-    %% FLUX TRANSVERSES
-    V100 -. "Supervision" .-> V10
-    AZ_APP -. "Requêtes BDD" .-> V10
-
-    %% Styling
-    style PFS fill:#f96,stroke:#333
-    style VGW fill:#f96,stroke:#333
-    style AZ_APP fill:#0078d4,stroke:#fff,color:#fff
-    style AZ_PG fill:#0078d4,stroke:#fff,color:#fff
-    style DC_AZ fill:#9f9,stroke:#333
-</pre><h2>📋 Inventaire Technique</h2>
+<p><em><strong>MERMAID_BLOCK_0</strong></em></p>
+<h2>📋 Inventaire Technique</h2>
 <h3>1. Documentation Applicative et Données</h3>
 <ul>
 <li><strong>Bases de données polyglottes</strong> : <strong>Modèle de données UML/Merise</strong> justifiant Postgres (relationnel) + Mongo (Time-Series).</li>
@@ -972,11 +839,8 @@ graph TD
 </tbody></table>
 <p><em>Note : Les serveurs locaux pour l&#39;AD et les BDD (Option B) utilisent l&#39;infrastructure matérielle déjà amortie de l&#39;entreprise. Le TCO met en évidence le coût de la brique &quot;Web/Application&quot;.</em></p>
 <h3>2.3 Bilan de l&#39;analyse TCO</h3>
-<pre class="mermaid">
-pie title Répartition TCO (3 ans) - Économie Hybride
-    "Option A: 100% On-Premise" : 68700
-    "Option B: Hybride (Azure PaaS)" : 17580
-</pre><p><strong>Conclusion de l&#39;analyse financière :</strong>
+<p><em><strong>MERMAID_BLOCK_0</strong></em></p>
+<p><strong>Conclusion de l&#39;analyse financière :</strong>
 L&#39;adoption de l&#39;architecture Hybride pour l&#39;application Smart Office 2.0 permet une économie estimée à <strong>74% sur 3 ans</strong> (soit environ 51 000 € économisés) par rapport à un hébergement 100% On-Premise. 
 Les gains s&#39;expliquent par :</p>
 <ol>
@@ -1002,36 +866,8 @@ Les gains s&#39;expliquent par :</p>
 <h2>1. Modélisation Relationnelle (PostgreSQL)</h2>
 <p>Cette base de données garantit l&#39;intégrité référentielle, la cohérence des réservations et la gestion stricte des rôles d&#39;authentification.</p>
 <h3>1.1 Diagramme de Classes (UML)</h3>
-<pre class="mermaid">
-classDiagram
-    class User {
-        +Integer id
-        +String username
-        +String password
-        +String role
-        +login()
-        +logout()
-    }
-    
-    class Salle {
-        +Integer id
-        +String nom
-        +Integer capacite
-        +Boolean equipement_visio
-    }
-
-    class Reservation {
-        +Integer id
-        +String employe_nom
-        +String salle_nom
-        +DateTime date_reservation
-        +creer()
-        +annuler()
-    }
-
-    User "1" -- "*" Reservation : effectue >
-    Salle "1" -- "*" Reservation : concerne >
-</pre><h3>1.2 Modèle Logique de Données (MLD)</h3>
+<p><em><strong>MERMAID_BLOCK_0</strong></em></p>
+<h3>1.2 Modèle Logique de Données (MLD)</h3>
 <ul>
 <li><strong>users</strong> (<u>id</u>: SERIAL, username: VARCHAR(50) UNIQUE, password: VARCHAR(50), role: VARCHAR(20))</li>
 <li><strong>salles</strong> (<u>id</u>: SERIAL, nom: VARCHAR(50) UNIQUE, capacite: INT, equipement_visio: BOOLEAN) <em>(Note : Les salles sont actuellement codées en dur dans le PoC Node.js, mais ceci représente l&#39;évolution cible de la DB).</em></li>
@@ -1063,22 +899,8 @@ classDiagram
 </ol>
 <hr>
 <h2>3. Flux de Données et Cohérence Polyglotte</h2>
-<pre class="mermaid">
-sequenceDiagram
-    participant User
-    participant WebApp as Application Web (Node.js)
-    participant Postgres as PostgreSQL (Relationnel)
-    participant Mongo as MongoDB (Time-Series / Logs)
-
-    User->>WebApp: 1. Demande de réservation
-    WebApp->>Postgres: 2. INSERT INTO reservations (...)
-    Postgres-->>WebApp: 3. Succès (Intégrité vérifiée)
-    
-    WebApp->>Mongo: 4. mongoose.save(IotLog: 'Création')
-    Mongo-->>WebApp: 5. Succès (Log asynchrone enregistré)
-    
-    WebApp-->>User: 6. Réservation confirmée
-</pre><p><strong>Justification du choix technique :</strong>
+<p><em><strong>MERMAID_BLOCK_1</strong></em></p>
+<p><strong>Justification du choix technique :</strong>
 En séparant les logs (Mongo) des transactions métier (Postgres), nous assurons que si le composant IoT s&#39;emballe et génère 10 000 logs par seconde (attaque DDoS ou capteur défectueux), la base de données de réservation métier (Postgres) ne subit aucun ralentissement (Locks).</p>
 
     </div>

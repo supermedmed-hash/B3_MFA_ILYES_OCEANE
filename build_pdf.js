@@ -64,10 +64,21 @@ filesToInclude.forEach(file => {
             // Convertir les liens Markdown en texte brut avant parsing
             let processedMd = rawContent.replace(/\[([^\]]+)\]\([^\)]+\)/g, '**$1**');
             
-            // Remplacer les blocs mermaid par <pre class="mermaid">
-            processedMd = processedMd.replace(/\`\`\`mermaid([\s\S]*?)\`\`\`/g, '<pre class="mermaid">$1</pre>');
+            // Extraire les blocs mermaid pour éviter que marked les parse (et échappe les caractères >)
+            let counter = 0;
+            const mermaidBlocks = {};
+            processedMd = processedMd.replace(/\`\`\`mermaid\r?\n([\s\S]*?)\`\`\`/g, (match, p1) => {
+                const id = `___MERMAID_BLOCK_${counter++}___`;
+                mermaidBlocks[id] = p1;
+                return id;
+            });
             
             sectionHtml = parse(processedMd);
+            
+            // Réinjecter les blocs mermaid en HTML brut
+            for (const [id, content] of Object.entries(mermaidBlocks)) {
+                sectionHtml = sectionHtml.replace(id, `<pre class="mermaid">\n${content}\n</pre>`);
+            }
         } else {
             // Nettoyer les HTML
             let bodyContent = rawContent;
