@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { parse } = require('marked');
 
 const filesToInclude = [
     { title: "Dossier d'Architecture Technique (DAT)", path: 'docs/dat/DAT_SmartOffice2.html' },
@@ -22,7 +23,6 @@ let htmlContent = `<!DOCTYPE html>
     <meta charset="UTF-8">
     <title>Dossier Final - Smart Office 2.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script type="module">
       import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
       mermaid.initialize({ startOnLoad: true });
@@ -61,14 +61,15 @@ filesToInclude.forEach(file => {
         let sectionHtml = "";
 
         if (file.path.endsWith('.md')) {
-            // Remplacer les blocs mermaid pour qu'ils soient reconnus par la lib JS
-            let processedMd = rawContent.replace(/\`\`\`mermaid([\s\S]*?)\`\`\`/g, '<div class="mermaid">$1</div>');
-            // Enlever les liens markdown type [texte](lien) pour ne garder que le texte
-            processedMd = processedMd.replace(/\[([^\]]+)\]\([^\)]+\)/g, '<strong>$1</strong>');
+            // Convertir les liens Markdown en texte brut avant parsing
+            let processedMd = rawContent.replace(/\[([^\]]+)\]\([^\)]+\)/g, '**$1**');
             
-            sectionHtml = "<script>document.write(marked.parse(`" + processedMd.replace(/\`/g, "\\`").replace(/\$/g, "\\$") + "`));</script>";
+            // Remplacer les blocs mermaid par <pre class="mermaid">
+            processedMd = processedMd.replace(/\`\`\`mermaid([\s\S]*?)\`\`\`/g, '<pre class="mermaid">$1</pre>');
+            
+            sectionHtml = parse(processedMd);
         } else {
-            // Nettoyer les HTML de leurs balises body/head/style pour les fusionner
+            // Nettoyer les HTML
             let bodyContent = rawContent;
             const bodyMatch = rawContent.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
             if (bodyMatch) {

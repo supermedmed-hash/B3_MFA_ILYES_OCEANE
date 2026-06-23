@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Dossier Final - Smart Office 2.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script type="module">
       import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
       mermaid.initialize({ startOnLoad: true });
@@ -129,15 +128,11 @@
     <div class="page-break"></div>
     <!-- SECTION: Architecture Physique -->
     <div class="section-content">
-        <script>document.write(marked.parse(`# 🏢 Schéma d'Architecture Physique — Smart Office 2.0
-**Auteur :** Ilyes (Lead Réseau) | **Statut :** Validé  
-**Contexte :** Immeuble de 4 étages — Biotech Corp (siège social — 200 employés cible)
-
----
-
-## 1. Vue Physique de l'Immeuble
-
-<div class="mermaid">
+        <h1>🏢 Schéma d&#39;Architecture Physique — Smart Office 2.0</h1>
+<p><strong>Auteur :</strong> Ilyes (Lead Réseau) | <strong>Statut :</strong> Validé<br><strong>Contexte :</strong> Immeuble de 4 étages — Biotech Corp (siège social — 200 employés cible)</p>
+<hr>
+<h2>1. Vue Physique de l&#39;Immeuble</h2>
+<pre class="mermaid">
 graph TD
     subgraph "🏢 Immeuble Biotech Corp — 4 Étages"
 
@@ -203,77 +198,205 @@ graph TD
     style E1_SW_CORE fill:#f39c12,color:#fff
     style AZURE fill:#0078d4,color:#fff
     style INTERNET fill:#95a5a6,color:#fff
-</div>
+</pre><hr>
+<h2>2. Inventaire Matériel</h2>
+<h3>2.1 Équipements Réseau</h3>
+<table>
+<thead>
+<tr>
+<th align="left">Équipement</th>
+<th align="left">Modèle</th>
+<th align="center">Quantité</th>
+<th align="left">Localisation</th>
+<th align="left">Rôle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Switch Cœur (L3)</strong></td>
+<td align="left">Cisco Catalyst 3650-48PS</td>
+<td align="center">1</td>
+<td align="left">Étage 1 — Baie serveurs</td>
+<td align="left">Routage inter-VLAN, agrégation trunk, PoE+</td>
+</tr>
+<tr>
+<td align="left"><strong>Switch Accès (L2)</strong></td>
+<td align="left">Cisco Catalyst 2960-X 48p</td>
+<td align="center">2</td>
+<td align="left">Étages 2 et 3</td>
+<td align="left">Distribution des ports, 802.1Q, PoE</td>
+</tr>
+<tr>
+<td align="left"><strong>Switch Accès (L2)</strong></td>
+<td align="left">Cisco Catalyst 2960-X 24p</td>
+<td align="center">2</td>
+<td align="left">Étages 1 et 4</td>
+<td align="left">Distribution des ports, 802.1Q</td>
+</tr>
+<tr>
+<td align="left"><strong>Pare-feu</strong></td>
+<td align="left">pfSense (appliance)</td>
+<td align="center">1</td>
+<td align="left">Étage 1 — Baie serveurs</td>
+<td align="left">Firewall, VPN IPsec, NAT, filtrage</td>
+</tr>
+<tr>
+<td align="left"><strong>Bornes Wi-Fi</strong></td>
+<td align="left">Cisco Aironet / Meraki</td>
+<td align="center">11</td>
+<td align="left">Tous les étages</td>
+<td align="left">Accès WLAN, SSID par VLAN</td>
+</tr>
+<tr>
+<td align="left"><strong>Contrôleur WLAN</strong></td>
+<td align="left">Cisco WLC 2504</td>
+<td align="center">1</td>
+<td align="left">Étage 1 — Baie serveurs</td>
+<td align="left">Gestion centralisée des AP</td>
+</tr>
+</tbody></table>
+<h3>2.2 Serveurs</h3>
+<table>
+<thead>
+<tr>
+<th align="left">Serveur</th>
+<th align="left">OS</th>
+<th align="left">IP</th>
+<th align="center">RAM</th>
+<th align="left">Disque</th>
+<th align="left">Rôle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>SRV-AD-LOCAL</strong></td>
+<td align="left">Windows Server 2019</td>
+<td align="left">10.10.10.10</td>
+<td align="center">8 Go</td>
+<td align="left">120 Go SSD</td>
+<td align="left">AD DS, DNS, DHCP, GPO</td>
+</tr>
+<tr>
+<td align="left"><strong>SRV-DOCKER</strong></td>
+<td align="left">Ubuntu 22.04 LTS</td>
+<td align="left">10.10.10.20</td>
+<td align="center">16 Go</td>
+<td align="left">500 Go SSD</td>
+<td align="left">Docker Host (App, PostgreSQL, MongoDB)</td>
+</tr>
+<tr>
+<td align="left"><strong>SRV-ZABBIX</strong></td>
+<td align="left">Ubuntu 22.04 LTS</td>
+<td align="left">10.10.100.10</td>
+<td align="center">8 Go</td>
+<td align="left">250 Go SSD</td>
+<td align="left">Zabbix Server, Grafana</td>
+</tr>
+<tr>
+<td align="left"><strong>NAS-BACKUP</strong></td>
+<td align="left">Synology DS220+</td>
+<td align="left">10.10.10.30</td>
+<td align="center">2 Go</td>
+<td align="left">2×4 To (RAID 1)</td>
+<td align="left">Sauvegarde BDD, configs pfSense</td>
+</tr>
+</tbody></table>
+<h3>2.3 Câblage</h3>
+<table>
+<thead>
+<tr>
+<th align="left">Type</th>
+<th align="left">Usage</th>
+<th align="center">Débit</th>
+<th align="left">Localisation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Fibre OM4 (10 Gbps)</strong></td>
+<td align="left">Backbone vertical (inter-étages)</td>
+<td align="center">10 Gbps</td>
+<td align="left">Gaines techniques</td>
+</tr>
+<tr>
+<td align="left"><strong>Cat 6A (Cuivre)</strong></td>
+<td align="left">Distribution horizontale (postes, AP, téléphones)</td>
+<td align="center">1-10 Gbps</td>
+<td align="left">Chaque étage — faux plancher/chemin de câble</td>
+</tr>
+<tr>
+<td align="left"><strong>Fibre FAI</strong></td>
+<td align="left">Lien Internet</td>
+<td align="center">500 Mbps</td>
+<td align="left">Étage 1 → NRO FAI</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>3. Répartition des VLANs par Étage</h2>
+<table>
+<thead>
+<tr>
+<th align="left">Étage</th>
+<th align="left">VLANs actifs</th>
+<th align="center">Nombre de prises</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Étage 1</strong> (Accueil + Salle serveurs)</td>
+<td align="left">VLAN 10 (Serveurs), VLAN 20 (Employés), VLAN 99 (Guest), VLAN 100 (Mgmt)</td>
+<td align="center">40</td>
+</tr>
+<tr>
+<td align="left"><strong>Étage 2</strong> (Open Space)</td>
+<td align="left">VLAN 20 (Employés), VLAN 40 (VoIP), VLAN 50 (IoT/Imprimantes)</td>
+<td align="center">120</td>
+</tr>
+<tr>
+<td align="left"><strong>Étage 3</strong> (Collaboratif)</td>
+<td align="left">VLAN 20 (Employés), VLAN 40 (VoIP), VLAN 50 (IoT capteurs)</td>
+<td align="center">60</td>
+</tr>
+<tr>
+<td align="left"><strong>Étage 4</strong> (Direction + R&amp;D)</td>
+<td align="left">VLAN 20 (Employés), VLAN 30 (R&amp;D isolé)</td>
+<td align="center">30</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. Alimentation Électrique et Redondance</h2>
+<table>
+<thead>
+<tr>
+<th align="left">Composant</th>
+<th align="left">Protection</th>
+<th align="left">Autonomie</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Baie serveurs</td>
+<td align="left">Onduleur APC Smart-UPS 1500VA</td>
+<td align="left">~20 min en charge complète</td>
+</tr>
+<tr>
+<td align="left">Switchs PoE</td>
+<td align="left">Alimentation redondante interne</td>
+<td align="left">N/A (PoE pour AP + téléphones)</td>
+</tr>
+<tr>
+<td align="left">Lien FAI</td>
+<td align="left">Backup 4G via interface OPT1 pfSense</td>
+<td align="left">Illimité (forfait data)</td>
+</tr>
+</tbody></table>
+<hr>
+<p><em>Document rédigé par Ilyes (Lead Réseau &amp; Sécurité) — Juin 2026</em></p>
 
----
-
-## 2. Inventaire Matériel
-
-### 2.1 Équipements Réseau
-
-| Équipement | Modèle | Quantité | Localisation | Rôle |
-|:---|:---|:---:|:---|:---|
-| **Switch Cœur (L3)** | Cisco Catalyst 3650-48PS | 1 | Étage 1 — Baie serveurs | Routage inter-VLAN, agrégation trunk, PoE+ |
-| **Switch Accès (L2)** | Cisco Catalyst 2960-X 48p | 2 | Étages 2 et 3 | Distribution des ports, 802.1Q, PoE |
-| **Switch Accès (L2)** | Cisco Catalyst 2960-X 24p | 2 | Étages 1 et 4 | Distribution des ports, 802.1Q |
-| **Pare-feu** | pfSense (appliance) | 1 | Étage 1 — Baie serveurs | Firewall, VPN IPsec, NAT, filtrage |
-| **Bornes Wi-Fi** | Cisco Aironet / Meraki | 11 | Tous les étages | Accès WLAN, SSID par VLAN |
-| **Contrôleur WLAN** | Cisco WLC 2504 | 1 | Étage 1 — Baie serveurs | Gestion centralisée des AP |
-
-### 2.2 Serveurs
-
-| Serveur | OS | IP | RAM | Disque | Rôle |
-|:---|:---|:---|:---:|:---|:---|
-| **SRV-AD-LOCAL** | Windows Server 2019 | 10.10.10.10 | 8 Go | 120 Go SSD | AD DS, DNS, DHCP, GPO |
-| **SRV-DOCKER** | Ubuntu 22.04 LTS | 10.10.10.20 | 16 Go | 500 Go SSD | Docker Host (App, PostgreSQL, MongoDB) |
-| **SRV-ZABBIX** | Ubuntu 22.04 LTS | 10.10.100.10 | 8 Go | 250 Go SSD | Zabbix Server, Grafana |
-| **NAS-BACKUP** | Synology DS220+ | 10.10.10.30 | 2 Go | 2×4 To (RAID 1) | Sauvegarde BDD, configs pfSense |
-
-### 2.3 Câblage
-
-| Type | Usage | Débit | Localisation |
-|:---|:---|:---:|:---|
-| **Fibre OM4 (10 Gbps)** | Backbone vertical (inter-étages) | 10 Gbps | Gaines techniques |
-| **Cat 6A (Cuivre)** | Distribution horizontale (postes, AP, téléphones) | 1-10 Gbps | Chaque étage — faux plancher/chemin de câble |
-| **Fibre FAI** | Lien Internet | 500 Mbps | Étage 1 → NRO FAI |
-
----
-
-## 3. Répartition des VLANs par Étage
-
-| Étage | VLANs actifs | Nombre de prises |
-|:---|:---|:---:|
-| **Étage 1** (Accueil + Salle serveurs) | VLAN 10 (Serveurs), VLAN 20 (Employés), VLAN 99 (Guest), VLAN 100 (Mgmt) | 40 |
-| **Étage 2** (Open Space) | VLAN 20 (Employés), VLAN 40 (VoIP), VLAN 50 (IoT/Imprimantes) | 120 |
-| **Étage 3** (Collaboratif) | VLAN 20 (Employés), VLAN 40 (VoIP), VLAN 50 (IoT capteurs) | 60 |
-| **Étage 4** (Direction + R&D) | VLAN 20 (Employés), VLAN 30 (R&D isolé) | 30 |
-
----
-
-## 4. Alimentation Électrique et Redondance
-
-| Composant | Protection | Autonomie |
-|:---|:---|:---|
-| Baie serveurs | Onduleur APC Smart-UPS 1500VA | ~20 min en charge complète |
-| Switchs PoE | Alimentation redondante interne | N/A (PoE pour AP + téléphones) |
-| Lien FAI | Backup 4G via interface OPT1 pfSense | Illimité (forfait data) |
-
----
-
-*Document rédigé par Ilyes (Lead Réseau & Sécurité) — Juin 2026*
-`));</script>
     </div>
         
     <div class="page-break"></div>
     <!-- SECTION: Architecture Hybride (Détail) -->
     <div class="section-content">
-        <script>document.write(marked.parse(`# 🌐 Architecture Hybride Détaillée - Smart Office 2.0
-
-Ce schéma présente l'interconnexion entre l'infrastructure locale (On-Premise) et le Cloud Azure, avec un focus sur la segmentation réseau (VLANs/Subnets) et le placement des instances.
-
-## 📊 Schéma des Réseaux et Instances
-
-<div class="mermaid">
+        <h1>🌐 Architecture Hybride Détaillée - Smart Office 2.0</h1>
+<p>Ce schéma présente l&#39;interconnexion entre l&#39;infrastructure locale (On-Premise) et le Cloud Azure, avec un focus sur la segmentation réseau (VLANs/Subnets) et le placement des instances.</p>
+<h2>📊 Schéma des Réseaux et Instances</h2>
+<pre class="mermaid">
 graph TD
     subgraph "🟦 CLOUD AZURE (VNet - 172.16.0.0/16)"
         subgraph "Identity Subnet (172.16.1.0/24)"
@@ -342,249 +465,544 @@ graph TD
     style AZ_APP fill:#0078d4,stroke:#fff,color:#fff
     style AZ_PG fill:#0078d4,stroke:#fff,color:#fff
     style DC_AZ fill:#9f9,stroke:#333
-</div>
+</pre><h2>📋 Inventaire Technique</h2>
+<h3>1. Documentation Applicative et Données</h3>
+<ul>
+<li><strong>Bases de données polyglottes</strong> : <strong>Modèle de données UML/Merise</strong> justifiant Postgres (relationnel) + Mongo (Time-Series).</li>
+<li><strong>Stratégie de stockage et sauvegarde</strong> : NAS en local avec réplication, script automatisé, Règle du 3-2-1. Voir <strong>Stratégie de Stockage</strong>.</li>
+</ul>
+<h3>2. Couche Réseau et Sécurité (Ilyes)</h3>
+<ul>
+<li><strong>Plan d&#39;adressage</strong> : Plan IPv4 avec 8 VLANs isolés. Voir <strong>Plan d&#39;Adressage</strong>.</li>
+<li><strong>Architecture Physique</strong> : Bâtiment de 4 étages avec backbone fibre 10G. Voir <strong>Schéma Physique</strong>.</li>
+<li><strong>Flux et ACLs</strong> : Politique Deny All sur pfSense, matrice de flux validée. Voir <strong>Matrice des Flux Réseau</strong>.</li>
+<li><strong>Réseau Sans Fil (WLAN)</strong> : Architecture centralisée avec WLC, SSID par VLAN, sécurité 802.1X. Voir <strong>Architecture Wi-Fi</strong>.</li>
+<li><strong>Politique de Sécurité (PSSI)</strong> : Zero Trust, NAC, IAM. Voir <strong>Politique de Sécurité</strong>.</li>
+</ul>
+<h3>3. Couche Système &amp; Cloud (Océane)</h3>
+<ul>
+<li><strong>Hybridation Active Directory</strong> : GPO et contrôle d&#39;accès local sur Windows Server 2019.</li>
+<li><strong>Choix du Cloud</strong> : Azure App Service + ACR, justifié par une analyse complète (TCO). Voir <strong>Analyse Comparative Cloud</strong>.</li>
+<li><strong>VPN IPSec</strong> : Tunnel sécurisé IKEv2 entre pfSense et Azure VPN Gateway. Résolution de noms unifiée via Split-DNS entre le domaine local et les ressources Cloud.</li>
+</ul>
 
-## 📋 Inventaire Technique
-
-### 1. Documentation Applicative et Données
-*   **Bases de données polyglottes** : <strong>Modèle de données UML/Merise</strong> justifiant Postgres (relationnel) + Mongo (Time-Series).
-*   **Stratégie de stockage et sauvegarde** : NAS en local avec réplication, script automatisé, Règle du 3-2-1. Voir <strong>Stratégie de Stockage</strong>.
-
-### 2. Couche Réseau et Sécurité (Ilyes)
-*   **Plan d'adressage** : Plan IPv4 avec 8 VLANs isolés. Voir <strong>Plan d'Adressage</strong>.
-*   **Architecture Physique** : Bâtiment de 4 étages avec backbone fibre 10G. Voir <strong>Schéma Physique</strong>.
-*   **Flux et ACLs** : Politique Deny All sur pfSense, matrice de flux validée. Voir <strong>Matrice des Flux Réseau</strong>.
-*   **Réseau Sans Fil (WLAN)** : Architecture centralisée avec WLC, SSID par VLAN, sécurité 802.1X. Voir <strong>Architecture Wi-Fi</strong>.
-*   **Politique de Sécurité (PSSI)** : Zero Trust, NAC, IAM. Voir <strong>Politique de Sécurité</strong>.
-
-### 3. Couche Système & Cloud (Océane)
-*   **Hybridation Active Directory** : GPO et contrôle d'accès local sur Windows Server 2019.
-*   **Choix du Cloud** : Azure App Service + ACR, justifié par une analyse complète (TCO). Voir <strong>Analyse Comparative Cloud</strong>.
-*   **VPN IPSec** : Tunnel sécurisé IKEv2 entre pfSense et Azure VPN Gateway. Résolution de noms unifiée via Split-DNS entre le domaine local et les ressources Cloud.
-`));</script>
     </div>
         
     <div class="page-break"></div>
     <!-- SECTION: Matrice des Flux Réseau -->
     <div class="section-content">
-        <script>document.write(marked.parse(`# 🔀 Matrice des Flux Réseau — Smart Office 2.0
-**Auteur :** Ilyes (Lead Réseau) | **Statut :** Validé
-**Contexte :** Implémentation du pare-feu pfSense en politique "Deny All" par défaut.
+        <h1>🔀 Matrice des Flux Réseau — Smart Office 2.0</h1>
+<p><strong>Auteur :</strong> Ilyes (Lead Réseau) | <strong>Statut :</strong> Validé
+<strong>Contexte :</strong> Implémentation du pare-feu pfSense en politique &quot;Deny All&quot; par défaut.</p>
+<p>Cette matrice documente l&#39;ensemble des flux autorisés (ACLs) entre les différents sous-réseaux (VLANs) et les environnements extérieurs (Internet, Cloud Azure). 
+<strong>Tout flux non explicitement autorisé dans ce tableau est bloqué par défaut.</strong></p>
+<hr>
+<h2>1. Plan d&#39;Adressage (Rappel)</h2>
+<table>
+<thead>
+<tr>
+<th align="left">Zone</th>
+<th align="left">Sous-réseau</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>VLAN 10</strong></td>
+<td align="left"><code>10.10.10.0/24</code></td>
+<td align="left">Serveurs &amp; Administration</td>
+</tr>
+<tr>
+<td align="left"><strong>VLAN 20</strong></td>
+<td align="left"><code>10.10.20.0/24</code></td>
+<td align="left">Employés (Data)</td>
+</tr>
+<tr>
+<td align="left"><strong>VLAN 30</strong></td>
+<td align="left"><code>10.10.30.0/24</code></td>
+<td align="left">R&amp;D (Isolé)</td>
+</tr>
+<tr>
+<td align="left"><strong>VLAN 40</strong></td>
+<td align="left"><code>10.10.40.0/24</code></td>
+<td align="left">Téléphonie IP (VoIP)</td>
+</tr>
+<tr>
+<td align="left"><strong>VLAN 50</strong></td>
+<td align="left"><code>10.10.50.0/24</code></td>
+<td align="left">IoT &amp; Imprimantes</td>
+</tr>
+<tr>
+<td align="left"><strong>VLAN 99</strong></td>
+<td align="left"><code>10.10.99.0/24</code></td>
+<td align="left">Guest (Wi-Fi public)</td>
+</tr>
+<tr>
+<td align="left"><strong>VLAN 100</strong></td>
+<td align="left"><code>10.10.100.0/24</code></td>
+<td align="left">Management Réseau (Zabbix, AP)</td>
+</tr>
+<tr>
+<td align="left"><strong>Azure VNet</strong></td>
+<td align="left"><code>172.16.0.0/16</code></td>
+<td align="left">Ressources Cloud Azure</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>2. Matrice des Flux Autorisés (ACLs pfSense)</h2>
+<p><em>Légende :</em> ✅ Autorisé | ❌ Bloqué par défaut</p>
+<table>
+<thead>
+<tr>
+<th align="left">ID</th>
+<th align="left">Source</th>
+<th align="left">Destination</th>
+<th align="left">Port / Protocole</th>
+<th align="center">Action</th>
+<th align="left">Description / Justification</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>DNS-01</strong></td>
+<td align="left">Tous les VLANs locaux</td>
+<td align="left">VLAN 10 (<code>10.10.10.10</code> - AD)</td>
+<td align="left">53 (UDP/TCP)</td>
+<td align="center">✅</td>
+<td align="left">Résolution DNS locale vers le contrôleur de domaine</td>
+</tr>
+<tr>
+<td align="left"><strong>DNS-02</strong></td>
+<td align="left">VLAN 10 (<code>10.10.10.10</code> - AD)</td>
+<td align="left">Internet (Ex: <code>8.8.8.8</code>)</td>
+<td align="left">53 (UDP)</td>
+<td align="center">✅</td>
+<td align="left">Forwarding DNS pour les requêtes externes</td>
+</tr>
+<tr>
+<td align="left"><strong>AD-01</strong></td>
+<td align="left">VLAN 20, VLAN 30</td>
+<td align="left">VLAN 10 (<code>10.10.10.10</code> - AD)</td>
+<td align="left">88, 389, 445, 636, 3268 (TCP/UDP)</td>
+<td align="center">✅</td>
+<td align="left">Authentification Kerberos, LDAP, SMB (GPO) pour les postes clients</td>
+</tr>
+<tr>
+<td align="left"><strong>WEB-01</strong></td>
+<td align="left">VLAN 20, VLAN 30</td>
+<td align="left">Internet</td>
+<td align="left">80, 443 (TCP)</td>
+<td align="center">✅</td>
+<td align="left">Navigation Web standard pour les employés et R&amp;D</td>
+</tr>
+<tr>
+<td align="left"><strong>WEB-02</strong></td>
+<td align="left">VLAN 99 (Guest)</td>
+<td align="left">Internet</td>
+<td align="left">80, 443 (TCP)</td>
+<td align="center">✅</td>
+<td align="left">Accès Internet uniquement pour les invités (Isolé du LAN)</td>
+</tr>
+<tr>
+<td align="left"><strong>APP-01</strong></td>
+<td align="left">Tous les VLANs locaux</td>
+<td align="left">Azure App Service</td>
+<td align="left">443 (TCP)</td>
+<td align="center">✅</td>
+<td align="left">Accès à l&#39;application web Smart Office (HTTPS)</td>
+</tr>
+<tr>
+<td align="left"><strong>DB-01</strong></td>
+<td align="left">Azure VNet (App Web)</td>
+<td align="left">VLAN 10 (<code>10.10.10.20</code> - SRV-DOCKER)</td>
+<td align="left">5432 (TCP)</td>
+<td align="center">✅</td>
+<td align="left">L&#39;application cloud accède à PostgreSQL via le tunnel VPN</td>
+</tr>
+<tr>
+<td align="left"><strong>DB-02</strong></td>
+<td align="left">Azure VNet (App Web)</td>
+<td align="left">VLAN 10 (<code>10.10.10.20</code> - SRV-DOCKER)</td>
+<td align="left">27017 (TCP)</td>
+<td align="center">✅</td>
+<td align="left">L&#39;application cloud pousse les logs IoT vers MongoDB via VPN</td>
+</tr>
+<tr>
+<td align="left"><strong>IOT-01</strong></td>
+<td align="left">VLAN 50 (Capteurs)</td>
+<td align="left">VLAN 10 (<code>10.10.10.20</code> - SRV-DOCKER)</td>
+<td align="left">27017 (TCP)</td>
+<td align="center">✅</td>
+<td align="left">Envoi direct de données MQTT/Mongo par les capteurs internes</td>
+</tr>
+<tr>
+<td align="left"><strong>MGT-01</strong></td>
+<td align="left">VLAN 10, VLAN 20</td>
+<td align="left">VLAN 100 (<code>10.10.100.10</code> - Zabbix)</td>
+<td align="left">80, 443 (TCP)</td>
+<td align="center">✅</td>
+<td align="left">Accès au dashboard Grafana/Zabbix par les admins</td>
+</tr>
+<tr>
+<td align="left"><strong>ZBX-01</strong></td>
+<td align="left">VLAN 100 (<code>10.10.100.10</code>)</td>
+<td align="left">Tous les VLANs locaux</td>
+<td align="left">10050 (TCP), ICMP</td>
+<td align="center">✅</td>
+<td align="left">Collecte des métriques Zabbix Agent et ping</td>
+</tr>
+<tr>
+<td align="left"><strong>ZBX-02</strong></td>
+<td align="left">VLAN 100 (<code>10.10.100.10</code>)</td>
+<td align="left">Azure VNet (VMs)</td>
+<td align="left">10050 (TCP), ICMP</td>
+<td align="center">✅</td>
+<td align="left">Collecte des métriques Cloud via le tunnel VPN</td>
+</tr>
+<tr>
+<td align="left"><strong>VOIP-01</strong></td>
+<td align="left">VLAN 40 (Téléphones)</td>
+<td align="left">Internet (SIP Trunk FAI)</td>
+<td align="left">5060, 10000-20000 (UDP)</td>
+<td align="center">✅</td>
+<td align="left">Flux SIP et RTP pour la téléphonie externe</td>
+</tr>
+<tr>
+<td align="left"><strong>VPN-01</strong></td>
+<td align="left">pfSense (WAN)</td>
+<td align="left">Azure VPN Gateway (IP Pub)</td>
+<td align="left">500, 4500 (UDP), ESP</td>
+<td align="center">✅</td>
+<td align="left">Établissement et maintien du tunnel VPN IPsec (IKEv2)</td>
+</tr>
+<tr>
+<td align="left"><strong>BKP-01</strong></td>
+<td align="left">VLAN 10 (<code>10.10.10.20</code>)</td>
+<td align="left">VLAN 10 (<code>10.10.10.30</code> - NAS)</td>
+<td align="left">445, 2049, 873 (TCP)</td>
+<td align="center">✅</td>
+<td align="left">Dépôt des sauvegardes BDD (SMB/NFS/Rsync) sur le NAS local</td>
+</tr>
+<tr>
+<td align="left"><strong>BKP-02</strong></td>
+<td align="left">VLAN 10 (<code>10.10.10.30</code> - NAS)</td>
+<td align="left">Internet (Azure Blob)</td>
+<td align="left">443 (TCP)</td>
+<td align="center">✅</td>
+<td align="left">Externalisation des sauvegardes vers le Cloud Azure</td>
+</tr>
+<tr>
+<td align="left"><strong>ISOL-01</strong></td>
+<td align="left">VLAN 99 (Guest)</td>
+<td align="left">LAN (<code>10.10.0.0/16</code>)</td>
+<td align="left">Tous (Any)</td>
+<td align="center">❌</td>
+<td align="left">Blocage strict des invités vers les réseaux internes</td>
+</tr>
+<tr>
+<td align="left"><strong>ISOL-02</strong></td>
+<td align="left">VLAN 30 (R&amp;D)</td>
+<td align="left">VLAN 20 (Employés)</td>
+<td align="left">Tous (Any)</td>
+<td align="center">❌</td>
+<td align="left">Isolement du trafic R&amp;D par rapport au reste de l&#39;entreprise</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>3. Paramètres Avancés pfSense</h2>
+<h3>3.1 NAT (Network Address Translation)</h3>
+<ul>
+<li><strong>Outbound NAT</strong> : Activé en mode &quot;Hybrid&quot;.</li>
+<li>Translation (PAT) configurée pour les réseaux <code>10.10.20.0/24</code> (Employés), <code>10.10.30.0/24</code> (R&amp;D), <code>10.10.40.0/24</code> (VoIP) et <code>10.10.99.0/24</code> (Guest) vers l&#39;IP publique WAN du pfSense pour l&#39;accès Internet.</li>
+<li><strong>PAS de NAT</strong> entre les réseaux locaux (VLAN 10 à 100) et le réseau Azure (<code>172.16.0.0/16</code>) car le tunnel IPsec gère le routage réseau-à-réseau pur (Phase 2 configurée sur ces subnets).</li>
+</ul>
+<h3>3.2 Filtrage applicatif (Layer 7)</h3>
+<ul>
+<li>Utilisation de pfBlockerNG (optionnel) envisagée pour la phase de production pour bloquer les IP malveillantes connues et le trafic publicitaire/P2P sur le VLAN 99 (Guest).</li>
+</ul>
+<hr>
+<p><em>Fin du document.</em></p>
 
-Cette matrice documente l'ensemble des flux autorisés (ACLs) entre les différents sous-réseaux (VLANs) et les environnements extérieurs (Internet, Cloud Azure). 
-**Tout flux non explicitement autorisé dans ce tableau est bloqué par défaut.**
-
----
-
-## 1. Plan d'Adressage (Rappel)
-
-| Zone | Sous-réseau | Description |
-|:---|:---|:---|
-| **VLAN 10** | \`10.10.10.0/24\` | Serveurs & Administration |
-| **VLAN 20** | \`10.10.20.0/24\` | Employés (Data) |
-| **VLAN 30** | \`10.10.30.0/24\` | R&D (Isolé) |
-| **VLAN 40** | \`10.10.40.0/24\` | Téléphonie IP (VoIP) |
-| **VLAN 50** | \`10.10.50.0/24\` | IoT & Imprimantes |
-| **VLAN 99** | \`10.10.99.0/24\` | Guest (Wi-Fi public) |
-| **VLAN 100** | \`10.10.100.0/24\` | Management Réseau (Zabbix, AP) |
-| **Azure VNet** | \`172.16.0.0/16\` | Ressources Cloud Azure |
-
----
-
-## 2. Matrice des Flux Autorisés (ACLs pfSense)
-
-*Légende :* ✅ Autorisé | ❌ Bloqué par défaut
-
-| ID | Source | Destination | Port / Protocole | Action | Description / Justification |
-|:---|:---|:---|:---|:---:|:---|
-| **DNS-01** | Tous les VLANs locaux | VLAN 10 (\`10.10.10.10\` - AD) | 53 (UDP/TCP) | ✅ | Résolution DNS locale vers le contrôleur de domaine |
-| **DNS-02** | VLAN 10 (\`10.10.10.10\` - AD) | Internet (Ex: \`8.8.8.8\`) | 53 (UDP) | ✅ | Forwarding DNS pour les requêtes externes |
-| **AD-01** | VLAN 20, VLAN 30 | VLAN 10 (\`10.10.10.10\` - AD) | 88, 389, 445, 636, 3268 (TCP/UDP) | ✅ | Authentification Kerberos, LDAP, SMB (GPO) pour les postes clients |
-| **WEB-01** | VLAN 20, VLAN 30 | Internet | 80, 443 (TCP) | ✅ | Navigation Web standard pour les employés et R&D |
-| **WEB-02** | VLAN 99 (Guest) | Internet | 80, 443 (TCP) | ✅ | Accès Internet uniquement pour les invités (Isolé du LAN) |
-| **APP-01** | Tous les VLANs locaux | Azure App Service | 443 (TCP) | ✅ | Accès à l'application web Smart Office (HTTPS) |
-| **DB-01** | Azure VNet (App Web) | VLAN 10 (\`10.10.10.20\` - SRV-DOCKER) | 5432 (TCP) | ✅ | L'application cloud accède à PostgreSQL via le tunnel VPN |
-| **DB-02** | Azure VNet (App Web) | VLAN 10 (\`10.10.10.20\` - SRV-DOCKER) | 27017 (TCP) | ✅ | L'application cloud pousse les logs IoT vers MongoDB via VPN |
-| **IOT-01** | VLAN 50 (Capteurs) | VLAN 10 (\`10.10.10.20\` - SRV-DOCKER) | 27017 (TCP) | ✅ | Envoi direct de données MQTT/Mongo par les capteurs internes |
-| **MGT-01** | VLAN 10, VLAN 20 | VLAN 100 (\`10.10.100.10\` - Zabbix) | 80, 443 (TCP) | ✅ | Accès au dashboard Grafana/Zabbix par les admins |
-| **ZBX-01** | VLAN 100 (\`10.10.100.10\`) | Tous les VLANs locaux | 10050 (TCP), ICMP | ✅ | Collecte des métriques Zabbix Agent et ping |
-| **ZBX-02** | VLAN 100 (\`10.10.100.10\`) | Azure VNet (VMs) | 10050 (TCP), ICMP | ✅ | Collecte des métriques Cloud via le tunnel VPN |
-| **VOIP-01** | VLAN 40 (Téléphones) | Internet (SIP Trunk FAI) | 5060, 10000-20000 (UDP) | ✅ | Flux SIP et RTP pour la téléphonie externe |
-| **VPN-01** | pfSense (WAN) | Azure VPN Gateway (IP Pub) | 500, 4500 (UDP), ESP | ✅ | Établissement et maintien du tunnel VPN IPsec (IKEv2) |
-| **BKP-01** | VLAN 10 (\`10.10.10.20\`) | VLAN 10 (\`10.10.10.30\` - NAS) | 445, 2049, 873 (TCP) | ✅ | Dépôt des sauvegardes BDD (SMB/NFS/Rsync) sur le NAS local |
-| **BKP-02** | VLAN 10 (\`10.10.10.30\` - NAS) | Internet (Azure Blob) | 443 (TCP) | ✅ | Externalisation des sauvegardes vers le Cloud Azure |
-| **ISOL-01**| VLAN 99 (Guest) | LAN (\`10.10.0.0/16\`) | Tous (Any) | ❌ | Blocage strict des invités vers les réseaux internes |
-| **ISOL-02**| VLAN 30 (R&D) | VLAN 20 (Employés) | Tous (Any) | ❌ | Isolement du trafic R&D par rapport au reste de l'entreprise |
-
----
-
-## 3. Paramètres Avancés pfSense
-
-### 3.1 NAT (Network Address Translation)
-- **Outbound NAT** : Activé en mode "Hybrid".
-- Translation (PAT) configurée pour les réseaux \`10.10.20.0/24\` (Employés), \`10.10.30.0/24\` (R&D), \`10.10.40.0/24\` (VoIP) et \`10.10.99.0/24\` (Guest) vers l'IP publique WAN du pfSense pour l'accès Internet.
-- **PAS de NAT** entre les réseaux locaux (VLAN 10 à 100) et le réseau Azure (\`172.16.0.0/16\`) car le tunnel IPsec gère le routage réseau-à-réseau pur (Phase 2 configurée sur ces subnets).
-
-### 3.2 Filtrage applicatif (Layer 7)
-- Utilisation de pfBlockerNG (optionnel) envisagée pour la phase de production pour bloquer les IP malveillantes connues et le trafic publicitaire/P2P sur le VLAN 99 (Guest).
-
----
-*Fin du document.*
-`));</script>
     </div>
         
     <div class="page-break"></div>
     <!-- SECTION: Architecture Wi-Fi -->
     <div class="section-content">
-        <script>document.write(marked.parse(`# 📶 Architecture WLAN (Wi-Fi) — Smart Office 2.0
-**Auteur :** Ilyes | **Statut :** Validé
+        <h1>📶 Architecture WLAN (Wi-Fi) — Smart Office 2.0</h1>
+<p><strong>Auteur :</strong> Ilyes | <strong>Statut :</strong> Validé</p>
+<p>Cette section documente l&#39;architecture du réseau sans-fil de l&#39;entreprise, indispensable pour le travail hybride et la mobilité des collaborateurs.</p>
+<hr>
+<h2>1. Topologie Matérielle</h2>
+<p>L&#39;infrastructure Wi-Fi repose sur une architecture <strong>centralisée</strong> (Contrôleur WLAN) pour faciliter le roaming (itinérance) entre les étages et unifier les politiques de sécurité.</p>
+<ul>
+<li><strong>Contrôleur WLAN (WLC)</strong> : 1x Cisco WLC 2504 (ou équivalent Meraki) hébergé dans la baie serveur (Étage 1) sur le VLAN de Management (VLAN 100).</li>
+<li><strong>Points d&#39;Accès (Access Points - AP)</strong> : 11x APs Cisco Aironet répartis sur les 4 étages.</li>
+<li><strong>Alimentation</strong> : Tous les APs sont alimentés en <strong>PoE+ (Power over Ethernet - 802.3at)</strong> par les switchs d&#39;accès Cisco 2960. Pas d&#39;alimentation secteur nécessaire.</li>
+</ul>
+<hr>
+<h2>2. Radios et Canaux (Planification RF)</h2>
+<p>Pour éviter les interférences (Overlap) entre les étages et offrir une haute densité :</p>
+<ul>
+<li><strong>Bande 2.4 GHz (IoT/Legacy)</strong> : Uniquement les canaux non-recouvrants 1, 6, 11 en alternance. Puissance d&#39;émission réduite.</li>
+<li><strong>Bande 5 GHz (Collaborateurs)</strong> : Privilégiée. Utilisation de canaux larges (40 MHz) en DFS pour garantir des débits élevés aux PC portables.</li>
+<li><strong>Band Steering</strong> : Activé sur le WLC pour forcer les clients compatibles à utiliser la bande 5 GHz (plus rapide, moins saturée).</li>
+</ul>
+<hr>
+<h2>3. Configuration des SSIDs et Sécurité</h2>
+<p>Le contrôleur diffuse différents SSIDs mappés directement sur les VLANs filaires de l&#39;entreprise.</p>
+<table>
+<thead>
+<tr>
+<th align="left">SSID (Nom du réseau)</th>
+<th align="center">Bande</th>
+<th align="left">Authentification</th>
+<th align="left">Chiffrement</th>
+<th align="center">VLAN assigné</th>
+<th align="left">Rôle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>Biotech-Corp</code></td>
+<td align="center">5 GHz</td>
+<td align="left"><strong>WPA2-Enterprise</strong> (802.1X via RADIUS AD)</td>
+<td align="left">AES</td>
+<td align="center">VLAN 20 (Employés)</td>
+<td align="left">Réseau principal sécurisé. L&#39;utilisateur utilise ses identifiants Windows.</td>
+</tr>
+<tr>
+<td align="left"><code>Biotech-R&amp;D</code></td>
+<td align="center">5 GHz</td>
+<td align="left"><strong>WPA2-Enterprise</strong> (Filtrage Groupe AD)</td>
+<td align="left">AES</td>
+<td align="center">VLAN 30 (R&amp;D)</td>
+<td align="left">Réseau ultra-isolé. Seuls les membres du groupe AD &quot;R&amp;D&quot; peuvent s&#39;y connecter.</td>
+</tr>
+<tr>
+<td align="left"><code>Biotech-IoT</code></td>
+<td align="center">2.4 GHz</td>
+<td align="left"><strong>WPA2-PSK</strong> (Clé pré-partagée complexe)</td>
+<td align="left">AES</td>
+<td align="center">VLAN 50 (IoT)</td>
+<td align="left">Pour les capteurs de présence/température ne gérant pas le 802.1X. Caches (SSID masqué).</td>
+</tr>
+<tr>
+<td align="left"><code>Biotech-Guest</code></td>
+<td align="center">2.4 / 5 GHz</td>
+<td align="left"><strong>Portail Captif</strong> (Open)</td>
+<td align="left">None (Chiffré via HTTPS sur le Web)</td>
+<td align="center">VLAN 99 (Guest)</td>
+<td align="left">Réseau invité isolé (Accès Internet uniquement). Isolation client activée.</td>
+</tr>
+</tbody></table>
+<h3>3.1 Explication du 802.1X (WPA2-Enterprise)</h3>
+<p>Lorsqu&#39;un employé se connecte à <code>Biotech-Corp</code> :</p>
+<ol>
+<li>Son PC contacte l&#39;AP.</li>
+<li>L&#39;AP relaie la requête (EAP) au serveur RADIUS (Hébergé sur le Windows Server AD local).</li>
+<li>L&#39;AD valide le couple <em>Nom d&#39;utilisateur / Mot de passe</em>.</li>
+<li>Si valide, l&#39;AP autorise la connexion et place le trafic du client dans le <strong>VLAN 20</strong>.</li>
+</ol>
+<p>Cette méthode garantit la traçabilité complète des connexions et empêche le vol de clés Wi-Fi partagées.</p>
 
-Cette section documente l'architecture du réseau sans-fil de l'entreprise, indispensable pour le travail hybride et la mobilité des collaborateurs.
-
----
-
-## 1. Topologie Matérielle
-
-L'infrastructure Wi-Fi repose sur une architecture **centralisée** (Contrôleur WLAN) pour faciliter le roaming (itinérance) entre les étages et unifier les politiques de sécurité.
-
-*   **Contrôleur WLAN (WLC)** : 1x Cisco WLC 2504 (ou équivalent Meraki) hébergé dans la baie serveur (Étage 1) sur le VLAN de Management (VLAN 100).
-*   **Points d'Accès (Access Points - AP)** : 11x APs Cisco Aironet répartis sur les 4 étages.
-*   **Alimentation** : Tous les APs sont alimentés en **PoE+ (Power over Ethernet - 802.3at)** par les switchs d'accès Cisco 2960. Pas d'alimentation secteur nécessaire.
-
----
-
-## 2. Radios et Canaux (Planification RF)
-
-Pour éviter les interférences (Overlap) entre les étages et offrir une haute densité :
-*   **Bande 2.4 GHz (IoT/Legacy)** : Uniquement les canaux non-recouvrants 1, 6, 11 en alternance. Puissance d'émission réduite.
-*   **Bande 5 GHz (Collaborateurs)** : Privilégiée. Utilisation de canaux larges (40 MHz) en DFS pour garantir des débits élevés aux PC portables.
-*   **Band Steering** : Activé sur le WLC pour forcer les clients compatibles à utiliser la bande 5 GHz (plus rapide, moins saturée).
-
----
-
-## 3. Configuration des SSIDs et Sécurité
-
-Le contrôleur diffuse différents SSIDs mappés directement sur les VLANs filaires de l'entreprise.
-
-| SSID (Nom du réseau) | Bande | Authentification | Chiffrement | VLAN assigné | Rôle |
-|:---|:---:|:---|:---|:---:|:---|
-| \`Biotech-Corp\` | 5 GHz | **WPA2-Enterprise** (802.1X via RADIUS AD) | AES | VLAN 20 (Employés) | Réseau principal sécurisé. L'utilisateur utilise ses identifiants Windows. |
-| \`Biotech-R&D\` | 5 GHz | **WPA2-Enterprise** (Filtrage Groupe AD) | AES | VLAN 30 (R&D) | Réseau ultra-isolé. Seuls les membres du groupe AD "R&D" peuvent s'y connecter. |
-| \`Biotech-IoT\` | 2.4 GHz | **WPA2-PSK** (Clé pré-partagée complexe) | AES | VLAN 50 (IoT) | Pour les capteurs de présence/température ne gérant pas le 802.1X. Caches (SSID masqué). |
-| \`Biotech-Guest\` | 2.4 / 5 GHz | **Portail Captif** (Open) | None (Chiffré via HTTPS sur le Web) | VLAN 99 (Guest) | Réseau invité isolé (Accès Internet uniquement). Isolation client activée. |
-
-### 3.1 Explication du 802.1X (WPA2-Enterprise)
-Lorsqu'un employé se connecte à \`Biotech-Corp\` :
-1. Son PC contacte l'AP.
-2. L'AP relaie la requête (EAP) au serveur RADIUS (Hébergé sur le Windows Server AD local).
-3. L'AD valide le couple *Nom d'utilisateur / Mot de passe*.
-4. Si valide, l'AP autorise la connexion et place le trafic du client dans le **VLAN 20**.
-
-Cette méthode garantit la traçabilité complète des connexions et empêche le vol de clés Wi-Fi partagées.
-`));</script>
     </div>
         
     <div class="page-break"></div>
     <!-- SECTION: Analyse Comparative Cloud -->
     <div class="section-content">
-        <script>document.write(marked.parse(`# ☁️ Analyse Comparative Cloud et TCO — Smart Office 2.0
-**Auteur :** Océane (Lead Système & Cloud) | **Statut :** Validé
-**Contexte :** Justification du choix du Cloud Provider pour l'hébergement de l'application Web (App Service) et le Registre de Conteneurs (ACR) dans le cadre de l'architecture hybride de Biotech Corp.
-
----
-
-## 1. Analyse Comparative (Azure vs AWS vs GCP)
-
-Pour répondre au besoin d'héberger une application Node.js conteneurisée avec un VPN Site-à-Site vers notre infrastructure locale (GNS3), nous avons évalué les trois principaux fournisseurs de cloud public.
-
-| Critère | 🟦 Microsoft Azure | 🟧 Amazon Web Services (AWS) | 🟩 Google Cloud (GCP) |
-|:---|:---|:---|:---|
-| **PaaS Conteneur** | **Azure App Service** (Web App for Containers) | **Elastic Beanstalk** / ECS Fargate | **Cloud Run** |
-| Facilité de déploiement | ⭐⭐⭐⭐⭐ (Intégration native Docker Compose) | ⭐⭐⭐ (Nécessite configuration ECS/Task Definitions) | ⭐⭐⭐⭐ (Très orienté Serverless/Knative) |
-| **Registre d'images** | Azure Container Registry (ACR) | Elastic Container Registry (ECR) | Artifact Registry |
-| **VPN Site-to-Site** | Azure VPN Gateway | AWS Site-to-Site VPN | Cloud VPN |
-| Intégration AD / Identité | **Excellente** (Entra ID natif) | Bonne (AWS Directory Service) | Moyenne (Cloud Identity) |
-| **Courbe d'apprentissage** | Rapide (Documentation claire, Portail intuitif) | Lente (Interface complexe, concepts très spécifiques) | Moyenne |
-
-### 🏆 Justification du Choix : Microsoft Azure
-**Pourquoi Azure a été retenu pour le projet Smart Office 2.0 :**
-1. **PaaS App Service pour Docker Compose :** Azure propose la fonctionnalité \`Web App for Containers\` qui supporte nativement un fichier \`docker-compose.yml\`. Cela correspond parfaitement à notre architecture applicative sans avoir à basculer vers Kubernetes (trop lourd pour ce PoC).
-2. **Écosystème Microsoft :** Notre infrastructure réseau On-Premise reposant sur Windows Server 2019 (AD DS), Azure offre le meilleur potentiel d'évolution (migration future vers Entra ID hybride).
-3. **Simplicité du VPN :** Azure VPN Gateway s'intègre très facilement avec pfSense en IKEv2.
-
----
-
-## 2. Analyse TCO (Total Cost of Ownership) sur 3 ans
-
-L'objectif de cette section est de comparer le coût de maintien d'une architecture locale (On-Premise) versus l'architecture Hybride actuelle (Serveurs locaux + App Web sur Azure).
-
-### Hypothèse de Dimensionnement (Biotech Corp)
-*   Besoin de haute disponibilité pour l'application Web (accessible 24/7 de l'extérieur).
-*   Besoin de sécurité et souveraineté pour les bases de données (restent en local).
-
-### 2.1 Option A : 100% On-Premise (Garder l'App Web en local)
-Nécessite l'achat de serveurs supplémentaires, de licences, et d'un routeur/firewall capable de gérer une forte charge externe (DMZ exposée).
-
-| Poste de dépense | Coût Année 1 (CAPEX + OPEX) | Coût Année 2 & 3 (OPEX) | Total sur 3 ans |
-|:---|:---|:---|:---|
-| Matériel (2x Serveurs Dell PowerEdge - Redondance) | 12 000 € (CAPEX) | 0 € | 12 000 € |
-| Licences (VMware/Hyper-V, Windows, Firewall avancé) | 3 500 € | 3 500 € / an | 10 500 € |
-| Énergie & Refroidissement supplémentaire | 1 800 € | 1 800 € / an | 5 400 € |
-| Bande passante Fibre (Garantie GTR 4h) | 3 600 € | 3 600 € / an | 10 800 € |
-| Temps Homme (MCO : Maintien en Condition Opérat.) | 10 000 € | 10 000 € / an | 30 000 € |
-| **TOTAL OPTION A** | **30 900 €** | **18 900 € / an** | **68 700 €** |
-
-### 2.2 Option B : Architecture Hybride (Choix du projet)
-Les bases de données restent sur l'infrastructure locale existante. Seule l'application Web et le VPN sont hébergés sur Azure (PaaS). L'investissement matériel initial est très faible.
-
-| Poste de dépense (Azure Pay-As-You-Go) | Coût Mensuel Estimé | Coût Annuel (OPEX) | Total sur 3 ans |
-|:---|:---|:---|:---|
-| **App Service Plan** (Linux B1 - Basic, scale manual) | ~12 € / mois | 144 € | 432 € |
-| **Container Registry** (Basic, 10GB storage) | ~5 € / mois | 60 € | 180 € |
-| **VPN Gateway** (VpnGw1 - 650 Mbps) | ~130 € / mois | 1 560 € | 4 680 € |
-| **Bande Passante Sortante** (Egress ~100GB/mo) | ~8 € / mois | 96 € | 288 € |
-| Temps Homme (Gestion Cloud, CI/CD automatisé) | (Inclus, réduit grâce au PaaS) | 4 000 € / an | 12 000 € |
-| **TOTAL OPTION B (Cloud Part)** | **~155 € / mois** | **5 860 € / an** | **17 580 €** |
-
-*Note : Les serveurs locaux pour l'AD et les BDD (Option B) utilisent l'infrastructure matérielle déjà amortie de l'entreprise. Le TCO met en évidence le coût de la brique "Web/Application".*
-
-### 2.3 Bilan de l'analyse TCO
-
-<div class="mermaid">
+        <h1>☁️ Analyse Comparative Cloud et TCO — Smart Office 2.0</h1>
+<p><strong>Auteur :</strong> Océane (Lead Système &amp; Cloud) | <strong>Statut :</strong> Validé
+<strong>Contexte :</strong> Justification du choix du Cloud Provider pour l&#39;hébergement de l&#39;application Web (App Service) et le Registre de Conteneurs (ACR) dans le cadre de l&#39;architecture hybride de Biotech Corp.</p>
+<hr>
+<h2>1. Analyse Comparative (Azure vs AWS vs GCP)</h2>
+<p>Pour répondre au besoin d&#39;héberger une application Node.js conteneurisée avec un VPN Site-à-Site vers notre infrastructure locale (GNS3), nous avons évalué les trois principaux fournisseurs de cloud public.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Critère</th>
+<th align="left">🟦 Microsoft Azure</th>
+<th align="left">🟧 Amazon Web Services (AWS)</th>
+<th align="left">🟩 Google Cloud (GCP)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>PaaS Conteneur</strong></td>
+<td align="left"><strong>Azure App Service</strong> (Web App for Containers)</td>
+<td align="left"><strong>Elastic Beanstalk</strong> / ECS Fargate</td>
+<td align="left"><strong>Cloud Run</strong></td>
+</tr>
+<tr>
+<td align="left">Facilité de déploiement</td>
+<td align="left">⭐⭐⭐⭐⭐ (Intégration native Docker Compose)</td>
+<td align="left">⭐⭐⭐ (Nécessite configuration ECS/Task Definitions)</td>
+<td align="left">⭐⭐⭐⭐ (Très orienté Serverless/Knative)</td>
+</tr>
+<tr>
+<td align="left"><strong>Registre d&#39;images</strong></td>
+<td align="left">Azure Container Registry (ACR)</td>
+<td align="left">Elastic Container Registry (ECR)</td>
+<td align="left">Artifact Registry</td>
+</tr>
+<tr>
+<td align="left"><strong>VPN Site-to-Site</strong></td>
+<td align="left">Azure VPN Gateway</td>
+<td align="left">AWS Site-to-Site VPN</td>
+<td align="left">Cloud VPN</td>
+</tr>
+<tr>
+<td align="left">Intégration AD / Identité</td>
+<td align="left"><strong>Excellente</strong> (Entra ID natif)</td>
+<td align="left">Bonne (AWS Directory Service)</td>
+<td align="left">Moyenne (Cloud Identity)</td>
+</tr>
+<tr>
+<td align="left"><strong>Courbe d&#39;apprentissage</strong></td>
+<td align="left">Rapide (Documentation claire, Portail intuitif)</td>
+<td align="left">Lente (Interface complexe, concepts très spécifiques)</td>
+<td align="left">Moyenne</td>
+</tr>
+</tbody></table>
+<h3>🏆 Justification du Choix : Microsoft Azure</h3>
+<p><strong>Pourquoi Azure a été retenu pour le projet Smart Office 2.0 :</strong></p>
+<ol>
+<li><strong>PaaS App Service pour Docker Compose :</strong> Azure propose la fonctionnalité <code>Web App for Containers</code> qui supporte nativement un fichier <code>docker-compose.yml</code>. Cela correspond parfaitement à notre architecture applicative sans avoir à basculer vers Kubernetes (trop lourd pour ce PoC).</li>
+<li><strong>Écosystème Microsoft :</strong> Notre infrastructure réseau On-Premise reposant sur Windows Server 2019 (AD DS), Azure offre le meilleur potentiel d&#39;évolution (migration future vers Entra ID hybride).</li>
+<li><strong>Simplicité du VPN :</strong> Azure VPN Gateway s&#39;intègre très facilement avec pfSense en IKEv2.</li>
+</ol>
+<hr>
+<h2>2. Analyse TCO (Total Cost of Ownership) sur 3 ans</h2>
+<p>L&#39;objectif de cette section est de comparer le coût de maintien d&#39;une architecture locale (On-Premise) versus l&#39;architecture Hybride actuelle (Serveurs locaux + App Web sur Azure).</p>
+<h3>Hypothèse de Dimensionnement (Biotech Corp)</h3>
+<ul>
+<li>Besoin de haute disponibilité pour l&#39;application Web (accessible 24/7 de l&#39;extérieur).</li>
+<li>Besoin de sécurité et souveraineté pour les bases de données (restent en local).</li>
+</ul>
+<h3>2.1 Option A : 100% On-Premise (Garder l&#39;App Web en local)</h3>
+<p>Nécessite l&#39;achat de serveurs supplémentaires, de licences, et d&#39;un routeur/firewall capable de gérer une forte charge externe (DMZ exposée).</p>
+<table>
+<thead>
+<tr>
+<th align="left">Poste de dépense</th>
+<th align="left">Coût Année 1 (CAPEX + OPEX)</th>
+<th align="left">Coût Année 2 &amp; 3 (OPEX)</th>
+<th align="left">Total sur 3 ans</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Matériel (2x Serveurs Dell PowerEdge - Redondance)</td>
+<td align="left">12 000 € (CAPEX)</td>
+<td align="left">0 €</td>
+<td align="left">12 000 €</td>
+</tr>
+<tr>
+<td align="left">Licences (VMware/Hyper-V, Windows, Firewall avancé)</td>
+<td align="left">3 500 €</td>
+<td align="left">3 500 € / an</td>
+<td align="left">10 500 €</td>
+</tr>
+<tr>
+<td align="left">Énergie &amp; Refroidissement supplémentaire</td>
+<td align="left">1 800 €</td>
+<td align="left">1 800 € / an</td>
+<td align="left">5 400 €</td>
+</tr>
+<tr>
+<td align="left">Bande passante Fibre (Garantie GTR 4h)</td>
+<td align="left">3 600 €</td>
+<td align="left">3 600 € / an</td>
+<td align="left">10 800 €</td>
+</tr>
+<tr>
+<td align="left">Temps Homme (MCO : Maintien en Condition Opérat.)</td>
+<td align="left">10 000 €</td>
+<td align="left">10 000 € / an</td>
+<td align="left">30 000 €</td>
+</tr>
+<tr>
+<td align="left"><strong>TOTAL OPTION A</strong></td>
+<td align="left"><strong>30 900 €</strong></td>
+<td align="left"><strong>18 900 € / an</strong></td>
+<td align="left"><strong>68 700 €</strong></td>
+</tr>
+</tbody></table>
+<h3>2.2 Option B : Architecture Hybride (Choix du projet)</h3>
+<p>Les bases de données restent sur l&#39;infrastructure locale existante. Seule l&#39;application Web et le VPN sont hébergés sur Azure (PaaS). L&#39;investissement matériel initial est très faible.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Poste de dépense (Azure Pay-As-You-Go)</th>
+<th align="left">Coût Mensuel Estimé</th>
+<th align="left">Coût Annuel (OPEX)</th>
+<th align="left">Total sur 3 ans</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>App Service Plan</strong> (Linux B1 - Basic, scale manual)</td>
+<td align="left">~12 € / mois</td>
+<td align="left">144 €</td>
+<td align="left">432 €</td>
+</tr>
+<tr>
+<td align="left"><strong>Container Registry</strong> (Basic, 10GB storage)</td>
+<td align="left">~5 € / mois</td>
+<td align="left">60 €</td>
+<td align="left">180 €</td>
+</tr>
+<tr>
+<td align="left"><strong>VPN Gateway</strong> (VpnGw1 - 650 Mbps)</td>
+<td align="left">~130 € / mois</td>
+<td align="left">1 560 €</td>
+<td align="left">4 680 €</td>
+</tr>
+<tr>
+<td align="left"><strong>Bande Passante Sortante</strong> (Egress ~100GB/mo)</td>
+<td align="left">~8 € / mois</td>
+<td align="left">96 €</td>
+<td align="left">288 €</td>
+</tr>
+<tr>
+<td align="left">Temps Homme (Gestion Cloud, CI/CD automatisé)</td>
+<td align="left">(Inclus, réduit grâce au PaaS)</td>
+<td align="left">4 000 € / an</td>
+<td align="left">12 000 €</td>
+</tr>
+<tr>
+<td align="left"><strong>TOTAL OPTION B (Cloud Part)</strong></td>
+<td align="left"><strong>~155 € / mois</strong></td>
+<td align="left"><strong>5 860 € / an</strong></td>
+<td align="left"><strong>17 580 €</strong></td>
+</tr>
+</tbody></table>
+<p><em>Note : Les serveurs locaux pour l&#39;AD et les BDD (Option B) utilisent l&#39;infrastructure matérielle déjà amortie de l&#39;entreprise. Le TCO met en évidence le coût de la brique &quot;Web/Application&quot;.</em></p>
+<h3>2.3 Bilan de l&#39;analyse TCO</h3>
+<pre class="mermaid">
 pie title Répartition TCO (3 ans) - Économie Hybride
     "Option A: 100% On-Premise" : 68700
     "Option B: Hybride (Azure PaaS)" : 17580
-</div>
+</pre><p><strong>Conclusion de l&#39;analyse financière :</strong>
+L&#39;adoption de l&#39;architecture Hybride pour l&#39;application Smart Office 2.0 permet une économie estimée à <strong>74% sur 3 ans</strong> (soit environ 51 000 € économisés) par rapport à un hébergement 100% On-Premise. 
+Les gains s&#39;expliquent par :</p>
+<ol>
+<li><strong>L&#39;élimination du CAPEX</strong> (pas de serveurs Web frontaux à acheter).</li>
+<li><strong>La réduction du MCO</strong> grâce aux services managés (PaaS), Azure gérant la maintenance de l&#39;OS sous-jacent et du moteur Docker.</li>
+<li><strong>L&#39;agilité</strong> : La facturation au mois permet d&#39;arrêter les environnements de test lorsqu&#39;ils ne sont pas utilisés.</li>
+</ol>
 
-**Conclusion de l'analyse financière :**
-L'adoption de l'architecture Hybride pour l'application Smart Office 2.0 permet une économie estimée à **74% sur 3 ans** (soit environ 51 000 € économisés) par rapport à un hébergement 100% On-Premise. 
-Les gains s'expliquent par :
-1.  **L'élimination du CAPEX** (pas de serveurs Web frontaux à acheter).
-2.  **La réduction du MCO** grâce aux services managés (PaaS), Azure gérant la maintenance de l'OS sous-jacent et du moteur Docker.
-3.  **L'agilité** : La facturation au mois permet d'arrêter les environnements de test lorsqu'ils ne sont pas utilisés.
-`));</script>
     </div>
         
     <div class="page-break"></div>
     <!-- SECTION: Modèle de Données -->
     <div class="section-content">
-        <script>document.write(marked.parse(`# 📊 Modèles de Données UML/Merise — Smart Office 2.0
-**Auteur :** Florian (Lead Data) | **Statut :** Validé
-**Contexte :** Application de réservation de salles et de suivi de logs IoT
-
-Afin de répondre aux exigences métiers d'intégrité (réservations) et de performance (logs temps réel), l'architecture s'appuie sur un système de base de données polyglotte :
-1. **PostgreSQL** : Pour les données structurées et relationnelles (Employés, Salles, Réservations).
-2. **MongoDB** : Pour les données non structurées et les flux volumineux (Logs capteurs IoT).
-
----
-
-## 1. Modélisation Relationnelle (PostgreSQL)
-
-Cette base de données garantit l'intégrité référentielle, la cohérence des réservations et la gestion stricte des rôles d'authentification.
-
-### 1.1 Diagramme de Classes (UML)
-
-<div class="mermaid">
+        <h1>📊 Modèles de Données UML/Merise — Smart Office 2.0</h1>
+<p><strong>Auteur :</strong> Florian (Lead Data) | <strong>Statut :</strong> Validé
+<strong>Contexte :</strong> Application de réservation de salles et de suivi de logs IoT</p>
+<p>Afin de répondre aux exigences métiers d&#39;intégrité (réservations) et de performance (logs temps réel), l&#39;architecture s&#39;appuie sur un système de base de données polyglotte :</p>
+<ol>
+<li><strong>PostgreSQL</strong> : Pour les données structurées et relationnelles (Employés, Salles, Réservations).</li>
+<li><strong>MongoDB</strong> : Pour les données non structurées et les flux volumineux (Logs capteurs IoT).</li>
+</ol>
+<hr>
+<h2>1. Modélisation Relationnelle (PostgreSQL)</h2>
+<p>Cette base de données garantit l&#39;intégrité référentielle, la cohérence des réservations et la gestion stricte des rôles d&#39;authentification.</p>
+<h3>1.1 Diagramme de Classes (UML)</h3>
+<pre class="mermaid">
 classDiagram
     class User {
         +Integer id
@@ -613,49 +1031,39 @@ classDiagram
 
     User "1" -- "*" Reservation : effectue >
     Salle "1" -- "*" Reservation : concerne >
-</div>
-
-### 1.2 Modèle Logique de Données (MLD)
-
-*   **users** (<u>id</u>: SERIAL, username: VARCHAR(50) UNIQUE, password: VARCHAR(50), role: VARCHAR(20))
-*   **salles** (<u>id</u>: SERIAL, nom: VARCHAR(50) UNIQUE, capacite: INT, equipement_visio: BOOLEAN) *(Note : Les salles sont actuellement codées en dur dans le PoC Node.js, mais ceci représente l'évolution cible de la DB).*
-*   **reservations** (<u>id</u>: SERIAL, employe_nom: VARCHAR(100), salle_nom: VARCHAR(50), date_reservation: TIMESTAMP)
-    *   *Constraint* : FOREIGN KEY (employe_nom) REFERENCES users(username)
-    *   *Constraint* : FOREIGN KEY (salle_nom) REFERENCES salles(nom)
-
----
-
-## 2. Modélisation NoSQL Document (MongoDB)
-
-Cette base de données est conçue pour l'ingestion à haute fréquence (High Throughput) des capteurs IoT des salles de réunion, et conserve l'historique des actions applicatives sans impacter les performances de la base transactionnelle.
-
-### 2.1 Structure du Document JSON (IotLogSchema)
-
-En NoSQL, il n'y a pas de schéma strict forcé par la base de données, mais l'application impose la structure \`Mongoose\` suivante :
-
-\`\`\`json
-{
-  "_id": "ObjectId('648a12b...9d')",
-  "salle_nom": "String (ex: 'Salle Da Vinci')",
-  "action": "String (ex: 'Création', 'Suppression', 'Mouvement Détecté')",
-  "utilisateur": "String (ex: 'employe', 'admin', 'capteur_iot_01')",
-  "timestamp": "Date (ex: ISODate('2026-06-23T14:32:00.000Z'))",
-  "__v": 0
+</pre><h3>1.2 Modèle Logique de Données (MLD)</h3>
+<ul>
+<li><strong>users</strong> (<u>id</u>: SERIAL, username: VARCHAR(50) UNIQUE, password: VARCHAR(50), role: VARCHAR(20))</li>
+<li><strong>salles</strong> (<u>id</u>: SERIAL, nom: VARCHAR(50) UNIQUE, capacite: INT, equipement_visio: BOOLEAN) <em>(Note : Les salles sont actuellement codées en dur dans le PoC Node.js, mais ceci représente l&#39;évolution cible de la DB).</em></li>
+<li><strong>reservations</strong> (<u>id</u>: SERIAL, employe_nom: VARCHAR(100), salle_nom: VARCHAR(50), date_reservation: TIMESTAMP)<ul>
+<li><em>Constraint</em> : FOREIGN KEY (employe_nom) REFERENCES users(username)</li>
+<li><em>Constraint</em> : FOREIGN KEY (salle_nom) REFERENCES salles(nom)</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2>2. Modélisation NoSQL Document (MongoDB)</h2>
+<p>Cette base de données est conçue pour l&#39;ingestion à haute fréquence (High Throughput) des capteurs IoT des salles de réunion, et conserve l&#39;historique des actions applicatives sans impacter les performances de la base transactionnelle.</p>
+<h3>2.1 Structure du Document JSON (IotLogSchema)</h3>
+<p>En NoSQL, il n&#39;y a pas de schéma strict forcé par la base de données, mais l&#39;application impose la structure <code>Mongoose</code> suivante :</p>
+<pre><code class="language-json">{
+  &quot;_id&quot;: &quot;ObjectId(&#39;648a12b...9d&#39;)&quot;,
+  &quot;salle_nom&quot;: &quot;String (ex: &#39;Salle Da Vinci&#39;)&quot;,
+  &quot;action&quot;: &quot;String (ex: &#39;Création&#39;, &#39;Suppression&#39;, &#39;Mouvement Détecté&#39;)&quot;,
+  &quot;utilisateur&quot;: &quot;String (ex: &#39;employe&#39;, &#39;admin&#39;, &#39;capteur_iot_01&#39;)&quot;,
+  &quot;timestamp&quot;: &quot;Date (ex: ISODate(&#39;2026-06-23T14:32:00.000Z&#39;))&quot;,
+  &quot;__v&quot;: 0
 }
-\`\`\`
-
-### 2.2 Stratégie d'Indexation
-
-Pour optimiser l'affichage sur le Dashboard (Grafana ou interface Web) et filtrer rapidement les anomalies, les index suivants sont créés (ou recommandés) dans MongoDB :
-
-1.  **Index sur \`timestamp\` (DESC)** : Pour afficher rapidement les 10 derniers logs chronologiques dans le frontend Node.js.
-2.  **Index Composé \`[salle_nom, action]\`** : Pour permettre à Zabbix ou Grafana de compter rapidement le nombre de "Créations" pour une salle spécifique sur une période donnée.
-
----
-
-## 3. Flux de Données et Cohérence Polyglotte
-
-<div class="mermaid">
+</code></pre>
+<h3>2.2 Stratégie d&#39;Indexation</h3>
+<p>Pour optimiser l&#39;affichage sur le Dashboard (Grafana ou interface Web) et filtrer rapidement les anomalies, les index suivants sont créés (ou recommandés) dans MongoDB :</p>
+<ol>
+<li><strong>Index sur <code>timestamp</code> (DESC)</strong> : Pour afficher rapidement les 10 derniers logs chronologiques dans le frontend Node.js.</li>
+<li><strong>Index Composé <code>[salle_nom, action]</code></strong> : Pour permettre à Zabbix ou Grafana de compter rapidement le nombre de &quot;Créations&quot; pour une salle spécifique sur une période donnée.</li>
+</ol>
+<hr>
+<h2>3. Flux de Données et Cohérence Polyglotte</h2>
+<pre class="mermaid">
 sequenceDiagram
     participant User
     participant WebApp as Application Web (Node.js)
@@ -670,71 +1078,115 @@ sequenceDiagram
     Mongo-->>WebApp: 5. Succès (Log asynchrone enregistré)
     
     WebApp-->>User: 6. Réservation confirmée
-</div>
+</pre><p><strong>Justification du choix technique :</strong>
+En séparant les logs (Mongo) des transactions métier (Postgres), nous assurons que si le composant IoT s&#39;emballe et génère 10 000 logs par seconde (attaque DDoS ou capteur défectueux), la base de données de réservation métier (Postgres) ne subit aucun ralentissement (Locks).</p>
 
-**Justification du choix technique :**
-En séparant les logs (Mongo) des transactions métier (Postgres), nous assurons que si le composant IoT s'emballe et génère 10 000 logs par seconde (attaque DDoS ou capteur défectueux), la base de données de réservation métier (Postgres) ne subit aucun ralentissement (Locks).
-`));</script>
     </div>
         
     <div class="page-break"></div>
     <!-- SECTION: Stratégie de Stockage -->
     <div class="section-content">
-        <script>document.write(marked.parse(`# 🗄️ Stratégie de Stockage et de Sauvegarde
-**Auteur :** Océane & Florian | **Statut :** Validé
+        <h1>🗄️ Stratégie de Stockage et de Sauvegarde</h1>
+<p><strong>Auteur :</strong> Océane &amp; Florian | <strong>Statut :</strong> Validé</p>
+<p>La protection du capital de données de Biotech Corp (Comptes utilisateurs, logs IoT, historiques de réservations) nécessite une stratégie de stockage résiliente et un plan de sauvegarde automatisé.</p>
+<hr>
+<h2>1. Stratégie de Stockage</h2>
+<h3>1.1 Emplacement et Technologies</h3>
+<p>L&#39;infrastructure repose sur deux environnements de stockage distincts :</p>
+<table>
+<thead>
+<tr>
+<th align="left">Type de Données</th>
+<th align="left">Localisation (On-Premise)</th>
+<th align="left">Technologie sous-jacente</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>OS et Hyperviseur (GNS3 VM)</strong></td>
+<td align="left">Serveur physique local (Host)</td>
+<td align="left">Disques SSD NVMe (Hautes performances, boot rapide)</td>
+</tr>
+<tr>
+<td align="left"><strong>Bases de données (PostgreSQL, Mongo)</strong></td>
+<td align="left">VM Docker (Volumes Persistants)</td>
+<td align="left">Stockage Bloc (Block Storage) local</td>
+</tr>
+<tr>
+<td align="left"><strong>Fichiers de sauvegarde &amp; Configs pfSense</strong></td>
+<td align="left">NAS Synology (VLAN 10)</td>
+<td align="left"><strong>NAS (Network Attached Storage)</strong> — Disques HDD en RAID 1 (Miroir)</td>
+</tr>
+<tr>
+<td align="left"><strong>Images Docker (Application Web)</strong></td>
+<td align="left">Azure Container Registry (Cloud)</td>
+<td align="left"><strong>Stockage Objet (Object Storage)</strong> managé par Azure</td>
+</tr>
+</tbody></table>
+<h3>1.2 Justification du choix NAS Local + Cloud</h3>
+<ul>
+<li><strong>NAS Synology Local</strong> : Offre une grande capacité de stockage à faible coût (HDD) pour les sauvegardes de premier niveau. Permet une restauration très rapide (RTO bas) en réseau local (10 Gbps). Le RAID 1 protège contre la panne d&#39;un disque physique.</li>
+<li><strong>Externalisation Cloud</strong> : Protège contre les sinistres majeurs sur le site local (Incendie, vol, ransomware qui chiffrerait le NAS).</li>
+</ul>
+<hr>
+<h2>2. Plan de Sauvegarde (Backup)</h2>
+<h3>2.1 Règle du &quot;3-2-1&quot; Appliquée</h3>
+<ul>
+<li><strong>3 copies</strong> des données (1 en production, 1 sur le NAS, 1 dans Azure Blob).</li>
+<li><strong>2 supports différents</strong> (Stockage Bloc SSD local et NAS HDD).</li>
+<li><strong>1 sauvegarde hors-site</strong> (Cloud Azure Storage, &quot;Air-Gapped&quot;).</li>
+</ul>
+<h3>2.2 Planification (Chron)</h3>
+<table>
+<thead>
+<tr>
+<th align="left">Ressource</th>
+<th align="left">Type de Sauvegarde</th>
+<th align="left">Fréquence</th>
+<th align="left">Rétention (Durée de vie)</th>
+<th align="left">Outil Utilisé</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>PostgreSQL</strong> (Réservations, Users)</td>
+<td align="left">Complète (Dump SQL)</td>
+<td align="left">Quotidienne (01:00 AM)</td>
+<td align="left">30 jours</td>
+<td align="left"><code>pg_dump</code></td>
+</tr>
+<tr>
+<td align="left"><strong>MongoDB</strong> (Logs IoT)</td>
+<td align="left">Complète (Dump BSON)</td>
+<td align="left">Quotidienne (02:00 AM)</td>
+<td align="left">7 jours (Logs non critiques)</td>
+<td align="left"><code>mongodump</code></td>
+</tr>
+<tr>
+<td align="left"><strong>pfSense</strong></td>
+<td align="left">Configuration (XML)</td>
+<td align="left">Hebdomadaire (Dimanche)</td>
+<td align="left">3 mois</td>
+<td align="left">Script Auto-Backup pfSense</td>
+</tr>
+<tr>
+<td align="left"><strong>Active Directory</strong></td>
+<td align="left">System State (VSS)</td>
+<td align="left">Hebdomadaire</td>
+<td align="left">4 semaines</td>
+<td align="left">Windows Server Backup</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>3. Procédure Technique d&#39;Automatisation</h2>
+<p>Un script PowerShell (détaillé dans <code>scripts/backup_databases.ps1</code>) est exécuté chaque nuit par le Planificateur de Tâches Windows ou un Cronjob Linux sur la VM Docker.</p>
+<p><strong>Processus du script :</strong></p>
+<ol>
+<li>Connexion aux conteneurs Docker (<code>docker exec</code>).</li>
+<li>Génération des fichiers <code>.sql</code> (Postgres) et de l&#39;archive tar.gz (Mongo).</li>
+<li>Compression ZIP des fichiers avec un horodatage (<code>YYYY-MM-DD</code>).</li>
+<li>Copie des archives sur le lecteur réseau NAS (partage SMB/NFS <code>\\NAS-BACKUP\Backups</code>).</li>
+<li><em>Optionnel/Évolution : Synchronisation du dossier NAS vers Azure Blob Storage.</em></li>
+</ol>
 
-La protection du capital de données de Biotech Corp (Comptes utilisateurs, logs IoT, historiques de réservations) nécessite une stratégie de stockage résiliente et un plan de sauvegarde automatisé.
-
----
-
-## 1. Stratégie de Stockage
-
-### 1.1 Emplacement et Technologies
-
-L'infrastructure repose sur deux environnements de stockage distincts :
-
-| Type de Données | Localisation (On-Premise) | Technologie sous-jacente |
-|:---|:---|:---|
-| **OS et Hyperviseur (GNS3 VM)** | Serveur physique local (Host) | Disques SSD NVMe (Hautes performances, boot rapide) |
-| **Bases de données (PostgreSQL, Mongo)** | VM Docker (Volumes Persistants) | Stockage Bloc (Block Storage) local |
-| **Fichiers de sauvegarde & Configs pfSense** | NAS Synology (VLAN 10) | **NAS (Network Attached Storage)** — Disques HDD en RAID 1 (Miroir) |
-| **Images Docker (Application Web)** | Azure Container Registry (Cloud) | **Stockage Objet (Object Storage)** managé par Azure |
-
-### 1.2 Justification du choix NAS Local + Cloud
-*   **NAS Synology Local** : Offre une grande capacité de stockage à faible coût (HDD) pour les sauvegardes de premier niveau. Permet une restauration très rapide (RTO bas) en réseau local (10 Gbps). Le RAID 1 protège contre la panne d'un disque physique.
-*   **Externalisation Cloud** : Protège contre les sinistres majeurs sur le site local (Incendie, vol, ransomware qui chiffrerait le NAS).
-
----
-
-## 2. Plan de Sauvegarde (Backup)
-
-### 2.1 Règle du "3-2-1" Appliquée
-*   **3 copies** des données (1 en production, 1 sur le NAS, 1 dans Azure Blob).
-*   **2 supports différents** (Stockage Bloc SSD local et NAS HDD).
-*   **1 sauvegarde hors-site** (Cloud Azure Storage, "Air-Gapped").
-
-### 2.2 Planification (Chron)
-
-| Ressource | Type de Sauvegarde | Fréquence | Rétention (Durée de vie) | Outil Utilisé |
-|:---|:---|:---|:---|:---|
-| **PostgreSQL** (Réservations, Users) | Complète (Dump SQL) | Quotidienne (01:00 AM) | 30 jours | \`pg_dump\` |
-| **MongoDB** (Logs IoT) | Complète (Dump BSON) | Quotidienne (02:00 AM) | 7 jours (Logs non critiques) | \`mongodump\` |
-| **pfSense** | Configuration (XML) | Hebdomadaire (Dimanche) | 3 mois | Script Auto-Backup pfSense |
-| **Active Directory** | System State (VSS) | Hebdomadaire | 4 semaines | Windows Server Backup |
-
----
-
-## 3. Procédure Technique d'Automatisation
-
-Un script PowerShell (détaillé dans \`scripts/backup_databases.ps1\`) est exécuté chaque nuit par le Planificateur de Tâches Windows ou un Cronjob Linux sur la VM Docker.
-
-**Processus du script :**
-1.  Connexion aux conteneurs Docker (\`docker exec\`).
-2.  Génération des fichiers \`.sql\` (Postgres) et de l'archive tar.gz (Mongo).
-3.  Compression ZIP des fichiers avec un horodatage (\`YYYY-MM-DD\`).
-4.  Copie des archives sur le lecteur réseau NAS (partage SMB/NFS \`\\NAS-BACKUP\Backups\`).
-5.  *Optionnel/Évolution : Synchronisation du dossier NAS vers Azure Blob Storage.*
-`));</script>
     </div>
         
     <div class="page-break"></div>
