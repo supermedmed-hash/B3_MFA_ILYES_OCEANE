@@ -57,8 +57,8 @@
       border-radius: 20px;
       box-shadow: 0 20px 40px rgba(0,0,0,0.15);
       transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-      margin-top: 40px !important;
-      max-height: 400px;
+      margin-top: 20px !important;
+      max-height: 280px;
       object-fit: cover;
     }
     
@@ -75,9 +75,9 @@
     .reveal li {
       color: #1d1d1f;
       font-weight: 500;
-      font-size: 1.4em;
-      margin-bottom: 25px;
-      padding: 15px;
+      font-size: 1.1em;
+      margin-bottom: 12px;
+      padding: 10px;
       background: rgba(0,0,0,0.04);
       border-radius: 12px;
       backdrop-filter: blur(10px);
@@ -131,9 +131,9 @@ Côté LAN, nous avons structuré le réseau en VLANs stricts : le VLAN 20 pour 
 
       <!-- Slide 4: Zero Trust -->
       <section data-auto-animate data-transition="slide">
-        <h2 style="font-size: 3.5em;">Zero <span class="gradient-text-red">Trust</span></h2>
+        <h2 style="font-size: 2.8em;">Zero <span class="gradient-text-red">Trust</span></h2>
         <p class="apple-subtitle fragment fade-in">Never trust, always verify.</p>
-        <ul style="margin-top: 50px;">
+        <ul style="margin-top: 30px;">
           <li class="fragment fade-left" style="background: rgba(255,59,48,0.1); color: #ff3b30;">Pare-feu pfSense en 'Default Deny'</li>
           <li class="fragment fade-left" style="background: rgba(255,59,48,0.1); color: #ff3b30;">Aucune communication Employés ➔ R&D</li>
           <li class="fragment fade-left" style="background: rgba(255,59,48,0.1); color: #ff3b30;">Accès distants VPN chiffrés de bout en bout</li>
@@ -171,7 +171,7 @@ Pour protéger ces données vitales, nous appliquons la règle de sauvegarde du 
       <section data-auto-animate data-transition="slide">
         <h2>Le <span class="gradient-text">Cockpit</span></h2>
         <p class="apple-subtitle">Supervision & Observabilité</p>
-        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80" class="slide-image fragment fade-up" style="width: 800px;" alt="Dashboard Data">
+        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80" class="slide-image fragment fade-up" style="width: 700px;" alt="Dashboard Data">
         <aside class="notes">
           [Florian] Bien sûr, une telle infrastructure nécessite un monitoring proactif. Nous avons déployé une stack de supervision double : Zabbix pour l'IT, et Grafana pour le management et la data.
 Comme vous le voyez sur cette maquette, Zabbix scrute l'état du tunnel VPN et la charge de nos VM. Si le tunnel VPN IPsec tombe, des alertes sont remontées automatiquement. Grafana, quant à lui, est directement pluggé sur notre base MongoDB pour afficher en temps réel l'utilisation des locaux connectés.
@@ -181,7 +181,7 @@ Comme vous le voyez sur cette maquette, Zabbix scrute l'état du tunnel VPN et l
       <!-- Slide 8: ITSM -->
       <section data-auto-animate data-transition="slide">
         <h2>Résilience & <span class="gradient-text">PRA</span></h2>
-        <ul style="margin-top: 50px;">
+        <ul style="margin-top: 30px;">
           <li class="fragment fade-up">Analyse d'Impact (BIA)</li>
           <li class="fragment fade-up">Objectif RTO : <strong class="gradient-text-red">4 heures</strong></li>
           <li class="fragment fade-up">Processus structurés ITSM</li>
@@ -194,7 +194,7 @@ Ce BIA a conduit à notre Plan de Reprise d'Activité (PRA). Par exemple, en cas
 
       <!-- Slide 9: Conclusion -->
       <section data-transition="zoom">
-        <h1 style="font-size: 5em;">Merci.</h1>
+        <h1 style="font-size: 3.5em;">Merci.</h1>
         <p class="apple-subtitle fragment fade-in">Place à la Démonstration.</p>
         <aside class="notes">
           [Équipe] Pour conclure, le projet Smart Office 2.0 répond à tous les enjeux de Biotech Corp : une base locale souveraine et sécurisée, propulsée par la flexibilité du Cloud pour absorber la croissance. Nous vous remercions pour votre attention et sommes maintenant à votre disposition pour la démonstration.
