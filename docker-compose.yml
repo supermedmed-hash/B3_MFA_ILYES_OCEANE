@@ -10,7 +10,7 @@ services:
   # 1. LAYER APPLICATIF : NOTRE API NODE.JS
   # ==========================================
   web-app:
-    build: . # Indique de construire l'image via le Dockerfile du dossier courant
+    build: ./app-reservation # Indique de construire l'image via le Dockerfile du dossier app-reservation
     container_name: smartoffice_web
     ports:
       - "3000:3000" # Mapping réseau : PORT_HOST:PORT_CONTENEUR
@@ -72,6 +72,99 @@ services:
       - smartoffice-net
     restart: unless-stopped
 
+  # ==========================================
+  # 4. MONITORING : ZABBIX (DB + SERVER + WEB)
+  # ==========================================
+  # Choix de Zabbix : Solution de supervision réseau/système open-source.
+  # Architecture 3-tiers : Base de données (MariaDB) + Serveur collecteur + Frontend Web.
+  # Déployé UNIQUEMENT en local (on-premise) pour surveiller l'infra GNS3/AD.
+  zabbix-db:
+    image: mariadb:11.3
+    container_name: smartoffice_zabbix_db
+    environment:
+      - MARIADB_USER=zabbix
+      - MARIADB_PASSWORD=zabbix_pass
+      - MARIADB_ROOT_PASSWORD=root_pass
+      - MARIADB_DATABASE=zabbix
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_bin --log-bin-trust-function-creators=1
+    volumes:
+      - zabbix-db-data:/var/lib/mysql
+    networks:
+      - smartoffice-net
+    restart: unless-stopped
+    # Healthcheck critique : MariaDB peut prendre 10-30s au démarrage.
+    # Sans ça, Zabbix Server crash en boucle car la DB n'est pas prête.
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  zabbix-server:
+    image: zabbix/zabbix-server-mysql:ubuntu-latest
+    container_name: smartoffice_zabbix_server
+    depends_on:
+      zabbix-db:
+        condition: service_healthy # Attend que MariaDB soit VRAIMENT prête (pas juste démarrée)
+    environment:
+      - DB_SERVER_HOST=zabbix-db
+      - MYSQL_USER=zabbix
+      - MYSQL_PASSWORD=zabbix_pass
+      - MYSQL_DATABASE=zabbix
+      - MYSQL_ROOT_PASSWORD=root_pass
+    ports:
+      - "10051:10051" # Port Zabbix server (collecte des métriques agents)
+    networks:
+      - smartoffice-net
+    restart: unless-stopped
+
+  zabbix-web:
+    image: zabbix/zabbix-web-nginx-mysql:ubuntu-latest
+    container_name: smartoffice_zabbix_web
+    depends_on:
+      zabbix-db:
+        condition: service_healthy
+      zabbix-server:
+        condition: service_started
+    environment:
+      - DB_SERVER_HOST=zabbix-db
+      - MYSQL_USER=zabbix
+      - MYSQL_PASSWORD=zabbix_pass
+      - MYSQL_DATABASE=zabbix
+      - MYSQL_ROOT_PASSWORD=root_pass
+      - ZBX_SERVER_HOST=zabbix-server
+      - PHP_TZ=Europe/Paris
+    ports:
+      - "8085:8080" # Interface web Zabbix sur http://localhost:8085
+    networks:
+      - smartoffice-net
+    restart: unless-stopped
+
+  # ==========================================
+  # 5. VISUALISATION : GRAFANA (+ PLUGIN ZABBIX)
+  # ==========================================
+  # Choix de Grafana : Outil de dashboarding professionnel.
+  # Connecté à Zabbix via le plugin officiel pour créer des tableaux de bord
+  # de supervision avancés (CPU, RAM, trafic réseau, alertes).
+  grafana:
+    image: grafana/grafana-oss:latest
+    container_name: smartoffice_grafana
+    depends_on:
+      zabbix-server:
+        condition: service_started
+    ports:
+      - "3001:3000" # Grafana sur http://localhost:3001 (3000 pris par web-app)
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_INSTALL_PLUGINS=alexanderzobnin-zabbix-app
+    volumes:
+      - grafana-data:/var/lib/grafana
+    networks:
+      - smartoffice-net
+    restart: unless-stopped
+
 # ==========================================
 # RÉSEAU ET VOLUMES GÉRÉS
 # ==========================================
@@ -84,3 +177,5 @@ volumes:
   # Déclaration des "Named Volumes" pris en charge par le daemon Docker.
   pgdata:
   mongodata:
+  grafana-data:
+  zabbix-db-data:

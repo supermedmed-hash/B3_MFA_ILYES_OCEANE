@@ -1,137 +1,134 @@
-# 🏢 Projet Smart Office 2.0 - B3 Infrastructure
+# 🏢 Smart Office 2.0 - Solution d'Infrastructure Hybride
 
-Bienvenue sur le dépôt officiel du projet de fin d'année B3.
+[![Azure](https://img.shields.io/badge/Cloud-Azure-blue?style=flat-square&logo=microsoft-azure)](https://azure.microsoft.com/)
+[![Docker](https://img.shields.io/badge/Container-Docker-2496ED?style=flat-square&logo=docker)](https://www.docker.com/)
+[![GitHub Actions](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-2088FF?style=flat-square&logo=github-actions)](https://github.com/features/actions)
 
----
-
-## 👥 L'Équipe
-
-| Membre | Rôle | Responsabilités |
-|--------|------|-----------------|
-| **Ilyes** | Lead Infrastructure & Sécurité | Configuration réseau, VLANs, Firewall, VPN |
-| **Océane** | Lead Systèmes & Cloud Hybride | Windows Server, Active Directory, Azure |
-| **Florian** | Lead Data & Supervision | PostgreSQL, Zabbix, Grafana |
-| **Mehdi** | Lead DevOps & Gestion de Projet | CI/CD, Docker, MongoDB, GitHub, Planning |
+Bienvenue sur le dépôt central de la solution **Smart Office 2.0**. Ce projet propose une infrastructure hybride complète pour une entreprise de biotechnologie, intégrant un environnement On-Premise (GNS3), un tunnel sécurisé (VPN IPsec) et une plateforme d'application Cloud (Azure).
 
 ---
 
-## 🎯 Objectifs
+## 👥 L'Équipe Projet
 
-Concevoir et déployer une **infrastructure sécurisée et hybride** pour une Biotech en hyper-croissance (50 → 200 employés).
-
-### Livrables Attendus
-- ✅ Dossier d'Architecture Technique (DAT)
-- ✅ Infrastructure réseau sécurisée (VLANs, Firewall, VPN)
-- ✅ Environnement Windows Server + Active Directory
-- ✅ Application de réservation conteneurisée (PoC DevOps)
-- ✅ Système de supervision centralisée
+| Membre | Rôle | Expertise Clé |
+|--------|------|---------------|
+| **Mehdi** | **Lead DevOps & Data** | Architecture Multi-container, CI/CD, Optimisation SQL/NoSQL |
+| **Ilyes** | **Lead Infrastructure** | Firewalling, Switching Cisco, Routage Inter-VLAN |
+| **Océane** | **Lead Systèmes** | Windows Server 2019, Active Directory, Azure AD Sync |
+| **Florian** | **Lead Supervision** | Monitoring Zabbix, Dashboards Grafana |
 
 ---
 
-## 🛠️ Stack Technique
+## 🏗️ Architecture de la Solution
 
-| Domaine | Technologies |
-|---------|-------------|
-| **Réseau** | Cisco (GNS3), PfSense, VPN IPsec |
-| **Système** | Windows Server 2019, Active Directory, Azure AD |
-| **DevOps** | Docker, GitHub Actions, CI/CD |
-| **Data** | PostgreSQL, MongoDB |
-| **Monitoring** | Zabbix, Grafana |
+L'infrastructure repose sur un pont hybride entre un site local et le cloud public Azure :
+
+```mermaid
+graph LR
+    subgraph "Site On-Premise (GNS3)"
+        SW[SW-CORE-BIOTECH] -- Trunk --> FW[pfSense Firewall]
+        AD[AD-SRV-2019] -- VLAN 10 --> SW
+        CLI[PC-EMPLOYEE] -- VLAN 20 --> SW
+    end
+    
+    FW -- Tunnel IPsec --> VPN[Azure VPN Gateway]
+    
+    subgraph "Cloud Azure (PaaS/IaaS)"
+        VPN -- VNet --> APP[Azure App Service]
+        APP -- Multi-container --> WEB[WebApp]
+        WEB -- Database --> DB[(Postgres/Mongo)]
+    end
+```
 
 ---
 
-## 🚀 Comment lancer l'application (PoC)
+## 🖧 Brique 1 : Infrastructure Réseau (On-Premise)
+
+### 1. Plan d'Adressage & VLANs
+L'adressage est segmenté pour garantir une isolation maximale :
+
+| VLAN | Nom | Réseau | Usage |
+|------|-----|--------|-------|
+| **10** | SERVERS | `10.10.10.0/24` | Contrôleurs de domaine, SQL local |
+| **20** | EMPLOYEES | `10.10.20.0/23` | Postes de travail utilisateurs |
+| **30** | R&D_ZONE | `10.10.30.0/24` | Labos de recherche (Isolé) |
+| **100** | MGMT | `10.10.100.0/24` | Administration des équipements |
+
+### 2. Sécurité (Firewalling Matrix)
+Le pare-feu **pfSense** gère les flux inter-VLAN avec une politique *Deny All* par défaut :
+- **VLAN 30 ⮕ AD (10.10.10.10)** : Ports `445` (SMB) et `1433` (SQL) uniquement.
+- **Isolation** : Aucun trafic autorisé entre VLAN 30 (R&D) et VLAN 20 (Employees).
+
+---
+
+## 🔒 Brique 2 : Hybridation & Connectivité
+
+La connectivité entre le site local et Azure est assurée par un **Tunnel VPN Site-to-Site (IPsec IKEv2)** :
+- **Phase 1** : AES-256, SHA256, DH Group 14.
+- **Réseau Local** : `10.10.0.0/16`
+- **Réseau Azure** : `10.100.0.0/16`
+- **Résilience** : Reconnexion automatique et surveillance du tunnel via pfSense.
+
+---
+
+## 🐳 Brique 3 : DevOps & Cloud App Service
+
+### 1. Architecture Multi-container
+L'application de réservation est conteneurisée et déployée sur **Azure App Service** :
+- **Frontend/API** : Node.js (Express).
+- **Database Relationnelle** : PostgreSQL (Persistance des réservations).
+- **Database NoSQL** : MongoDB (Logs IoT en temps réel).
+
+### 2. Pipeline CI/CD (GitHub Actions)
+Chaque commit déclenche une chaîne de déploiement automatique :
+1. **Linting & Tests** : Validation du code.
+2. **Docker Build** : Création de l'image de production.
+3. **Push ACR** : Stockage sécurisé sur Azure Container Registry.
+4. **Deploy Azure** : Mise à jour à chaud de l'App Service via Docker Compose.
+
+### 3. Optimisations de Résilience (High Availability)
+- **Connection Pooling** : Usage de `pg.Pool` pour éviter les timeouts SQL.
+- **Recursive Retry Logic** : L'app attend que les bases de données soient up avant de servir les requêtes.
+- **Port Tuning** : Utilisation de `WEBSITES_PORT=3000` pour un routage Azure optimal.
+
+---
+
+## 📊 Brique 4 : Supervision & Monitoring
+
+La solution est supervisée 24h/24 pour garantir la disponibilité :
+- **Zabbix** : Monitoring des ressources (CPU, RAM, Disque) et du statut des tunnels VPN.
+- **Grafana** : Dashboards visuels pour les KPIs métier (nombre de réservations/heure, alertes IoT).
+
+---
+
+## 📂 Structure du Dépôt
 
 ```bash
-# 1. Cloner le dépôt
+.
+├── .github/workflows/   # Automatisations CI/CD
+├── app-reservation/     # Code source de l'application Web
+├── infrastructure/
+│   ├── cloud/           # Définitions Azure (JSON/Compose)
+│   ├── reseau/          # Configs Switchs & Firewall
+│   └── systeme/         # Scripts PowerShell & GPO
+├── docs/                # Documentation complète & DAT
+└── monitoring/          # Templates Zabbix & Grafana
+```
+
+---
+
+## 🛠️ Instructions pour les Collaborateurs
+
+### Installation Locale (Test)
+```powershell
 git clone https://github.com/supermedmed-hash/B3_MFA_ILYES_OCEANE.git
-
-# 2. Aller dans le dossier de l'application
 cd app-reservation
-
-# 3. Lancer avec Docker Compose
 docker-compose up -d
-
-# 4. Accéder à l'interface
-# Ouvrir dans le navigateur : http://localhost:3000
 ```
 
----
-
-## 📂 Organisation du Dépôt
-
-```
-smart-office-2.0/
-│
-├── .github/workflows/     # 🔄 Workflows CI/CD (GitHub Actions)
-├── docs/                  # 📚 Documentation (DAT, procédures, schémas)
-├── app-reservation/       # 🐳 Application Smart Office (Docker)
-├── infrastructure/        # 🖧 Configuration réseau & système
-├── monitoring/            # 📊 Templates Zabbix & Grafana
-└── data/                  # 🗄️ Scripts SQL & NoSQL
-```
-
-### Détail des Dossiers
-
-| Dossier | Contenu | Responsable |
-|---------|---------|-------------|
-| `/docs/dat/` | Dossier d'Architecture Technique | Tous |
-| `/docs/procedures/` | Procédures d'installation | Tous |
-| `/docs/schemas/` | Schémas réseau (Draw.io, Visio) | Ilyes |
-| `/infrastructure/reseau/` | Configs switches/routeurs | Ilyes |
-| `/infrastructure/systeme/` | Scripts PowerShell AD | Océane |
-| `/infrastructure/cloud/` | Templates Azure (Terraform/JSON) | Océane |
-| `/monitoring/zabbix/` | Templates XML Zabbix | Florian |
-| `/monitoring/grafana/` | Dashboards JSON | Florian |
-| `/data/sql/` | Scripts PostgreSQL | Florian |
-| `/data/nosql/` | Scripts MongoDB | Mehdi |
+### Accès Azure (Production)
+URL : `https://smartoffice-poc-app.azurewebsites.net`  
+*Note : Seuls les membres de l'équipe peuvent accéder aux logs via le CLI Azure.*
 
 ---
-
-## 🌿 Stratégie de Branches
-
-Nous utilisons **GitFlow simplifié** :
-
-| Branche | Usage | Qui peut merger ? |
-|---------|-------|-------------------|
-| `main` | Version présentable au jury (stable) | Mehdi uniquement |
-| `develop` | Branche d'intégration | Équipe |
-| `feat/*` | Nouvelles fonctionnalités | Chacun |
-| `infra/*` | Configuration infrastructure | Ilyes |
-| `script/*` | Scripts système | Océane |
-| `docs/*` | Documentation | Tous |
-
-### Convention de Nommage
-
-```
-type/nom-de-la-tache
-```
-
-**Exemples :**
-- `feat/docker-app` (Mehdi)
-- `infra/vlan-config` (Ilyes)
-- `script/ad-users` (Océane)
-- `docs/dat-chapitre1`
-
----
-
-## 🤝 Workflow de Collaboration
-
-1. **Créer une branche** depuis `develop`
-2. **Développer** la fonctionnalité
-3. **Pousser** la branche sur GitHub
-4. **Créer une Pull Request** vers `develop`
-5. **Code Review** par Mehdi
-6. **Merge** après validation
-
-> ⚠️ **Règle d'or** : Ne jamais push directement sur `main` !
-
----
-
-## 📞 Contact
-
-Pour toute question sur le projet, contacter l'équipe via le canal Teams du projet.
-
----
-
-*Projet réalisé dans le cadre du cursus B3 Infrastructure - 2025/2026*
+*Dépôt officiel du Projet Fil Rouge B3 - Biotech Corp - 2024/2025*

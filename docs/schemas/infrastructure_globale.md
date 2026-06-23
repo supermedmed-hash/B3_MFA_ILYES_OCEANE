@@ -13,15 +13,17 @@ graph LR
         SW["🖧 Cisco Switch"]
         
         subgraph VLANS ["VLANs"]
-            V20["🖥️ Srv (AD, Zabbix)"]
-            V40["📡 IoT (Capteurs)"]
-            V30["👥 Users"]
+            V10["🖥️ Srv (AD, BDD, Zabbix)"]
+            V20["👥 Employés"]
+            V40["📡 IoT & VoIP"]
+            V99["🛜 Guest"]
         end
         
         PFS --- SW
+        SW --- V10
         SW --- V20
         SW --- V40
-        SW --- V30
+        SW --- V99
     end
 
     %% TUNNEL
@@ -32,25 +34,24 @@ graph LR
         direction TB
         VGW["🌐 VPN Gateway"]
         
-        subgraph COMPUTE ["Ressources"]
+        subgraph COMPUTE ["Ressources Managées"]
             direction LR
-            DC_AZ["🏠 AD Replica"]
-            DOCKER["🐳 Docker Host VM"]
+            ACR["📦 Azure Container Registry"]
+            APPSVC["🌐 Azure App Service"]
         end
         
-        subgraph CONTAINERS ["Containers (DOCKER)"]
-            WEB["Web App"]
-            DB["DB (PG/Mongo)"]
+        subgraph CONTAINERS ["Containers App Service"]
+            WEB["Web App Node.js"]
         end
         
-        VGW --- COMPUTE
-        DOCKER --- WEB
-        WEB --- DB
+        VGW --- APPSVC
+        ACR -. "Pull Image" .-> APPSVC
+        APPSVC --- WEB
     end
 
     %% FLUX TRANSVERSES
-    V20 -. "Supervision" .-> DOCKER
-    DC_AZ -. "Sync" .-> V20
+    V10 -. "Supervision (Zabbix)" .-> APPSVC
+    WEB -. "Requêtes BDD" .-> V10
 
     %% STYLING
     style LOCAL fill:#fff4dd,stroke:#d4a017
@@ -71,11 +72,12 @@ graph LR
     *   `smartoffice_mongo` : Logs IoT (MongoDB 6).
 
 ### 2. Couche Réseau (Ilyes)
-*   **Segmentation** : 4 VLANs distincts sur le site local pour isoler le trafic IoT et serveurs.
-*   **Sécurité** : Firewall PfSense gérant le tunnel IPsec vers Azure.
+*   **Segmentation** : 8 VLANs distincts (Serveurs, Employés, R&D, VoIP, IoT, Management, Guest).
+*   **Sécurité** : Firewall PfSense (Deny All) gérant le tunnel IPsec vers Azure et NAC (802.1X).
 
 ### 3. Couche Système & Cloud (Océane)
-*   **Hybridation AD** : Windows Server 2019 local et replica VM sur Azure pour assurer la continuité de service.
+*   **Identité** : Active Directory local (Windows Server 2019) gérant l'authentification réseau.
+*   **Choix Cloud** : PaaS Azure (App Service) privilégié (TCO réduit de 74%) par rapport à l'IaaS pur.
 
 ### 4. Couche Data & Supervision (Florian)
 *   **Supervision** : Serveur Zabbix local monitorant les instances cloud et locales.

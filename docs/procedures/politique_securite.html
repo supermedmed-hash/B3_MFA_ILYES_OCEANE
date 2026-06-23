@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Politique de Sécurité - Smart Office 2.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; color: #333; line-height: 1.6; background-color: #f4f7f6; padding: 40px; margin: 0; }
+        .container { max-width: 950px; margin: auto; background: white; padding: 50px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-radius: 8px; }
+        .header { text-align: center; border-bottom: 3px solid #2c3e50; padding-bottom: 20px; margin-bottom: 40px; }
+        .header h1 { margin: 0; color: #2c3e50; font-size: 2.2em; }
+        .header p { color: #555; font-size: 1.1em; }
+        h2 { color: #2980b9; border-bottom: 2px solid #d4e6f1; padding-bottom: 8px; margin-top: 40px; }
+        h3 { color: #154360; margin-top: 30px; }
+        p, li { font-size: 15px; color: #4a5568; }
+        .highlight { background-color: #fdfefe; border-left: 4px solid #3498db; padding: 15px; margin: 20px 0; }
+        .rule-box { background-color: #f9ebea; border-left: 4px solid #c0392b; padding: 15px; margin: 20px 0; color: #641e16; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 14px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #2c3e50; color: white; }
+        tr:nth-child(even) { background-color: #f2f4f4; }
+        .footer { text-align: center; margin-top: 50px; font-size: 0.9em; color: #888; }
+        @media print {
+            body { background-color: white; padding: 0; }
+            .container { box-shadow: none; padding: 0; }
+            .page-break { page-break-before: always; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Politique de Sécurité des Systèmes d'Information (PSSI)</h1>
+        <p>Projet : <strong>Smart Office 2.0</strong> | Biotech Corp</p>
+        <p><em>Version 1.0 — Validée par la DSI</em></p>
+    </div>
+
+    <h2>1. Objectifs de la Politique de Sécurité</h2>
+    <p>Cette politique a pour but de garantir la Confidentialité, l'Intégrité, et la Disponibilité (CIA) des données et des systèmes de Biotech Corp. Elle s'appuie sur les concepts de défense en profondeur, de Zero Trust, et de moindre privilège.</p>
+
+    <h2>2. Identité et Gestion des Accès (IAM)</h2>
+    
+    <h3>2.1 Authentification Active Directory (AD)</h3>
+    <p>L'ensemble des identités des collaborateurs est géré de manière centralisée par le contrôleur de domaine Windows Server 2019 local.</p>
+    <ul>
+        <li><strong>Stratégie de Mots de passe (GPO) :</strong> Minimum 12 caractères, complexité activée (majuscules, minuscules, chiffres, caractères spéciaux), renouvellement tous les 90 jours.</li>
+        <li><strong>Verrouillage de compte :</strong> Le compte AD est verrouillé après 5 tentatives infructueuses (durée : 30 minutes).</li>
+        <li><strong>Multi-Factor Authentication (MFA) :</strong> En cours d'étude pour les accès distants via VPN client. Actuellement mis en œuvre via Azure pour l'accès aux ressources Cloud d'administration.</li>
+    </ul>
+
+    <h3>2.2 Contrôle d'Accès Basé sur les Rôles (RBAC)</h3>
+    <p>Les accès aux ressources sont strictement limités au besoin d'en connaître (Need-to-Know).</p>
+    <table>
+        <tr>
+            <th>Rôle Applicatif</th>
+            <th>Droits d'accès</th>
+            <th>Authentification</th>
+        </tr>
+        <tr>
+            <td><strong>Utilisateur (Employé)</strong></td>
+            <td>Consultation et création de réservations de salles. Accès internet filtré.</td>
+            <td>AD Local + Base de données Web</td>
+        </tr>
+        <tr>
+            <td><strong>Administrateur IT</strong></td>
+            <td>Suppression des réservations, accès Zabbix, accès serveurs via SSH/RDP.</td>
+            <td>AD Local (Groupe Admins du domaine)</td>
+        </tr>
+        <tr>
+            <td><strong>Invité (Guest)</strong></td>
+            <td>Aucun accès interne. Accès Web limité uniquement.</td>
+            <td>Portail Captif (Wi-Fi)</td>
+        </tr>
+    </table>
+
+    <div class="page-break"></div>
+
+    <h2>3. Sécurité Réseau (Approche Zero Trust)</h2>
+
+    <h3>3.1 Segmentation (VLANs) et Pare-feu</h3>
+    <div class="rule-box">
+        <strong>Règle d'Or :</strong> Le pfSense est configuré avec une règle de base <strong>"Deny All"</strong>. Tout trafic non explicitement autorisé par une ACL est bloqué et journalisé.
+    </div>
+    <p>Le réseau est micro-segmenté selon les usages métier :</p>
+    <ul>
+        <li><strong>VLAN 10 (Serveurs) :</strong> Accessible uniquement par les Administrateurs (VLAN 100).</li>
+        <li><strong>VLAN 30 (R&D) :</strong> Totalement isolé du reste de l'entreprise (VLAN 20) pour protéger la propriété intellectuelle Biotech.</li>
+        <li><strong>VLAN 50 (IoT) :</strong> Ne peut communiquer qu'avec le serveur MongoDB. Pas d'accès Internet pour éviter le piratage des capteurs.</li>
+    </ul>
+
+    <h3>3.2 Contrôle d'Accès Réseau (NAC / 802.1X)</h3>
+    <p>Les ports des switchs Cisco sont sécurisés :</p>
+    <ul>
+        <li>Authentification 802.1X via le serveur RADIUS (intégré à l'AD) avant d'attribuer le port au VLAN approprié.</li>
+        <li>Un appareil inconnu branché sur une prise murale est placé par défaut dans un VLAN de quarantaine ou le port est désactivé (port-security).</li>
+    </ul>
+
+    <h2>4. Sécurité des Données et Cryptographie</h2>
+
+    <h3>4.1 Chiffrement en Transit</h3>
+    <ul>
+        <li><strong>Flux Web :</strong> L'application web Smart Office n'est accessible que via HTTPS (TLS 1.2 minimum), certificat généré par Azure App Service.</li>
+        <li><strong>Flux Inter-Sites :</strong> Le lien entre le site local et le Cloud Azure est encapsulé dans un tunnel VPN IPsec IKEv2 avec chiffrement AES-256.</li>
+    </ul>
+
+    <h3>4.2 Chiffrement au Repos (Data at Rest)</h3>
+    <ul>
+        <li><strong>Bases de données :</strong> Les disques virtuels de la VM Docker (PostgreSQL et Mongo) sont chiffrés.</li>
+        <li><strong>Cloud :</strong> Les sauvegardes envoyées vers Azure Blob Storage sont chiffrées par défaut par la plateforme Azure (SSE - Storage Service Encryption).</li>
+    </ul>
+
+    <h2>5. Supervision et Détection (SIEM / IDS)</h2>
+    
+    <p>Afin d'identifier proactivement les menaces :</p>
+    <ul>
+        <li><strong>Monitoring :</strong> Zabbix surveille la disponibilité et la charge (CPU/RAM).</li>
+        <li><strong>Analyse de logs :</strong> pfSense journalise tous les paquets bloqués (Deny). Ces logs sont centralisés.</li>
+        <li><strong>Détection d'intrusion (IDS) :</strong> Le module Suricata (intégré au pfSense) analyse le trafic WAN/LAN en temps réel avec des signatures (Emerging Threats) pour alerter en cas de flux suspect (malware, scan de ports).</li>
+    </ul>
+
+    <h2>6. Sécurité Applicative (DevSecOps)</h2>
+
+    <p>La sécurité est intégrée au cycle de vie de développement :</p>
+    <ul>
+        <li><strong>Protection Injections SQL :</strong> L'application Node.js utilise des requêtes paramétrées (ex: <code>$1</code>) via la bibliothèque <code>pg</code>, rendant l'injection impossible.</li>
+        <li><strong>Sécurité Docker :</strong> Images construites sur Alpine (surface d'attaque réduite), ne s'exécutant pas en mode "privileged".</li>
+        <li><strong>Gestion des Secrets :</strong> Mots de passe et chaînes de connexion ne sont jamais codés en dur dans le dépôt GitHub, mais injectés en tant que variables d'environnement via GitHub Secrets et Azure App Settings.</li>
+    </ul>
+
+    <div class="footer">
+        <p>Smart Office 2.0 — Politique de Sécurité (PSSI) — Approche Zero Trust</p>
+    </div>
+</div>
+
+</body>
+</html>

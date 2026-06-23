@@ -1,5 +1,5 @@
 const express = require('express');
-const { Client } = require('pg');
+const { Pool } = require('pg');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 
@@ -13,22 +13,28 @@ app.use(cookieParser()); // Pour lire rapidement les cookies d'authentification
 // ==========================================
 // 1. CONFIGURATION POSTGRESQL (Relationnel)
 // ==========================================
-const pgClient = new Client({
+const pool = new Pool({
     user: process.env.POSTGRES_USER || 'admin_postgres',
     host: process.env.POSTGRES_HOST || 'localhost',
     database: process.env.POSTGRES_DB || 'smartoffice',
     password: process.env.POSTGRES_PASSWORD || 'secret_postgres',
     port: 5432,
+    max: 10,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 2000,
 });
 
 let pgStatus = '🔴 Hors ligne';
-pgClient.connect()
-    .then(async () => {
+
+async function initializePostgres() {
+    let client;
+    try {
+        client = await pool.connect();
         console.log('Connecté avec succès à PostgreSQL');
         pgStatus = '🟢 En ligne';
-        
+
         // Création de la table 'users'
-        await pgClient.query(`
+        await client.query(`
             CREATE TABLE IF NOT EXISTS users (
                 id SERIAL PRIMARY KEY,
                 username VARCHAR(50) UNIQUE NOT NULL,
@@ -38,15 +44,15 @@ pgClient.connect()
         `);
 
         // Création de comptes par défaut si la table est vide (PoC)
-        const checkUsers = await pgClient.query('SELECT COUNT(*) FROM users');
+        const checkUsers = await client.query('SELECT COUNT(*) FROM users');
         if (parseInt(checkUsers.rows[0].count) === 0) {
-            await pgClient.query("INSERT INTO users (username, password, role) VALUES ('admin', 'admin123', 'admin')");
-            await pgClient.query("INSERT INTO users (username, password, role) VALUES ('employe', 'employe123', 'user')");
+            await client.query("INSERT INTO users (username, password, role) VALUES ('admin', 'admin123', 'admin')");
+            await client.query("INSERT INTO users (username, password, role) VALUES ('employe', 'employe123', 'user')");
             console.log('Comptes par défaut créés: admin/admin123 et employe/employe123');
         }
 
         // Création de la table 'reservations'
-        await pgClient.query(`
+        await client.query(`
             CREATE TABLE IF NOT EXISTS reservations (
                 id SERIAL PRIMARY KEY,
                 employe_nom VARCHAR(100) NOT NULL,
@@ -55,8 +61,15 @@ pgClient.connect()
             );
         `);
         console.log('Tables PostgreSQL vérifiées/créées.');
-    })
-    .catch(err => console.error('Erreur de connexion PostgreSQL :', err.message));
+    } catch (err) {
+        console.error('Erreur lors de l\'initialisation des tables PostgreSQL, nouvelle tentative dans 5s...', err.message);
+        setTimeout(initializePostgres, 5000);
+    } finally {
+        if (client) client.release();
+    }
+}
+
+initializePostgres();
 
 // ==========================================
 // 2. CONFIGURATION MONGODB (NoSQL)
@@ -64,12 +77,20 @@ pgClient.connect()
 const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/smartoffice_iot';
 let mongoStatus = '🔴 Hors ligne';
 
-mongoose.connect(mongoUri)
-    .then(() => {
-        console.log('Connecté avec succès à MongoDB');
-        mongoStatus = '🟢 En ligne';
-    })
-    .catch(err => console.error('Erreur de connexion MongoDB :', err.message));
+const connectMongoWithRetry = () => {
+    console.log('Tentative de connexion à MongoDB...');
+    mongoose.connect(mongoUri)
+        .then(() => {
+            console.log('Connecté avec succès à MongoDB');
+            mongoStatus = '🟢 En ligne';
+        })
+        .catch(err => {
+            console.error('Erreur de connexion MongoDB, nouvelle tentative dans 5s...', err.message);
+            setTimeout(connectMongoWithRetry, 5000);
+        });
+};
+
+connectMongoWithRetry();
 
 const IotLogSchema = new mongoose.Schema({
     salle_nom: String,
@@ -87,7 +108,7 @@ const IotLog = mongoose.model('IotLog', IotLogSchema);
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
     try {
-        const result = await pgClient.query('SELECT * FROM users WHERE username = $1 AND password = $2', [username, password]);
+        const result = await pool.query('SELECT * FROM users WHERE username = $1 AND password = $2', [username, password]);
         if (result.rows.length > 0) {
             const user = result.rows[0];
             // Stockage simplifié de session via cookie (Pour PoC uniquement)
@@ -131,9 +152,9 @@ const checkAuth = (req, res, next) => {
 app.post('/api/reserver', checkAuth, async (req, res) => {
     const { salle_nom } = req.body;
     const employe_nom = req.user.username; // Le nom vient de la session, impossible à falsifier
-    
+
     try {
-        await pgClient.query(
+        await pool.query(
             'INSERT INTO reservations (employe_nom, salle_nom) VALUES ($1, $2)',
             [employe_nom, salle_nom]
         );
@@ -160,12 +181,12 @@ app.post('/api/supprimer/:id', checkAuth, async (req, res) => {
     const { id } = req.params;
     try {
         // Obtenir d'abord les infos de la réservation pour les logs IoT
-        const getRes = await pgClient.query('SELECT * FROM reservations WHERE id = $1', [id]);
-        
+        const getRes = await pool.query('SELECT * FROM reservations WHERE id = $1', [id]);
+
         if (getRes.rows.length > 0) {
             const resToDelete = getRes.rows[0];
 
-            await pgClient.query('DELETE FROM reservations WHERE id = $1', [id]);
+            await pool.query('DELETE FROM reservations WHERE id = $1', [id]);
 
             const log = new IotLog({
                 salle_nom: resToDelete.salle_nom,
@@ -232,7 +253,7 @@ app.get('/', async (req, res) => {
     let iotLogsHtml = '';
 
     try {
-        const pgResult = await pgClient.query('SELECT * FROM reservations ORDER BY date_reservation DESC LIMIT 10');
+        const pgResult = await pool.query('SELECT * FROM reservations ORDER BY date_reservation DESC LIMIT 10');
         if (pgResult.rows.length === 0) {
             reservationsHtml = '<p class="text-muted p-3">Aucune réservation pour le moment.</p>';
         } else {
@@ -240,7 +261,7 @@ app.get('/', async (req, res) => {
             pgResult.rows.forEach(row => {
                 const date = new Date(row.date_reservation).toLocaleString('fr-FR');
                 // Seul l'Admin peut voir le bouton Supprimer
-                const deleteBtn = userSession.role === 'admin' 
+                const deleteBtn = userSession.role === 'admin'
                     ? `<form action="/api/supprimer/${row.id}" method="POST" class="d-inline float-end"><button type="submit" class="btn btn-sm btn-outline-danger">Supprimer</button></form>`
                     : '';
 
