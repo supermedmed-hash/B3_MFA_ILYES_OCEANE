@@ -8,16 +8,17 @@
   <!-- Reveal.js CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/white.min.css">
   
   <!-- Apple-like Font (Inter) -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap" rel="stylesheet">
   
   <style>
-    /* Custom Apple Style Design */
+    /* Custom Apple Style Design - Light Mode */
     .reveal {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background-color: #000000; /* Deep black */
+      background-color: #f5f5f7; /* Apple light gray */
+      color: #1d1d1f; /* Apple dark gray for text */
     }
     
     .reveal h1, .reveal h2, .reveal h3 {
@@ -26,18 +27,19 @@
       text-transform: none;
       letter-spacing: -0.03em;
       margin-bottom: 10px;
+      color: #1d1d1f;
     }
     
     /* Apple Gradient Text */
     .gradient-text {
-      background: -webkit-linear-gradient(45deg, #0A84FF, #30D158);
+      background: -webkit-linear-gradient(45deg, #007aff, #34c759);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       display: inline-block;
     }
     
     .gradient-text-red {
-      background: -webkit-linear-gradient(45deg, #FF453A, #FF9F0A);
+      background: -webkit-linear-gradient(45deg, #ff3b30, #ff9500);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       display: inline-block;
@@ -53,9 +55,11 @@
     
     .slide-image {
       border-radius: 20px;
-      box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
       transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
       margin-top: 40px !important;
+      max-height: 400px;
+      object-fit: cover;
     }
     
     .slide-image:hover {
@@ -69,12 +73,12 @@
     }
     
     .reveal li {
-      color: #F5F5F7;
+      color: #1d1d1f;
       font-weight: 500;
       font-size: 1.4em;
       margin-bottom: 25px;
       padding: 15px;
-      background: rgba(255,255,255,0.05);
+      background: rgba(0,0,0,0.04);
       border-radius: 12px;
       backdrop-filter: blur(10px);
     }
@@ -94,7 +98,7 @@
       <section data-auto-animate data-transition="fade">
         <h1 style="font-size: 4.5em;">Smart Office <span class="gradient-text">2.0</span></h1>
         <p class="apple-subtitle fragment fade-up">L'infrastructure de demain, aujourd'hui.</p>
-        <p class="fragment fade-up" style="font-size: 0.6em; color: #555; margin-top: 60px;">Océane, Florian, Ilyes, Mehdi</p>
+        <p class="fragment fade-up" style="font-size: 0.6em; color: #86868b; margin-top: 60px;">Océane, Florian, Ilyes, Mehdi</p>
         <aside class="notes">
           [Océane] Bonjour à tous et merci de nous recevoir. Nous sommes l'équipe en charge de la transformation numérique de Biotech Corp. Aujourd'hui, nous allons vous présenter le socle technologique du projet 'Smart Office 2.0'. L'entreprise passant de 50 à 200 collaborateurs avec une forte culture du télétravail, notre mission a été de concevoir une infrastructure à la fois scalable, hyper-sécurisée et résiliente. Nous allons vous démontrer comment nous avons répondu à ce cahier des charges exigeant.
         </aside>
@@ -104,7 +108,7 @@
       <section data-auto-animate data-transition="slide">
         <h2>L'Architecture <span class="gradient-text">Hybride</span></h2>
         <p class="apple-subtitle fragment fade-up">Le meilleur des deux mondes.</p>
-        <img src="hybrid_cloud_concept.png" class="slide-image fragment fade-up" style="max-height: 400px;">
+        <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80" class="slide-image fragment fade-up" alt="Serveurs Hybrides">
         <aside class="notes">
           [Océane] Face à l'hyper-croissance de Biotech Corp, le 100% local n'était plus viable financièrement, et le 100% Cloud posait des problèmes de souveraineté des données de R&D. Nous avons donc opté pour une approche Hybride.
 Comme vous le voyez sur ce schéma conceptuel, nous conservons nos serveurs critiques 'On-Premise' pour la sécurité. En revanche, l'application métier Web est déportée sur le Cloud Microsoft Azure via le service PaaS 'App Service'. Notre analyse TCO le prouve : cette hybridation nous fait économiser près de 74% des coûts.
@@ -130,9 +134,9 @@ Côté LAN, nous avons structuré le réseau en VLANs stricts : le VLAN 20 pour 
         <h2 style="font-size: 3.5em;">Zero <span class="gradient-text-red">Trust</span></h2>
         <p class="apple-subtitle fragment fade-in">Never trust, always verify.</p>
         <ul style="margin-top: 50px;">
-          <li class="fragment fade-left" style="background: rgba(255,69,58,0.1);">Pare-feu pfSense en 'Default Deny'</li>
-          <li class="fragment fade-left" style="background: rgba(255,69,58,0.1);">Aucune communication Employés ➔ R&D</li>
-          <li class="fragment fade-left" style="background: rgba(255,69,58,0.1);">Accès distants VPN chiffrés de bout en bout</li>
+          <li class="fragment fade-left" style="background: rgba(255,59,48,0.1); color: #ff3b30;">Pare-feu pfSense en 'Default Deny'</li>
+          <li class="fragment fade-left" style="background: rgba(255,59,48,0.1); color: #ff3b30;">Aucune communication Employés ➔ R&D</li>
+          <li class="fragment fade-left" style="background: rgba(255,59,48,0.1); color: #ff3b30;">Accès distants VPN chiffrés de bout en bout</li>
         </ul>
         <aside class="notes">
           [Ilyes] Notre politique de sécurité est dictée par le modèle Zero Trust. Le pare-feu pfSense agit en 'Default Deny'. Par exemple, le réseau des employés ne peut techniquement pas atteindre le réseau de la R&D.
@@ -143,7 +147,7 @@ De plus, face aux risques de cyberattaques et aux exigences du télétravail, no
       <!-- Slide 5: DevOps -->
       <section data-auto-animate data-transition="slide">
         <h2>L'Usine <span class="gradient-text">DevOps</span></h2>
-        <img src="smart_office_infra.png" class="slide-image fragment zoom-in" style="max-height: 400px;">
+        <img src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=800&q=80" class="slide-image fragment zoom-in" alt="Bureaux Modernes Smart Office">
         <p class="fragment fade-up apple-subtitle" style="margin-top: 20px;">Zero Downtime Deployment via GitHub & Azure.</p>
         <aside class="notes">
           [Mehdi] Pour soutenir cette infrastructure moderne, nous avons adopté une démarche DevOps complète. Notre application métier est conteneurisée avec Docker. Cela garantit une portabilité parfaite.
@@ -167,7 +171,7 @@ Pour protéger ces données vitales, nous appliquons la règle de sauvegarde du 
       <section data-auto-animate data-transition="slide">
         <h2>Le <span class="gradient-text">Cockpit</span></h2>
         <p class="apple-subtitle">Supervision & Observabilité</p>
-        <img src="supervision_dashboard.png" class="slide-image fragment fade-up" style="max-height: 400px; width: 800px; object-fit: cover;">
+        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80" class="slide-image fragment fade-up" style="width: 800px;" alt="Dashboard Data">
         <aside class="notes">
           [Florian] Bien sûr, une telle infrastructure nécessite un monitoring proactif. Nous avons déployé une stack de supervision double : Zabbix pour l'IT, et Grafana pour le management et la data.
 Comme vous le voyez sur cette maquette, Zabbix scrute l'état du tunnel VPN et la charge de nos VM. Si le tunnel VPN IPsec tombe, des alertes sont remontées automatiquement. Grafana, quant à lui, est directement pluggé sur notre base MongoDB pour afficher en temps réel l'utilisation des locaux connectés.
