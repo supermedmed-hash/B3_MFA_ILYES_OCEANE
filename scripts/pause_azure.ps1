@@ -7,13 +7,13 @@ if (!(Get-Command az -ErrorAction SilentlyContinue)) {
     if (Test-Path $azPath) { $env:Path += ";$azPath" }
 }
 
-$RG_NAME = "RG-SmartOffice-Prod"
+$RG_NAME = "RG-SmartOffice-IaaS-France"
 
 Write-Host "⏸️ Mise en pause de l'infrastructure Azure..." -ForegroundColor Yellow
 
 # 1. Arrêt de la Web App
 Write-Host "🌐 Arrêt de la Web App..."
-az webapp stop --name smartoffice-poc-app --resource-group $RG_NAME
+az webapp stop --name smartoffice-poc-app --resource-group $ResourceGroup
 
 # 2. Arrêt et désallocation de TOUTES les VMs du groupe (AD, etc.)
 $vms = az vm list --resource-group $RG_NAME --query "[].name" -o tsv

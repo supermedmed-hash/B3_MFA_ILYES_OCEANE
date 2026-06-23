@@ -24,7 +24,7 @@
         a { color: inherit; text-decoration: none; font-weight: bold; } /* Desactive liens cliquables visuellement */
         img { max-width: 100%; height: auto; }
         pre { background: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto; }
-    </style>
+     .mermaid { margin: 20px 0; overflow-x: auto; background: #f4f4f4; padding: 15px; border-radius: 5px; text-align: left; } .mermaid svg { max-width: 100% !important; max-height: 600px !important; height: auto !important; width: auto !important; display: block; margin: auto; }</style>
 </head>
 <body>
 <div class="container">
@@ -54,16 +54,16 @@
     <p>L'infrastructure repose sur un bâtiment de 4 étages avec un cœur de réseau redondé. La sécurité est assurée par une segmentation stricte des flux et l'application d'un modèle Zero Trust au niveau du pare-feu pfSense.</p>
     
     <div class="link-card">
-        🏢 <strong>Schéma d'Architecture Physique</strong> (Plans de câblage, inventaire matériel)
+         <strong>Schéma d'Architecture Physique</strong> (Plans de câblage, inventaire matériel)
     </div>
     <div class="link-card">
-        🌐 <strong>Plan d'Adressage IP et VLANs</strong>
+         <strong>Plan d'Adressage IP et VLANs</strong>
     </div>
     <div class="link-card">
-        🔀 <strong>Matrice des Flux Réseau (ACLs pfSense)</strong>
+         <strong>Matrice des Flux Réseau (ACLs pfSense)</strong>
     </div>
     <div class="link-card">
-        📶 <strong>Architecture WLAN / Wi-Fi d'entreprise</strong>
+         <strong>Architecture WLAN / Wi-Fi d'entreprise</strong>
     </div>
 
     <div class="page-break"></div>
@@ -76,20 +76,20 @@
     </div>
 
     <div class="link-card">
-        ☁️ <strong>Analyse Comparative Cloud et TCO (Justification financière)</strong>
+         <strong>Analyse Comparative Cloud et TCO (Justification financière)</strong>
     </div>
     <div class="link-card">
-        🧩 <strong>Schéma Logique de l'Architecture Hybride</strong>
+         <strong>Schéma Logique de l'Architecture Hybride</strong>
     </div>
 
     <h2>4. Modélisation et Sauvegarde des Données (Mehdi)</h2>
     <p>Nous utilisons une approche polyglotte : PostgreSQL pour garantir l'intégrité transactionnelle des réservations, et MongoDB pour ingérer la masse des logs générés par les capteurs IoT, évitant ainsi un goulot d'étranglement.</p>
 
     <div class="link-card">
-        📊 <strong>Modèles de Données (UML/Merise PostgreSQL & MongoDB)</strong>
+         <strong>Modèles de Données (UML/Merise PostgreSQL & MongoDB)</strong>
     </div>
     <div class="link-card">
-        💾 <strong>Stratégie de Stockage et Plan de Sauvegarde (3-2-1)</strong>
+         <strong>Stratégie de Stockage et Plan de Sauvegarde (3-2-1)</strong>
     </div>
 
     <div class="page-break"></div>
@@ -98,32 +98,32 @@
     <p>La sécurité du SI et la continuité de service sont intégrées By Design. Le projet intègre une gestion complète du cycle de vie des incidents (ITIL) et un Plan de Reprise d'Activité basé sur une analyse des impacts métier.</p>
 
     <div class="link-card">
-        🛡️ <strong>Politique de Sécurité (PSSI) — Zero Trust & IAM</strong>
+         <strong>Politique de Sécurité (PSSI) — Zero Trust & IAM</strong>
     </div>
     <div class="link-card">
-        📉 <strong>Analyse d'Impact sur l'Activité (BIA) — Définition RTO/RPO</strong>
+         <strong>Analyse d'Impact sur l'Activité (BIA) — Définition RTO/RPO</strong>
     </div>
     <div class="link-card">
-        🔄 <strong>Plan de Continuité et de Reprise d'Activité (PCA/PRA)</strong>
+         <strong>Plan de Continuité et de Reprise d'Activité (PCA/PRA)</strong>
     </div>
     <div class="link-card">
-        🎫 <strong>Processus ITSM (Gestion des Incidents et Escalade)</strong>
+         <strong>Processus ITSM (Gestion des Incidents et Escalade)</strong>
     </div>
 
     <h2>6. Supervision et Observabilité (Florian)</h2>
     <p>La haute disponibilité et le monitoring proactif sont assurés par un socle Zabbix/Grafana, permettant à la fois de surveiller la santé des équipements réseau et serveurs, et de fournir des Dashboards dynamiques basés sur les données IoT.</p>
 
     <div class="link-card">
-        <h2>📂 Consulter les Dossiers Détaillés</h2>
-        👁️ <strong>Architecture de Supervision (Zabbix & Grafana)</strong>
+        <h2> Consulter les Dossiers Détaillés</h2>
+         <strong>Architecture de Supervision (Zabbix & Grafana)</strong>
     </div>
 
     <h2>7. Démarche DevOps et Suivi de Projet (Mehdi)</h2>
     <p>L'intégralité du code (Infrastructure as Code, Pipeline CI/CD, Application Web) est gérée sous GitHub. Le déploiement vers Azure est totalement automatisé (Zero Downtime Deployment).</p>
 
     <div class="link-card">
-        <h2>📂 Consulter les Dossiers Détaillés</h2>
-        🚀 <strong>Processus de Déploiement CI/CD</strong>
+        <h2> Consulter les Dossiers Détaillés</h2>
+         <strong>Processus de Déploiement CI/CD</strong>
     </div>
 
     <h2>8. Limites Techniques et Théorie de l'Hybridation</h2>
@@ -153,59 +153,59 @@
     <div class="page-break"></div>
     <!-- SECTION: Architecture Physique -->
     <div class="section-content">
-        <h1>🏢 Schéma d&#39;Architecture Physique — Smart Office 2.0</h1>
+        <h1> Schéma d&#39;Architecture Physique — Smart Office 2.0</h1>
 <p><strong>Auteur :</strong> Ilyes (Lead Réseau) | <strong>Statut :</strong> Validé<br><strong>Contexte :</strong> Immeuble de 4 étages — Biotech Corp (siège social — 200 employés cible)</p>
 <hr>
 <h2>1. Vue Physique de l&#39;Immeuble</h2>
 <pre class="mermaid">
 graph TD
-    subgraph "🏢 Immeuble Biotech Corp — 4 Étages"
+    subgraph " Immeuble Biotech Corp — 4 Étages"
 
         subgraph "Étage 4 — Direction & R&D"
-            E4_AP["📶 AP Wi-Fi x2"]
-            E4_SW["🔲 Switch Accès Cisco 2960 (24p)"]
-            E4_PC["💻 15 Postes (VLAN 30 R&D)"]
-            E4_PC2["💻 5 Postes Direction (VLAN 20)"]
+            E4_AP[" AP Wi-Fi x2"]
+            E4_SW[" Switch Accès Cisco 2960 (24p)"]
+            E4_PC[" 15 Postes (VLAN 30 R&D)"]
+            E4_PC2[" 5 Postes Direction (VLAN 20)"]
         end
 
         subgraph "Étage 3 — Espaces Collaboratifs"
-            E3_AP["📶 AP Wi-Fi x3"]
-            E3_SW["🔲 Switch Accès Cisco 2960 (48p)"]
-            E3_PC["💻 40 Postes (VLAN 20 Employés)"]
-            E3_IOT["📡 Capteurs IoT salles (VLAN 50)"]
-            E3_VOIP["📞 Téléphones IP x10 (VLAN 40)"]
+            E3_AP[" AP Wi-Fi x3"]
+            E3_SW[" Switch Accès Cisco 2960 (48p)"]
+            E3_PC[" 40 Postes (VLAN 20 Employés)"]
+            E3_IOT[" Capteurs IoT salles (VLAN 50)"]
+            E3_VOIP[" Téléphones IP x10 (VLAN 40)"]
         end
 
         subgraph "Étage 2 — Open Space"
-            E2_AP["📶 AP Wi-Fi x4"]
-            E2_SW["🔲 Switch Accès Cisco 2960 (48p)"]
-            E2_PC["💻 80 Postes (VLAN 20 Employés)"]
-            E2_VOIP["📞 Téléphones IP x20 (VLAN 40)"]
-            E2_PRINT["🖨️ Imprimantes x4 (VLAN 50)"]
+            E2_AP[" AP Wi-Fi x4"]
+            E2_SW[" Switch Accès Cisco 2960 (48p)"]
+            E2_PC[" 80 Postes (VLAN 20 Employés)"]
+            E2_VOIP[" Téléphones IP x20 (VLAN 40)"]
+            E2_PRINT[" Imprimantes x4 (VLAN 50)"]
         end
 
         subgraph "Étage 1 — Accueil & Salle Serveurs"
-            E1_AP["📶 AP Wi-Fi x2 (VLAN 99 Guest)"]
-            E1_SW_CORE["⭐ Switch Cœur Cisco 3650 (L3)"]
-            E1_SW_ACC["🔲 Switch Accès Cisco 2960 (24p)"]
-            E1_PC["💻 10 Postes Accueil (VLAN 20)"]
+            E1_AP[" AP Wi-Fi x2 (VLAN 99 Guest)"]
+            E1_SW_CORE[" Switch Cœur Cisco 3650 (L3)"]
+            E1_SW_ACC[" Switch Accès Cisco 2960 (24p)"]
+            E1_PC[" 10 Postes Accueil (VLAN 20)"]
 
-            subgraph "🔒 Salle Serveurs (Baie 42U)"
-                SRV_AD["🖥️ SRV-AD-LOCAL<br/>Windows Server 2019<br/>AD / DNS / DHCP<br/>10.10.10.10"]
-                SRV_DOCKER["🐳 SRV-DOCKER<br/>Ubuntu 22.04<br/>Docker Host<br/>10.10.10.20"]
-                SRV_ZABBIX["📊 SRV-ZABBIX<br/>Zabbix + Grafana<br/>10.10.100.10"]
-                FW_PFS["🛡️ FIREWALL<br/>pfSense (2x NIC)<br/>WAN: DHCP FAI<br/>LAN: 10.10.10.1"]
-                UPS["🔋 Onduleur APC 1500VA"]
-                NAS_BKP["💾 NAS Synology<br/>Backups BDD<br/>10.10.10.30"]
+            subgraph " Salle Serveurs (Baie 42U)"
+                SRV_AD[" SRV-AD-LOCAL<br/>Windows Server 2019<br/>AD / DNS / DHCP<br/>10.10.10.10"]
+                SRV_DOCKER[" SRV-DOCKER<br/>Ubuntu 22.04<br/>Docker Host<br/>10.10.10.20"]
+                SRV_ZABBIX[" SRV-ZABBIX<br/>Zabbix + Grafana<br/>10.10.100.10"]
+                FW_PFS[" FIREWALL<br/>pfSense (2x NIC)<br/>WAN: DHCP FAI<br/>LAN: 10.10.10.1"]
+                UPS[" Onduleur APC 1500VA"]
+                NAS_BKP[" NAS Synology<br/>Backups BDD<br/>10.10.10.30"]
             end
         end
     end
 
     %% Câblage vertical (Backbone fibre)
-    E4_SW ---|"🔗 Fibre 10G (Trunk)"| E1_SW_CORE
-    E3_SW ---|"🔗 Fibre 10G (Trunk)"| E1_SW_CORE
-    E2_SW ---|"🔗 Fibre 10G (Trunk)"| E1_SW_CORE
-    E1_SW_ACC ---|"🔗 Cuivre 1G"| E1_SW_CORE
+    E4_SW ---|" Fibre 10G (Trunk)"| E1_SW_CORE
+    E3_SW ---|" Fibre 10G (Trunk)"| E1_SW_CORE
+    E2_SW ---|" Fibre 10G (Trunk)"| E1_SW_CORE
+    E1_SW_ACC ---|" Cuivre 1G"| E1_SW_CORE
 
     %% Connexions salle serveurs
     E1_SW_CORE ---|"Trunk"| FW_PFS
@@ -215,8 +215,13 @@ graph TD
     E1_SW_CORE ---|"VLAN 10"| NAS_BKP
 
     %% Lien WAN
-    FW_PFS ---|"🌐 Fibre FAI 500Mbps"| INTERNET["☁️ Internet"]
-    FW_PFS -.-|"🔐 VPN IPsec"| AZURE["🟦 Azure Cloud"]
+    FW_PFS ---|" Fibre FAI 500Mbps"| INTERNET[" Internet"]
+    FW_PFS -.-|" VPN IPsec"| AZURE[" Azure Cloud"]
+
+    %% Force vertical stacking of floors
+    E4_SW ~~~ E3_SW
+    E3_SW ~~~ E2_SW
+    E2_SW ~~~ E1_SW_ACC
 
     %% Styling
     style FW_PFS fill:#e74c3c,color:#fff
@@ -419,12 +424,12 @@ graph TD
     <div class="page-break"></div>
     <!-- SECTION: Architecture Hybride (Détail) -->
     <div class="section-content">
-        <h1>🌐 Architecture Hybride Détaillée - Smart Office 2.0</h1>
+        <h1> Architecture Hybride Détaillée - Smart Office 2.0</h1>
 <p>Ce schéma présente l&#39;interconnexion entre l&#39;infrastructure locale (On-Premise) et le Cloud Azure, avec un focus sur la segmentation réseau (VLANs/Subnets) et le placement des instances.</p>
-<h2>📊 Schéma des Réseaux et Instances</h2>
+<h2> Schéma des Réseaux et Instances</h2>
 <pre class="mermaid">
 graph TD
-    subgraph "🟦 CLOUD AZURE (VNet - 172.16.0.0/16)"
+    subgraph " CLOUD AZURE (VNet - 172.16.0.0/16)"
         subgraph "Identity Subnet (172.16.1.0/24)"
             DC_AZ["VM: DC-CLOUD\n(Replica AD)"]
         end
@@ -440,8 +445,8 @@ graph TD
         VGW["Azure VPN Gateway"]
     end
 
-    subgraph "🏢 SITE LOCAL (10.10.0.0/16)"
-        subgraph "🛡️ Firewall & Gateway"
+    subgraph " SITE LOCAL (10.10.0.0/16)"
+        subgraph " Firewall & Gateway"
             PFS["PfSense Firewall"]
         end
 
@@ -454,13 +459,13 @@ graph TD
         end
 
         subgraph VLANS ["VLANs"]
-            V10["🖥️ Srv (AD, DBs, Zabbix) - VLAN 10"]
-            V20["👥 Employés - VLAN 20"]
-            V30["🧪 R&D Isolé - VLAN 30"]
-            V40["📞 VoIP - VLAN 40"]
-            V50["📡 IoT - VLAN 50"]
-            V99["🛜 Guest Wi-Fi - VLAN 99"]
-            V100["🔧 Management - VLAN 100"]
+            V10[" Srv (AD, DBs, Zabbix) - VLAN 10"]
+            V20[" Employés - VLAN 20"]
+            V30[" R&D Isolé - VLAN 30"]
+            V40[" VoIP - VLAN 40"]
+            V50[" IoT - VLAN 50"]
+            V99[" Guest Wi-Fi - VLAN 99"]
+            V100[" Management - VLAN 100"]
         end
     end
 
@@ -493,7 +498,7 @@ graph TD
     style AZ_PG fill:#0078d4,stroke:#fff,color:#fff
     style DC_AZ fill:#9f9,stroke:#333
 
-</pre><h2>📋 Inventaire Technique</h2>
+</pre><h2> Inventaire Technique</h2>
 <h3>1. Documentation Applicative et Données</h3>
 <ul>
 <li><strong>Bases de données polyglottes</strong> : <strong>Modèle de données UML/Merise</strong> justifiant Postgres (relationnel) + Mongo (Time-Series).</li>
@@ -519,7 +524,7 @@ graph TD
     <div class="page-break"></div>
     <!-- SECTION: Matrice des Flux Réseau -->
     <div class="section-content">
-        <h1>🔀 Matrice des Flux Réseau — Smart Office 2.0</h1>
+        <h1> Matrice des Flux Réseau — Smart Office 2.0</h1>
 <p><strong>Auteur :</strong> Ilyes (Lead Réseau) | <strong>Statut :</strong> Validé
 <strong>Contexte :</strong> Implémentation du pare-feu pfSense en politique &quot;Deny All&quot; par défaut.</p>
 <p>Cette matrice documente l&#39;ensemble des flux autorisés (ACLs) entre les différents sous-réseaux (VLANs) et les environnements extérieurs (Internet, Cloud Azure). 
@@ -577,7 +582,7 @@ graph TD
 </tbody></table>
 <hr>
 <h2>2. Matrice des Flux Autorisés (ACLs pfSense)</h2>
-<p><em>Légende :</em> ✅ Autorisé | ❌ Bloqué par défaut</p>
+<p><em>Légende :</em>  Autorisé |  Bloqué par défaut</p>
 <table>
 <thead>
 <tr>
@@ -594,7 +599,7 @@ graph TD
 <td align="left">Tous les VLANs locaux</td>
 <td align="left">VLAN 10 (<code>10.10.10.10</code> - AD)</td>
 <td align="left">53 (UDP/TCP)</td>
-<td align="center">✅</td>
+<td align="center"></td>
 <td align="left">Résolution DNS locale vers le contrôleur de domaine</td>
 </tr>
 <tr>
@@ -602,7 +607,7 @@ graph TD
 <td align="left">VLAN 10 (<code>10.10.10.10</code> - AD)</td>
 <td align="left">Internet (Ex: <code>8.8.8.8</code>)</td>
 <td align="left">53 (UDP)</td>
-<td align="center">✅</td>
+<td align="center"></td>
 <td align="left">Forwarding DNS pour les requêtes externes</td>
 </tr>
 <tr>
@@ -610,7 +615,7 @@ graph TD
 <td align="left">VLAN 20, VLAN 30</td>
 <td align="left">VLAN 10 (<code>10.10.10.10</code> - AD)</td>
 <td align="left">88, 389, 445, 636, 3268 (TCP/UDP)</td>
-<td align="center">✅</td>
+<td align="center"></td>
 <td align="left">Authentification Kerberos, LDAP, SMB (GPO) pour les postes clients</td>
 </tr>
 <tr>
@@ -618,7 +623,7 @@ graph TD
 <td align="left">VLAN 20, VLAN 30</td>
 <td align="left">Internet</td>
 <td align="left">80, 443 (TCP)</td>
-<td align="center">✅</td>
+<td align="center"></td>
 <td align="left">Navigation Web standard pour les employés et R&amp;D</td>
 </tr>
 <tr>
@@ -626,7 +631,7 @@ graph TD
 <td align="left">VLAN 99 (Guest)</td>
 <td align="left">Internet</td>
 <td align="left">80, 443 (TCP)</td>
-<td align="center">✅</td>
+<td align="center"></td>
 <td align="left">Accès Internet uniquement pour les invités (Isolé du LAN)</td>
 </tr>
 <tr>
@@ -634,7 +639,7 @@ graph TD
 <td align="left">Tous les VLANs locaux</td>
 <td align="left">Azure App Service</td>
 <td align="left">443 (TCP)</td>
-<td align="center">✅</td>
+<td align="center"></td>
 <td align="left">Accès à l&#39;application web Smart Office (HTTPS)</td>
 </tr>
 <tr>
@@ -642,7 +647,7 @@ graph TD
 <td align="left">Azure VNet (App Web)</td>
 <td align="left">VLAN 10 (<code>10.10.10.20</code> - SRV-DOCKER)</td>
 <td align="left">5432 (TCP)</td>
-<td align="center">✅</td>
+<td align="center"></td>
 <td align="left">L&#39;application cloud accède à PostgreSQL via le tunnel VPN</td>
 </tr>
 <tr>
@@ -650,7 +655,7 @@ graph TD
 <td align="left">Azure VNet (App Web)</td>
 <td align="left">VLAN 10 (<code>10.10.10.20</code> - SRV-DOCKER)</td>
 <td align="left">27017 (TCP)</td>
-<td align="center">✅</td>
+<td align="center"></td>
 <td align="left">L&#39;application cloud pousse les logs IoT vers MongoDB via VPN</td>
 </tr>
 <tr>
@@ -658,7 +663,7 @@ graph TD
 <td align="left">VLAN 50 (Capteurs)</td>
 <td align="left">VLAN 10 (<code>10.10.10.20</code> - SRV-DOCKER)</td>
 <td align="left">27017 (TCP)</td>
-<td align="center">✅</td>
+<td align="center"></td>
 <td align="left">Envoi direct de données MQTT/Mongo par les capteurs internes</td>
 </tr>
 <tr>
@@ -666,7 +671,7 @@ graph TD
 <td align="left">VLAN 10, VLAN 20</td>
 <td align="left">VLAN 100 (<code>10.10.100.10</code> - Zabbix)</td>
 <td align="left">80, 443 (TCP)</td>
-<td align="center">✅</td>
+<td align="center"></td>
 <td align="left">Accès au dashboard Grafana/Zabbix par les admins</td>
 </tr>
 <tr>
@@ -674,7 +679,7 @@ graph TD
 <td align="left">VLAN 100 (<code>10.10.100.10</code>)</td>
 <td align="left">Tous les VLANs locaux</td>
 <td align="left">10050 (TCP), ICMP</td>
-<td align="center">✅</td>
+<td align="center"></td>
 <td align="left">Collecte des métriques Zabbix Agent et ping</td>
 </tr>
 <tr>
@@ -682,7 +687,7 @@ graph TD
 <td align="left">VLAN 100 (<code>10.10.100.10</code>)</td>
 <td align="left">Azure VNet (VMs)</td>
 <td align="left">10050 (TCP), ICMP</td>
-<td align="center">✅</td>
+<td align="center"></td>
 <td align="left">Collecte des métriques Cloud via le tunnel VPN</td>
 </tr>
 <tr>
@@ -690,7 +695,7 @@ graph TD
 <td align="left">VLAN 40 (Téléphones)</td>
 <td align="left">Internet (SIP Trunk FAI)</td>
 <td align="left">5060, 10000-20000 (UDP)</td>
-<td align="center">✅</td>
+<td align="center"></td>
 <td align="left">Flux SIP et RTP pour la téléphonie externe</td>
 </tr>
 <tr>
@@ -698,7 +703,7 @@ graph TD
 <td align="left">pfSense (WAN)</td>
 <td align="left">Azure VPN Gateway (IP Pub)</td>
 <td align="left">500, 4500 (UDP), ESP</td>
-<td align="center">✅</td>
+<td align="center"></td>
 <td align="left">Établissement et maintien du tunnel VPN IPsec (IKEv2)</td>
 </tr>
 <tr>
@@ -706,7 +711,7 @@ graph TD
 <td align="left">VLAN 10 (<code>10.10.10.20</code>)</td>
 <td align="left">VLAN 10 (<code>10.10.10.30</code> - NAS)</td>
 <td align="left">445, 2049, 873 (TCP)</td>
-<td align="center">✅</td>
+<td align="center"></td>
 <td align="left">Dépôt des sauvegardes BDD (SMB/NFS/Rsync) sur le NAS local</td>
 </tr>
 <tr>
@@ -714,7 +719,7 @@ graph TD
 <td align="left">VLAN 10 (<code>10.10.10.30</code> - NAS)</td>
 <td align="left">Internet (Azure Blob)</td>
 <td align="left">443 (TCP)</td>
-<td align="center">✅</td>
+<td align="center"></td>
 <td align="left">Externalisation des sauvegardes vers le Cloud Azure</td>
 </tr>
 <tr>
@@ -722,7 +727,7 @@ graph TD
 <td align="left">VLAN 99 (Guest)</td>
 <td align="left">LAN (<code>10.10.0.0/16</code>)</td>
 <td align="left">Tous (Any)</td>
-<td align="center">❌</td>
+<td align="center"></td>
 <td align="left">Blocage strict des invités vers les réseaux internes</td>
 </tr>
 <tr>
@@ -730,7 +735,7 @@ graph TD
 <td align="left">VLAN 30 (R&amp;D)</td>
 <td align="left">VLAN 20 (Employés)</td>
 <td align="left">Tous (Any)</td>
-<td align="center">❌</td>
+<td align="center"></td>
 <td align="left">Isolement du trafic R&amp;D par rapport au reste de l&#39;entreprise</td>
 </tr>
 </tbody></table>
@@ -754,7 +759,7 @@ graph TD
     <div class="page-break"></div>
     <!-- SECTION: Architecture Wi-Fi -->
     <div class="section-content">
-        <h1>📶 Architecture WLAN (Wi-Fi) — Smart Office 2.0</h1>
+        <h1> Architecture WLAN (Wi-Fi) — Smart Office 2.0</h1>
 <p><strong>Auteur :</strong> Ilyes | <strong>Statut :</strong> Validé</p>
 <p>Cette section documente l&#39;architecture du réseau sans-fil de l&#39;entreprise, indispensable pour le travail hybride et la mobilité des collaborateurs.</p>
 <hr>
@@ -835,7 +840,7 @@ graph TD
     <div class="page-break"></div>
     <!-- SECTION: Analyse Comparative Cloud -->
     <div class="section-content">
-        <h1>☁️ Analyse Comparative Cloud et TCO — Smart Office 2.0</h1>
+        <h1> Analyse Comparative Cloud et TCO — Smart Office 2.0</h1>
 <p><strong>Auteur :</strong> Océane (Lead Système &amp; Cloud) | <strong>Statut :</strong> Validé
 <strong>Contexte :</strong> Justification du choix du Cloud Provider pour l&#39;hébergement de l&#39;application Web (App Service) et le Registre de Conteneurs (ACR) dans le cadre de l&#39;architecture hybride de Biotech Corp.</p>
 <hr>
@@ -845,9 +850,9 @@ graph TD
 <thead>
 <tr>
 <th align="left">Critère</th>
-<th align="left">🟦 Microsoft Azure</th>
-<th align="left">🟧 Amazon Web Services (AWS)</th>
-<th align="left">🟩 Google Cloud (GCP)</th>
+<th align="left"> Microsoft Azure</th>
+<th align="left"> Amazon Web Services (AWS)</th>
+<th align="left"> Google Cloud (GCP)</th>
 </tr>
 </thead>
 <tbody><tr>
@@ -858,9 +863,9 @@ graph TD
 </tr>
 <tr>
 <td align="left">Facilité de déploiement</td>
-<td align="left">⭐⭐⭐⭐⭐ (Intégration native Docker Compose)</td>
-<td align="left">⭐⭐⭐ (Nécessite configuration ECS/Task Definitions)</td>
-<td align="left">⭐⭐⭐⭐ (Très orienté Serverless/Knative)</td>
+<td align="left"> (Intégration native Docker Compose)</td>
+<td align="left"> (Nécessite configuration ECS/Task Definitions)</td>
+<td align="left"> (Très orienté Serverless/Knative)</td>
 </tr>
 <tr>
 <td align="left"><strong>Registre d&#39;images</strong></td>
@@ -887,7 +892,7 @@ graph TD
 <td align="left">Moyenne</td>
 </tr>
 </tbody></table>
-<h3>🏆 Justification du Choix : Microsoft Azure</h3>
+<h3> Justification du Choix : Microsoft Azure</h3>
 <p><strong>Pourquoi Azure a été retenu pour le projet Smart Office 2.0 :</strong></p>
 <ol>
 <li><strong>PaaS App Service pour Docker Compose :</strong> Azure propose la fonctionnalité <code>Web App for Containers</code> qui supporte nativement un fichier <code>docker-compose.yml</code>. Cela correspond parfaitement à notre architecture applicative sans avoir à basculer vers Kubernetes (trop lourd pour ce PoC).</li>
@@ -1019,7 +1024,7 @@ Les gains s&#39;expliquent par :</p>
     <div class="page-break"></div>
     <!-- SECTION: Modèle de Données -->
     <div class="section-content">
-        <h1>📊 Modèles de Données UML/Merise — Smart Office 2.0</h1>
+        <h1> Modèles de Données UML/Merise — Smart Office 2.0</h1>
 <p><strong>Auteur :</strong> Mehdi (Lead DevOps &amp; Data) | <strong>Statut :</strong> Validé
 <strong>Contexte :</strong> Application de réservation de salles et de suivi de logs IoT</p>
 <p>Afin de répondre aux exigences métiers d&#39;intégrité (réservations) et de performance (logs temps réel), l&#39;architecture s&#39;appuie sur un système de base de données polyglotte :</p>
@@ -1117,7 +1122,7 @@ En séparant les logs (Mongo) des transactions métier (Postgres), nous assurons
     <div class="page-break"></div>
     <!-- SECTION: Stratégie de Stockage -->
     <div class="section-content">
-        <h1>🗄️ Stratégie de Stockage et de Sauvegarde</h1>
+        <h1> Stratégie de Stockage et de Sauvegarde</h1>
 <p><strong>Auteur :</strong> Océane &amp; Florian | <strong>Statut :</strong> Validé</p>
 <p>La protection du capital de données de Biotech Corp (Comptes utilisateurs, logs IoT, historiques de réservations) nécessite une stratégie de stockage résiliente et un plan de sauvegarde automatisé.</p>
 <hr>
@@ -1782,8 +1787,8 @@ En séparant les logs (Mongo) des transactions métier (Postgres), nous assurons
 
     <div class="workflow">
         <strong>Flux de traitement d'un incident :</strong><br><br>
-        <code>📩 Détection</code> → <code>📋 Enregistrement</code> → <code>🏷️ Classification</code> → <code>🔍 Diagnostic</code> → <code>🔧 Résolution</code> → <code>✅ Clôture</code><br><br>
-        En cas d'échec au diagnostic : <code>⬆️ Escalade</code> vers le niveau supérieur.
+        <code> Détection</code> → <code> Enregistrement</code> → <code> Classification</code> → <code> Diagnostic</code> → <code> Résolution</code> → <code> Clôture</code><br><br>
+        En cas d'échec au diagnostic : <code> Escalade</code> vers le niveau supérieur.
     </div>
 
     <h3>3.1 Détection</h3>
@@ -1907,7 +1912,7 @@ En séparant les logs (Mongo) des transactions métier (Postgres), nous assurons
     <h2>5. Exemple de Traitement d'Incident</h2>
 
     <div class="highlight">
-        <strong>🎫 INC-2026-0042 — Application Web inaccessible (HTTP 502)</strong><br><br>
+        <strong> INC-2026-0042 — Application Web inaccessible (HTTP 502)</strong><br><br>
         <strong>Détection</strong> : 23/06/2026 14:32 — Alerte Zabbix : "Web check failed on smartoffice-poc-app.azurewebsites.net"<br>
         <strong>Classification</strong> : P1 — Impact Critique / Urgence Haute<br>
         <strong>Assignation N1</strong> : Florian (astreinte) — Vérification des logs → App Service redémarré, problème persiste<br>
@@ -1957,7 +1962,7 @@ En séparant les logs (Mongo) des transactions métier (Postgres), nous assurons
     <div class="page-break"></div>
     <!-- SECTION: Architecture de Supervision (Zabbix & Grafana) -->
     <div class="section-content">
-        <h1>👁️ Architecture de Supervision et Observabilité — Smart Office 2.0</h1>
+        <h1> Architecture de Supervision et Observabilité — Smart Office 2.0</h1>
 <p><strong>Auteur :</strong> Florian (Lead Supervision &amp; Observabilité) | <strong>Statut :</strong> Validé
 <strong>Contexte :</strong> Monitoring proactif de l&#39;infrastructure hybride et alerting en temps réel.</p>
 <p>Afin de garantir une haute disponibilité (SLA 99.9%) et de fournir des métriques lisibles aux équipes métier, l&#39;infrastructure s&#39;appuie sur une stack de supervision double : <strong>Zabbix</strong> pour l&#39;infrastructure profonde et <strong>Grafana</strong> pour la visualisation des données métier IoT.</p>

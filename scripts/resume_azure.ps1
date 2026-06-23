@@ -7,13 +7,13 @@ if (!(Get-Command az -ErrorAction SilentlyContinue)) {
     if (Test-Path $azPath) { $env:Path += ";$azPath" }
 }
 
-$RG_NAME = "RG-SmartOffice-Prod"
+$RG_NAME = "RG-SmartOffice-IaaS-France"
 
 Write-Host "🚀 Redémarrage de l'infrastructure Azure..." -ForegroundColor Cyan
 
 # 1. Redémarrage de la Web App
 Write-Host "🌐 Démarrage de la Web App..."
-az webapp start --name smartoffice-poc-app --resource-group $RG_NAME
+az webapp start --name smartoffice-poc-app --resource-group $ResourceGroup
 
 # 2. Redémarrage de TOUTES les VMs du groupe
 $vms = az vm list --resource-group $RG_NAME --query "[].name" -o tsv
