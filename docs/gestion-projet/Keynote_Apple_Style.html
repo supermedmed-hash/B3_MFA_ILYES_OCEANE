@@ -29,6 +29,10 @@
       margin-bottom: 10px;
       color: #1d1d1f;
     }
+
+    .reveal h1 { font-size: 3em; }
+    .reveal h2 { font-size: 2em; }
+    .reveal h3 { font-size: 1.5em; }
     
     /* Apple Gradient Text */
     .gradient-text {
@@ -48,17 +52,17 @@
     .apple-subtitle {
       color: #86868b;
       font-weight: 500;
-      font-size: 1.3em;
-      margin-top: 10px;
+      font-size: 0.9em;
+      margin-top: 5px;
       letter-spacing: -0.01em;
     }
     
     .slide-image {
-      border-radius: 20px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+      border-radius: 16px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
       transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
       margin-top: 10px !important;
-      max-height: 220px;
+      max-height: 35vh; /* Dynamique selon l'écran */
       object-fit: cover;
     }
     
@@ -69,24 +73,33 @@
     .reveal ul {
       list-style-type: none;
       text-align: center;
-      margin-top: 40px;
+      margin-top: 20px;
+      width: 80%;
+      margin-left: auto;
+      margin-right: auto;
     }
     
     .reveal li {
       color: #1d1d1f;
       font-weight: 500;
-      font-size: 1.1em;
-      margin-bottom: 12px;
-      padding: 10px;
+      font-size: 0.8em;
+      margin-bottom: 10px;
+      padding: 8px 15px;
       background: rgba(0,0,0,0.04);
-      border-radius: 12px;
+      border-radius: 10px;
       backdrop-filter: blur(10px);
     }
     
     .big-number {
-      font-size: 4em !important;
+      font-size: 2.5em !important;
       font-weight: 900;
-      margin: 20px 0;
+      margin: 10px 0;
+    }
+
+    .team-names {
+      font-size: 0.5em; 
+      color: #86868b; 
+      margin-top: 40px;
     }
   </style>
 </head>
@@ -96,9 +109,9 @@
 
       <!-- Slide 1: Intro -->
       <section data-auto-animate data-transition="fade">
-        <h1 style="font-size: 4.5em;">Smart Office <span class="gradient-text">2.0</span></h1>
+        <h1>Smart Office <span class="gradient-text">2.0</span></h1>
         <p class="apple-subtitle fragment fade-up">L'infrastructure de demain, aujourd'hui.</p>
-        <p class="fragment fade-up" style="font-size: 0.6em; color: #86868b; margin-top: 60px;">Océane, Florian, Ilyes, Mehdi</p>
+        <p class="fragment fade-up team-names">Océane, Florian, Ilyes, Mehdi</p>
         <aside class="notes">
           [Océane - Env. 2 min 30] 
 Bonjour à toutes et à tous, et merci de nous recevoir aujourd'hui. Nous sommes l'équipe d'ingénieurs en charge de la refonte du système d'information de Biotech Corp.
@@ -143,9 +156,9 @@ Pour le Wi-Fi, finies les clés partagées que l'on se passe sur des bouts de pa
 
       <!-- Slide 4: Zero Trust -->
       <section data-auto-animate data-transition="slide">
-        <h2 style="font-size: 2.8em;">Zero <span class="gradient-text-red">Trust</span></h2>
+        <h2>Zero <span class="gradient-text-red">Trust</span></h2>
         <p class="apple-subtitle fragment fade-in">Never trust, always verify.</p>
-        <ul style="margin-top: 30px;">
+        <ul>
           <li class="fragment fade-left" style="background: rgba(255,59,48,0.1); color: #ff3b30;">Pare-feu pfSense en 'Default Deny'</li>
           <li class="fragment fade-left" style="background: rgba(255,59,48,0.1); color: #ff3b30;">Aucune communication Employés ➔ R&D</li>
           <li class="fragment fade-left" style="background: rgba(255,59,48,0.1); color: #ff3b30;">Accès distants VPN chiffrés de bout en bout</li>
@@ -163,7 +176,7 @@ De plus, pour répondre à la politique de télétravail jusqu'à 3 jours par se
       <section data-auto-animate data-transition="slide">
         <h2>L'Usine <span class="gradient-text">DevOps</span></h2>
         <img src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=800&q=80" class="slide-image fragment zoom-in" alt="Bureaux Modernes Smart Office">
-        <p class="fragment fade-up apple-subtitle" style="margin-top: 10px; font-size: 1em;">Zero Downtime Deployment via GitHub & Azure.</p>
+        <p class="fragment fade-up apple-subtitle">Zero Downtime Deployment via GitHub & Azure.</p>
         <aside class="notes">
           [Mehdi - Env. 3 min]
 Pour que l'infrastructure réseau d'Ilyes et Cloud d'Océane puisse être exploitée par les développeurs, nous avons adopté une véritable démarche DevOps. L'époque où l'on déployait des fichiers manuellement par FTP est révolue.
@@ -193,7 +206,7 @@ Nous conservons 3 copies de toutes nos données. Celles-ci sont stockées sur 2 
       <section data-auto-animate data-transition="slide">
         <h2>Le <span class="gradient-text">Cockpit</span></h2>
         <p class="apple-subtitle">Supervision & Observabilité</p>
-        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80" class="slide-image fragment fade-up" style="width: 700px;" alt="Dashboard Data">
+        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80" class="slide-image fragment fade-up" style="max-width: 600px;" alt="Dashboard Data">
         <aside class="notes">
           [Florian - Env. 3 min]
 Merci Mehdi. Une infrastructure aussi riche nécessite de pouvoir lire en permanence ses "signes vitaux". C'est là qu'intervient mon rôle sur la supervision et l'observabilité. Nous ne voulions pas d'un système aveugle, nous avons donc déployé une double stack.
@@ -207,7 +220,7 @@ De l'autre côté, nous avons Grafana. C'est notre vitrine de la donnée métier
       <!-- Slide 8: ITSM -->
       <section data-auto-animate data-transition="slide">
         <h2>Résilience & <span class="gradient-text">PRA</span></h2>
-        <ul style="margin-top: 30px;">
+        <ul>
           <li class="fragment fade-up">Analyse d'Impact (BIA)</li>
           <li class="fragment fade-up">Objectif RTO : <strong class="gradient-text-red">4 heures</strong></li>
           <li class="fragment fade-up">Processus structurés ITSM</li>
@@ -224,7 +237,7 @@ Grâce à nos choix d'hybridation, l'application Web sur Azure ne tombera pas. L
 
       <!-- Slide 9: Conclusion -->
       <section data-transition="zoom">
-        <h1 style="font-size: 3.5em;">Merci.</h1>
+        <h2>Merci.</h2>
         <p class="apple-subtitle fragment fade-in">Place à la Démonstration.</p>
         <aside class="notes">
           [Équipe - Océane ou Florian - Env. 1 min]
@@ -244,9 +257,12 @@ Nous vous remercions sincèrement pour votre écoute. C'est avec un immense plai
   <script>
     Reveal.initialize({
       hash: true,
-      controls: false,
+      controls: true,
       progress: true,
       center: true,
+      margin: 0.1,
+      minScale: 0.2,
+      maxScale: 2.0,
       transition: 'slide', // none/fade/slide/convex/concave/zoom
       backgroundTransition: 'fade',
       plugins: [ RevealNotes ]
