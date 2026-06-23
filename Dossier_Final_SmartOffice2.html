@@ -82,7 +82,7 @@
         🧩 <strong>Schéma Logique de l'Architecture Hybride</strong>
     </div>
 
-    <h2>4. Modélisation et Sauvegarde des Données</h2>
+    <h2>4. Modélisation et Sauvegarde des Données (Mehdi)</h2>
     <p>Nous utilisons une approche polyglotte : PostgreSQL pour garantir l'intégrité transactionnelle des réservations, et MongoDB pour ingérer la masse des logs générés par les capteurs IoT, évitant ainsi un goulot d'étranglement.</p>
 
     <div class="link-card">
@@ -110,14 +110,14 @@
         🎫 <strong>Processus ITSM (Gestion des Incidents et Escalade)</strong>
     </div>
 
-    <h2>6. Supervision et Observabilité (Mehdi)</h2>
+    <h2>6. Supervision et Observabilité (Florian)</h2>
     <p>La haute disponibilité et le monitoring proactif sont assurés par un socle Zabbix/Grafana, permettant à la fois de surveiller la santé des équipements réseau et serveurs, et de fournir des Dashboards dynamiques basés sur les données IoT.</p>
 
     <div class="link-card">
         👁️ <strong>Architecture de Supervision (Zabbix & Grafana)</strong>
     </div>
 
-    <h2>7. Démarche DevOps et Suivi de Projet</h2>
+    <h2>7. Démarche DevOps et Suivi de Projet (Mehdi)</h2>
     <p>L'intégralité du code (Infrastructure as Code, Pipeline CI/CD, Application Web) est gérée sous GitHub. Le déploiement vers Azure est totalement automatisé (Zero Downtime Deployment).</p>
 
     <div class="link-card">
@@ -1002,7 +1002,7 @@ Les gains s&#39;expliquent par :</p>
     <!-- SECTION: Modèle de Données -->
     <div class="section-content">
         <h1>📊 Modèles de Données UML/Merise — Smart Office 2.0</h1>
-<p><strong>Auteur :</strong> Florian (Lead Data) | <strong>Statut :</strong> Validé
+<p><strong>Auteur :</strong> Mehdi (Lead DevOps &amp; Data) | <strong>Statut :</strong> Validé
 <strong>Contexte :</strong> Application de réservation de salles et de suivi de logs IoT</p>
 <p>Afin de répondre aux exigences métiers d&#39;intégrité (réservations) et de performance (logs temps réel), l&#39;architecture s&#39;appuie sur un système de base de données polyglotte :</p>
 <ol>
@@ -1940,7 +1940,7 @@ En séparant les logs (Mongo) des transactions métier (Postgres), nous assurons
     <!-- SECTION: Architecture de Supervision (Zabbix & Grafana) -->
     <div class="section-content">
         <h1>👁️ Architecture de Supervision et Observabilité — Smart Office 2.0</h1>
-<p><strong>Auteur :</strong> Mehdi (Lead Supervision &amp; Observabilité) | <strong>Statut :</strong> Validé
+<p><strong>Auteur :</strong> Florian (Lead Supervision &amp; Observabilité) | <strong>Statut :</strong> Validé
 <strong>Contexte :</strong> Monitoring proactif de l&#39;infrastructure hybride et alerting en temps réel.</p>
 <p>Afin de garantir une haute disponibilité (SLA 99.9%) et de fournir des métriques lisibles aux équipes métier, l&#39;infrastructure s&#39;appuie sur une stack de supervision double : <strong>Zabbix</strong> pour l&#39;infrastructure profonde et <strong>Grafana</strong> pour la visualisation des données métier IoT.</p>
 <hr>
@@ -1982,7 +1982,7 @@ En séparant les logs (Mongo) des transactions métier (Postgres), nous assurons
 <li><code>mariadb</code> (Base de données dédiée aux métriques Zabbix)</li>
 <li><code>grafana</code> (Serveur de visualisation)</li>
 </ul>
-<p><em>Document rédigé par Mehdi (Lead Supervision) — Juin 2026</em></p>
+<p><em>Document rédigé par Florian (Lead Supervision) — Juin 2026</em></p>
 
     </div>
         

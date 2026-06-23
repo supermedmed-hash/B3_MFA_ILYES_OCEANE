@@ -1,5 +1,5 @@
 # 👁️ Architecture de Supervision et Observabilité — Smart Office 2.0
-**Auteur :** Mehdi (Lead Supervision & Observabilité) | **Statut :** Validé
+**Auteur :** Florian (Lead Supervision & Observabilité) | **Statut :** Validé
 **Contexte :** Monitoring proactif de l'infrastructure hybride et alerting en temps réel.
 
 Afin de garantir une haute disponibilité (SLA 99.9%) et de fournir des métriques lisibles aux équipes métier, l'infrastructure s'appuie sur une stack de supervision double : **Zabbix** pour l'infrastructure profonde et **Grafana** pour la visualisation des données métier IoT.
@@ -46,4 +46,4 @@ Sur le `SRV-ZABBIX`, la stack est entièrement déployée via `docker-compose` p
 *   `mariadb` (Base de données dédiée aux métriques Zabbix)
 *   `grafana` (Serveur de visualisation)
 
-*Document rédigé par Mehdi (Lead Supervision) — Juin 2026*
+*Document rédigé par Florian (Lead Supervision) — Juin 2026*

@@ -1,5 +1,5 @@
 # 📊 Modèles de Données UML/Merise — Smart Office 2.0
-**Auteur :** Florian (Lead Data) | **Statut :** Validé
+**Auteur :** Mehdi (Lead DevOps & Data) | **Statut :** Validé
 **Contexte :** Application de réservation de salles et de suivi de logs IoT
 
 Afin de répondre aux exigences métiers d'intégrité (réservations) et de performance (logs temps réel), l'architecture s'appuie sur un système de base de données polyglotte :
