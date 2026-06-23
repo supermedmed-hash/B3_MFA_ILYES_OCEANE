@@ -110,7 +110,14 @@
         🎫 <strong>Processus ITSM (Gestion des Incidents et Escalade)</strong>
     </div>
 
-    <h2>6. Démarche DevOps et Suivi de Projet</h2>
+    <h2>6. Supervision et Observabilité (Mehdi)</h2>
+    <p>La haute disponibilité et le monitoring proactif sont assurés par un socle Zabbix/Grafana, permettant à la fois de surveiller la santé des équipements réseau et serveurs, et de fournir des Dashboards dynamiques basés sur les données IoT.</p>
+
+    <div class="link-card">
+        👁️ <strong>Architecture de Supervision (Zabbix & Grafana)</strong>
+    </div>
+
+    <h2>7. Démarche DevOps et Suivi de Projet</h2>
     <p>L'intégralité du code (Infrastructure as Code, Pipeline CI/CD, Application Web) est gérée sous GitHub. Le déploiement vers Azure est totalement automatisé (Zero Downtime Deployment).</p>
 
     <div class="link-card">
@@ -1926,6 +1933,56 @@ En séparant les logs (Mongo) des transactions métier (Postgres), nous assurons
     </div>
 </div>
 
+
+    </div>
+        
+    <div class="page-break"></div>
+    <!-- SECTION: Architecture de Supervision (Zabbix & Grafana) -->
+    <div class="section-content">
+        <h1>👁️ Architecture de Supervision et Observabilité — Smart Office 2.0</h1>
+<p><strong>Auteur :</strong> Mehdi (Lead Supervision &amp; Observabilité) | <strong>Statut :</strong> Validé
+<strong>Contexte :</strong> Monitoring proactif de l&#39;infrastructure hybride et alerting en temps réel.</p>
+<p>Afin de garantir une haute disponibilité (SLA 99.9%) et de fournir des métriques lisibles aux équipes métier, l&#39;infrastructure s&#39;appuie sur une stack de supervision double : <strong>Zabbix</strong> pour l&#39;infrastructure profonde et <strong>Grafana</strong> pour la visualisation des données métier IoT.</p>
+<hr>
+<h2>1. Topologie de Supervision (Zabbix)</h2>
+<p>Zabbix est le cœur de la supervision technique. Déployé sur le serveur <code>SRV-ZABBIX</code> (VLAN 100), il interroge activement tous les composants du réseau local et Cloud via des agents et du SNMP.</p>
+<h3>1.1 Périmètre surveillé</h3>
+<ul>
+<li><strong>Réseau (SNMPv3)</strong> : pfSense (Bande passante WAN/LAN, état du tunnel IPsec), Switchs Cisco (Trafic des ports), AP Wi-Fi.</li>
+<li><strong>Serveurs locaux (Zabbix Agent)</strong> : SRV-AD-LOCAL (Charge CPU, RAM, services AD), SRV-DOCKER (Statut du démon Docker, charge globale).</li>
+<li><strong>Cloud Azure (Agent/API)</strong> : Surveillance de la passerelle VPN Azure et du conteneur App Service.</li>
+<li><strong>Bases de données</strong> : Templates Zabbix pour PostgreSQL (connexions actives, deadlocks) et MongoDB (Taille des collections, QPS).</li>
+</ul>
+<h3>1.2 Flux Réseau de Monitoring</h3>
+<p>Les flux Zabbix nécessitent une ouverture de port spécifique sur le pfSense (règle ACL <code>ZBX-01</code> et <code>ZBX-02</code> de la matrice des flux) :</p>
+<ul>
+<li>Du VLAN 100 vers tous les VLANs sur le port <code>TCP/10050</code> (Zabbix Agent).</li>
+<li>Des équipements vers le VLAN 100 sur le port <code>TCP/10051</code> (Zabbix Trapper / Active checks).</li>
+</ul>
+<hr>
+<h2>2. Tableaux de Bord et Data-Visualisation (Grafana)</h2>
+<p>Si Zabbix est destiné aux équipes IT (SysAdmin/NetAdmin), <strong>Grafana</strong> (également hébergé sur le VLAN 100) est la vitrine de la donnée pour le management et l&#39;équipe Data.</p>
+<h3>2.1 Sources de Données (Data Sources)</h3>
+<p>Grafana est connecté à deux bases :</p>
+<ol>
+<li><strong>Le plugin Zabbix</strong> : Pour générer des dashboards graphiques élégants de la santé des serveurs (CPU, RAM, Disque) et du réseau (Top talkers).</li>
+<li><strong>La base MongoDB</strong> : Requêtage direct des collections IoT pour afficher en temps réel l&#39;occupation des salles, les mouvements détectés, et l&#39;historique d&#39;utilisation.</li>
+</ol>
+<h3>2.2 Alerting &amp; Notification</h3>
+<ul>
+<li><strong>Niveau 1 (Avertissement)</strong> : Espace disque &gt; 80%, latence WAN &gt; 50ms. Notification via un Webhook sur un canal Slack dédié à l&#39;équipe IT.</li>
+<li><strong>Niveau 2 (Critique)</strong> : Chute du tunnel VPN IPsec, crash du conteneur Node.js Azure, perte de l&#39;AD. Déclenchement d&#39;une alerte pager pour l&#39;administrateur d&#39;astreinte, conformément au <strong>Processus ITSM</strong>.</li>
+</ul>
+<hr>
+<h2>3. Déploiement Conteneurisé</h2>
+<p>Sur le <code>SRV-ZABBIX</code>, la stack est entièrement déployée via <code>docker-compose</code> pour faciliter les mises à jour et les sauvegardes :</p>
+<ul>
+<li><code>zabbix-server-mysql</code> (Moteur de collecte)</li>
+<li><code>zabbix-web-nginx-mysql</code> (Interface Web d&#39;administration)</li>
+<li><code>mariadb</code> (Base de données dédiée aux métriques Zabbix)</li>
+<li><code>grafana</code> (Serveur de visualisation)</li>
+</ul>
+<p><em>Document rédigé par Mehdi (Lead Supervision) — Juin 2026</em></p>
 
     </div>
         

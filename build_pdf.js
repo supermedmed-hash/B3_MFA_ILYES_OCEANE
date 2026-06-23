@@ -14,7 +14,8 @@ const filesToInclude = [
     { title: "Politique de Sécurité (PSSI)", path: 'docs/procedures/politique_securite.html' },
     { title: "Analyse BIA", path: 'docs/procedures/analyse_BIA.html' },
     { title: "PCA / PRA", path: 'docs/procedures/PCA_PRA_SmartOffice2.html' },
-    { title: "Processus ITSM", path: 'docs/procedures/processus_ITSM.html' }
+    { title: "Processus ITSM", path: 'docs/procedures/processus_ITSM.html' },
+    { title: "Architecture de Supervision (Zabbix & Grafana)", path: 'docs/dat/supervision_monitoring.md' }
 ];
 
 let htmlContent = `<!DOCTYPE html>
