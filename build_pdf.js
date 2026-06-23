@@ -68,7 +68,7 @@ filesToInclude.forEach(file => {
             let counter = 0;
             const mermaidBlocks = {};
             processedMd = processedMd.replace(/\`\`\`mermaid\r?\n([\s\S]*?)\`\`\`/g, (match, p1) => {
-                const id = `MERMAIDBLOCKPLACEHOLDER${counter}ENDPLACEHOLDER`;
+                const id = `<div id="MERMAID_BLOCK_${counter}"></div>`;
                 mermaidBlocks[id] = p1;
                 counter++;
                 return id;
