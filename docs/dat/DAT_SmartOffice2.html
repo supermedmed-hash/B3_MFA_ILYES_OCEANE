@@ -108,6 +108,7 @@
     <p>La haute disponibilité et le monitoring proactif sont assurés par un socle Zabbix/Grafana, permettant à la fois de surveiller la santé des équipements réseau et serveurs, et de fournir des Dashboards dynamiques basés sur les données IoT.</p>
 
     <div class="link-card">
+        <h2>📂 Consulter les Dossiers Détaillés</h2>
         👁️ <a href="supervision_monitoring.md">Architecture de Supervision (Zabbix & Grafana)</a>
     </div>
 
@@ -115,11 +116,28 @@
     <p>L'intégralité du code (Infrastructure as Code, Pipeline CI/CD, Application Web) est gérée sous GitHub. Le déploiement vers Azure est totalement automatisé (Zero Downtime Deployment).</p>
 
     <div class="link-card">
-        📅 <a href="../gestion-projet/suivi_sprints.md">Suivi de Projet Agile (Sprints et Backlog)</a>
+        <h2>📂 Consulter les Dossiers Détaillés</h2>
+        🚀 <a href="../procedures/processus_deploiement_CI_CD.md">Processus de Déploiement CI/CD</a>
     </div>
 
+    <h2>8. Limites Techniques et Théorie de l'Hybridation</h2>
+    <p>Dans le cadre de ce projet académique, la mise en place <strong>réelle</strong> du tunnel hybride s'est heurtée à des limites matérielles et budgétaires :</p>
+    <ul>
+        <li><strong>Limites On-Premise :</strong> L'absence d'images IOS propriétaires Cisco complique le déploiement local sous GNS3.</li>
+        <li><strong>Limites Cloud :</strong> L'abonnement <em>Azure for Students</em> impose des quotas stricts sur les cœurs vCPU et restreint les régions de déploiement (via la stratégie <code>RequestDisallowedByAzure</code>), ce qui empêche le provisionnement simultané d'une passerelle Azure VPN Gateway et des multiples machines virtuelles (AD, Docker, Zabbix).</li>
+    </ul>
+    
+    <p><strong>Cependant, la conception théorique de cette hybridation (Validée dans notre architecture) est la suivante :</strong></p>
+    <ul>
+        <li><strong>Côté Azure :</strong> Déploiement d'une <code>Virtual Network Gateway</code> (VNG) de type VPN, configurée en mode <em>Route-Based</em>, avec une IP Publique dédiée.</li>
+        <li><strong>Côté Local :</strong> Configuration du pare-feu <code>pfSense</code> en tant qu'Endpoint IPsec.</li>
+        <li><strong>Établissement du Tunnel Site-à-Site (S2S) :</strong> Négociation IKEv2 (Phase 1 : AES-256, SHA256, DH Group 14). Utilisation d'une clé pré-partagée (PSK) sécurisée.</li>
+        <li><strong>Routage :</strong> Propagations des routes permettant au réseau local (<code>10.10.0.0/16</code>) de dialoguer de manière transparente avec le VNet Azure (<code>10.100.0.0/16</code>), garantissant ainsi la synchronisation Active Directory vers Entra ID et l'accès privé aux bases de données PaaS.</li>
+    </ul>
+
     <div class="footer">
-        <p>Smart Office 2.0 — DAT Consolidé — Valide l'ensemble des livrables de la grille UF INFRA B3</p>
+        Document d'Architecture Technique - Smart Office 2.0<br>
+        Créé dans le cadre du projet B3 - Ynov
     </div>
 </div>
 
