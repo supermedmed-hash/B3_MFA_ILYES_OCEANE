@@ -8,6 +8,7 @@ if (!(Get-Command az -ErrorAction SilentlyContinue)) {
 }
 
 $RG_NAME = "RG-SmartOffice-IaaS-France"
+$ResourceGroup = "RG-SmartOffice-Prod"
 
 Write-Host "🚀 Redémarrage de l'infrastructure Azure..." -ForegroundColor Cyan
 

@@ -38,12 +38,31 @@ Grafana est connecté à deux bases :
 
 ---
 
-## 3. Déploiement Conteneurisé
+## 3. Déploiement Conteneurisé et Provisionnement Automatique
 
-Sur le `SRV-ZABBIX`, la stack est entièrement déployée via `docker-compose` pour faciliter les mises à jour et les sauvegardes :
-*   `zabbix-server-mysql` (Moteur de collecte)
-*   `zabbix-web-nginx-mysql` (Interface Web d'administration)
-*   `mariadb` (Base de données dédiée aux métriques Zabbix)
-*   `grafana` (Serveur de visualisation)
+Sur le `SRV-ZABBIX`, la stack est entièrement déployée via `docker-compose`. Afin de garantir une **restaurabilité totale et automatique**, nous utilisons le mécanisme de **provisioning natif** de Grafana et un script d'automatisation des sauvegardes/restaurations.
+
+### 3.1 Provisionnement automatique de Grafana
+Lors du déploiement, Grafana configure automatiquement ses ressources sans intervention manuelle grâce aux répertoires de configuration montés en volume :
+*   **Datasources** (`monitoring/grafana/provisioning/datasources/zabbix_mongo.yaml`) : Configure automatiquement la connexion avec l'API Zabbix (`http://zabbix-web:8080/api_jsonrpc.php`) et la base MongoDB.
+*   **Dashboards** (`monitoring/grafana/provisioning/dashboards/dashboards.yaml`) : Indique à Grafana de charger tous les fichiers JSON du dossier `monitoring/grafana/dashboards/`.
+*   **Modèle de Dashboard** (`monitoring/grafana/dashboards/smartoffice_dashboard.json`) : Dashboard par défaut préchargé contenant des graphiques pour la charge CPU des serveurs et les données d'occupation IoT.
+
+### 3.2 Sauvegarde et Restauration des bases de données
+Le script [`backup_restore_db.ps1`](file:///c:/Users/Administrateur/Desktop/Cours/B3/Fil_Rouge/scripts/backup_restore_db.ps1) permet d'automatiser les opérations de sauvegarde et de restauration sur les conteneurs distants via le CLI Azure :
+
+*   **Sauvegarder l'ensemble des bases** :
+    ```powershell
+    .\scripts\backup_restore_db.ps1 -Action backup
+    ```
+    *Effet : Génère les dumps de PostgreSQL, MongoDB, et MariaDB (Zabbix) dans le répertoire `/home/admin_smartoffice/backups/` sur chaque VM.*
+
+*   **Restaurer l'ensemble des bases** :
+    ```powershell
+    .\scripts\backup_restore_db.ps1 -Action restore
+    ```
+    *Effet : Restaure les dumps correspondants dans les conteneurs de base de données respectifs et redémarre les services pour appliquer la configuration.*
+
+---
 
 *Document rédigé par Florian (Lead Supervision) — Juin 2026*
