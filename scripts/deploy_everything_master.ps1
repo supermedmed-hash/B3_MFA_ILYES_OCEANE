@@ -13,7 +13,8 @@
 param(
     [string]$OnPremPublicIP = "",      # IP publique de pfSense (WAN). Trouvee automatiquement si vide.
     [string]$SharedKey = "SmartOfficeVPN2026Secure",
-    [string]$Location = "francecentral"
+    [string]$Location = "francecentral",
+    [switch]$AutoConnectLocal = $true  # Enchainer automatiquement sur la configuration locale GNS3 & pfSense
 )
 
 # Enlever les messages d'avertissement de format
@@ -327,10 +328,19 @@ Write-Host " Remote Gateway IP (Azure VPN) : $AZURE_VPN_IP" -ForegroundColor Whi
 Write-Host " Pre-Shared Key (PSK)          : $SharedKey" -ForegroundColor White
 Write-Host " Web App URL                   : https://$APP_NAME.azurewebsites.net" -ForegroundColor White
 Write-Host ""
-Write-Host " 📌 ÉTAPES DE RE-CONNEXION PFSENSE :" -ForegroundColor Yellow
-Write-Host "   1. Ouvre le script 'scripts/pfsense_ssh_config.py'."
-Write-Host "   2. Mets a jour 'remote-gateway' et 'peerid_data' avec : $AZURE_VPN_IP"
-Write-Host "   3. Lance le script python pour reconnecter le tunnel pfSense-Azure."
+if ($AutoConnectLocal) {
+    Write-Host "🔗 Enchainement automatique : Configuration de l'environnement local GNS3 & pfSense..." -ForegroundColor Magenta
+    if (Test-Path "scripts/setup_gns3_pfsense_master.ps1") {
+        & "scripts/setup_gns3_pfsense_master.ps1" -AzureVpnIP $AZURE_VPN_IP
+    } else {
+        Write-Warning "Le script scripts/setup_gns3_pfsense_master.ps1 est introuvable."
+    }
+} else {
+    Write-Host " 📌 ÉTAPES DE RE-CONNEXION PFSENSE MANUELLE :" -ForegroundColor Yellow
+    Write-Host "   1. Ouvre le script 'scripts/pfsense_ssh_config.py'."
+    Write-Host "   2. Mets a jour 'remote-gateway' et 'peerid_data' avec : $AZURE_VPN_IP"
+    Write-Host "   3. Lance le script python pour reconnecter le tunnel pfSense-Azure."
+}
 Write-Host ""
 Write-Host " Pour supprimer toute l'infra et stopper les couts :" -ForegroundColor Red
 Write-Host "   az group delete --name $RG_PROD --yes --no-wait"
