@@ -42,39 +42,33 @@ git checkout develop
 
 ---
 
-## 🏗️ Étape 3 : Déploiement automatisé de l'Infrastructure Azure
-Lancez le script maître qui gère la création automatique de tous les composants Cloud (RGs, VNets, Subnets, 3 VMs, AD DS, Docker, VPN Gateway, Liaison IPsec, App Service et ACR) :
+## 🏗️ Étape 3 : Déploiement et Connexion Automatique (One-Shot)
+Lancez le script maître. Il gère la création automatique de tous les composants Cloud dans Azure et, dès que la passerelle VPN est prête, il enchaîne **automatiquement** sur la configuration locale de GNS3 et pfSense :
 
 ```powershell
+# Usage standard (si pfSense est situé dans D:\VM\PfSense.vmx)
 .\scripts\deploy_everything_master.ps1
+
+# Si votre collègue a un chemin de stockage de VM différent :
+.\scripts\deploy_everything_master.ps1 -PfSenseVmxPath "CHEMIN_VERS_VOTRE_PFSENSE.vmx"
 ```
 
 > [!NOTE]
-> *   Le script détecte automatiquement votre adresse IP publique active (celle de votre box ou partage de connexion) pour la lier à la configuration VPN.
-> *   Si vous souhaitez forcer une IP spécifique pour pfSense, utilisez :
->     `.\scripts\deploy_everything_master.ps1 -OnPremPublicIP <IP_WAN_PFSENSE>`
-> *   **Durée d'exécution** : Environ **30 minutes** (temps de création de la passerelle VPN `VpnGw1AZ` résiliente dans Azure).
+> *   **Automatisation de bout en bout** : Le script déploie l'infrastructure Azure, alloue la passerelle VPN, récupère sa nouvelle adresse IP publique, vérifie vos prérequis locaux, répare/câble la topologie GNS3, configure l'IP des VPCS locaux, calcule votre IP publique hôte en direct et injecte la configuration réseau/IPsec complète sur pfSense par SSH.
+> *   **Durée d'exécution** : Environ **30 minutes** (le temps que la passerelle VPN Azure se construise en arrière-plan).
 
-Une fois terminé, le script affiche en vert :
-*   L'IP publique du VPN Azure (Remote Gateway).
-*   La clé partagée (PSK).
-*   L'adresse URL de l'App Service.
+Une fois le script terminé avec succès :
+*   L'infrastructure Azure est opérationnelle.
+*   La maquette GNS3 est entièrement configurée.
+*   **Le tunnel VPN IPsec est automatiquement configuré et connecté.**
 
 ---
 
-## 🔒 Étape 4 : Reconnexion du pfSense (GNS3)
-Une fois la nouvelle passerelle VPN Azure active, l'IP publique de la passerelle Azure aura changé. Il faut reconfigurer le pfSense local :
-
-1.  Ouvrez le script de configuration Python [`pfsense_ssh_config.py`](file:///c:/Users/Administrateur/Desktop/Cours/B3/Fil_Rouge/scripts/pfsense_ssh_config.py).
-2.  Mettez à jour les deux variables en haut du fichier avec la **nouvelle IP publique de la passerelle Azure** (affichée à la fin de l'étape 3) :
-    ```python
-    azure_vpn_ip = "NOUVELLE_IP_PUBLIQUE_AZURE"
-    ```
-3.  Exécutez le script pour pousser la configuration de sécurité mise à jour sur pfSense :
-    ```bash
-    python scripts/pfsense_ssh_config.py
-    ```
-4.  Sur l'interface pfSense, vérifiez que le tunnel IPsec s'est rétabli (Statut vert dans *Status > IPsec*).
+## 🔒 Étape 4 : Validation du Tunnel VPN IPsec
+Le tunnel se connecte automatiquement à la fin de l'étape 3. Pour le valider manuellement :
+1.  Connectez-vous sur l'interface Web de votre pfSense local (`http://192.168.2.145`).
+2.  Allez dans le menu **Status > IPsec**.
+3.  Vérifiez que le statut de l'association de sécurité (SA) affiche **Established** avec les subnets `10.10.0.0/16` côté local et `10.100.0.0/16` côté Azure.
 
 ---
 
