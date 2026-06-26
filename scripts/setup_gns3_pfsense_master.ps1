@@ -12,7 +12,8 @@
 
 param(
     [string]$AzureVpnIP = "",          # L'IP publique du VPN Azure (obtenue après le déploiement Azure)
-    [string]$PfSenseIP = "192.168.2.145" # L'IP LAN/WAN d'administration de pfSense
+    [string]$PfSenseIP = "192.168.2.145", # L'IP LAN/WAN d'administration de pfSense
+    [string]$PfSenseVmxPath = "D:\VM\PfSense.vmx" # Chemin d'accès au fichier VMX de pfSense
 )
 
 $ErrorActionPreference = "Stop"
@@ -38,8 +39,8 @@ try {
 
 # B. Vérifier si le fichier VM pfSense existe
 Write-Host "  🔍 Vérification du fichier VM pfSense..." -ForegroundColor Yellow
-if (-not (Test-Path "D:\VM\PfSense.vmx")) {
-    Write-Error "Le fichier VM pfSense n'a pas été trouvé à l'emplacement prévu : D:\VM\PfSense.vmx. Veuillez ajuster le chemin dans 'infrastructure/reseau/fix_and_complete_topology.ps1' et ce script."
+if (-not (Test-Path $PfSenseVmxPath)) {
+    Write-Error "Le fichier VM pfSense n'a pas été trouvé à l'emplacement prévu : $PfSenseVmxPath. Veuillez spécifier le chemin correct avec le paramètre -PfSenseVmxPath."
 }
 Write-Host "  [OK] Fichier VM pfSense trouvé." -ForegroundColor Green
 
@@ -69,7 +70,7 @@ Write-Host "[1] Configuration et câblage de la topologie GNS3..." -ForegroundCo
 if (-not (Test-Path "infrastructure/reseau/fix_and_complete_topology.ps1")) {
     Write-Error "Script 'fix_and_complete_topology.ps1' introuvable."
 }
-& "infrastructure/reseau/fix_and_complete_topology.ps1"
+& "infrastructure/reseau/fix_and_complete_topology.ps1" -PfSenseVmxPath $PfSenseVmxPath
 
 # Démarrer le nœud pfSense via l'API GNS3
 Write-Host "  Démarrage du nœud pfSense dans GNS3..." -ForegroundColor Yellow

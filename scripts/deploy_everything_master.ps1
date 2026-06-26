@@ -14,7 +14,8 @@ param(
     [string]$OnPremPublicIP = "",      # IP publique de pfSense (WAN). Trouvee automatiquement si vide.
     [string]$SharedKey = "SmartOfficeVPN2026Secure",
     [string]$Location = "francecentral",
-    [switch]$AutoConnectLocal = $true  # Enchainer automatiquement sur la configuration locale GNS3 & pfSense
+    [switch]$AutoConnectLocal = $true, # Enchainer automatiquement sur la configuration locale GNS3 & pfSense
+    [string]$PfSenseVmxPath = "D:\VM\PfSense.vmx" # Chemin d'accès au fichier VMX de pfSense
 )
 
 # Enlever les messages d'avertissement de format
@@ -331,7 +332,7 @@ Write-Host ""
 if ($AutoConnectLocal) {
     Write-Host "🔗 Enchainement automatique : Configuration de l'environnement local GNS3 & pfSense..." -ForegroundColor Magenta
     if (Test-Path "scripts/setup_gns3_pfsense_master.ps1") {
-        & "scripts/setup_gns3_pfsense_master.ps1" -AzureVpnIP $AZURE_VPN_IP
+        & "scripts/setup_gns3_pfsense_master.ps1" -AzureVpnIP $AZURE_VPN_IP -PfSenseVmxPath $PfSenseVmxPath
     } else {
         Write-Warning "Le script scripts/setup_gns3_pfsense_master.ps1 est introuvable."
     }

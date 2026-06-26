@@ -1,3 +1,7 @@
+param(
+    [string]$PfSenseVmxPath = "D:\VM\PfSense.vmx"
+)
+
 # ============================================================
 # Phase 1 : Fix topologie + Ajout pfSense VMware
 # ============================================================
@@ -89,7 +93,7 @@ $pfSenseTemplate = @{
     name              = "pfSense-Firewall"
     template_type     = "vmware"
     compute_id        = "local"
-    vmx_path          = "D:\VM\PfSense.vmx"
+    vmx_path          = $PfSenseVmxPath
     linked_clone      = $false
     headless          = $false
     on_close          = "save_vm_state"
