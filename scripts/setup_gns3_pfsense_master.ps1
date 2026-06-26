@@ -23,6 +23,46 @@ Write-Host "==========================================================" -Foregro
 Write-Host ""
 
 # ============================================================
+# 0. Vérification des Prérequis
+# ============================================================
+Write-Host "[0] Vérification des prérequis système..." -ForegroundColor Magenta
+
+# A. Vérifier si GNS3 API est en ligne
+Write-Host "  🔍 Vérification de GNS3 API..." -ForegroundColor Yellow
+try {
+    $gns3Test = Invoke-RestMethod -Uri "http://localhost:3080/v2/version" -TimeoutSec 3
+    Write-Host "  [OK] GNS3 API en ligne (version: $($gns3Test.version))" -ForegroundColor Green
+} catch {
+    Write-Error "GNS3 n'est pas démarré ou n'écoute pas sur http://localhost:3080. Lancez GNS3 d'abord."
+}
+
+# B. Vérifier si le fichier VM pfSense existe
+Write-Host "  🔍 Vérification du fichier VM pfSense..." -ForegroundColor Yellow
+if (-not (Test-Path "D:\VM\PfSense.vmx")) {
+    Write-Error "Le fichier VM pfSense n'a pas été trouvé à l'emplacement prévu : D:\VM\PfSense.vmx. Veuillez ajuster le chemin dans 'infrastructure/reseau/fix_and_complete_topology.ps1' et ce script."
+}
+Write-Host "  [OK] Fichier VM pfSense trouvé." -ForegroundColor Green
+
+# C. Vérifier si Python est installé
+Write-Host "  🔍 Vérification de Python..." -ForegroundColor Yellow
+$pythonTest = Get-Command python -ErrorAction SilentlyContinue
+if (-not $pythonTest) {
+    Write-Error "Python n'est pas installé ou n'est pas dans le PATH. Veuillez installer Python 3."
+}
+Write-Host "  [OK] Python détecté." -ForegroundColor Green
+
+# D. Vérifier si Paramiko est installé
+Write-Host "  🔍 Vérification de la bibliothèque Python 'paramiko'..." -ForegroundColor Yellow
+$paramikoTest = python -c "import paramiko; print('OK')" 2>$null
+if ($paramikoTest -ne "OK") {
+    Write-Error "La bibliothèque Python 'paramiko' n'est pas installée. Veuillez l'installer avec 'pip install paramiko'."
+}
+Write-Host "  [OK] Paramiko détecté." -ForegroundColor Green
+
+Write-Host "  [OK] Tous les prérequis sont validés !" -ForegroundColor Green
+Write-Host ""
+
+# ============================================================
 # 1. Réparation & Configuration de la Topologie GNS3
 # ============================================================
 Write-Host "[1] Configuration et câblage de la topologie GNS3..." -ForegroundColor Magenta
