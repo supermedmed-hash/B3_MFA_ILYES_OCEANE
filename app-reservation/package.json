@@ -2,9 +2,9 @@
   "name": "smart-office-poc",
   "version": "1.0.0",
   "description": "PoC de réservation de salles IoT pour Smart Office 2.0",
-  "main": "server.js",
+  "main": "src/server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node src/server.js"
   },
   "dependencies": {
     "cookie-parser": "^1.4.6",

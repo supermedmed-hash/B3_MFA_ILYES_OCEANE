@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue Présentateur - Smart Office 2.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0; padding: 20px;
+            font-family: 'Inter', sans-serif;
+            background-color: #1c1c1e;
+            color: #fff;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            grid-template-rows: 80px 1fr;
+            gap: 20px;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .header {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #2c2c2e;
+            padding: 0 30px;
+            border-radius: 12px;
+        }
+
+        .timer {
+            font-size: 2.5rem;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            color: #32d74b;
+        }
+
+        .timer.warning { color: #ffd60a; }
+        .timer.danger { color: #ff453a; }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            background: #0a84ff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        button:hover { background: #007aff; }
+        button:disabled { background: #48484a; color: #8e8e93; cursor: not-allowed; }
+
+        .sidebar {
+            background: #2c2c2e;
+            border-radius: 12px;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .slide-preview {
+            background: #1c1c1e;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+
+        .slide-preview.active {
+            border-color: #0a84ff;
+            background: #3a3a3c;
+        }
+
+        .slide-preview h4 { margin: 0 0 5px 0; font-size: 0.9rem; color: #8e8e93; }
+        .slide-preview p { margin: 0; font-size: 1.1rem; font-weight: 600; }
+
+        .main-content {
+            background: #2c2c2e;
+            border-radius: 12px;
+            padding: 40px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .script-section {
+            display: none;
+            font-size: 1.8rem; /* Large font for easy reading */
+            line-height: 1.6;
+        }
+
+        .script-section.active { display: block; }
+
+        .speaker {
+            display: inline-block;
+            background: #ff9f0a;
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .speaker.oceane { background: #32d74b; }
+        .speaker.ilyes { background: #0a84ff; color: #fff;}
+        .speaker.mehdi { background: #bf5af2; color: #fff;}
+        .speaker.florian { background: #ff453a; color: #fff;}
+        
+        .notes {
+            color: #a1a1a6;
+            font-size: 1.2rem;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        p { margin-top: 0; margin-bottom: 25px; }
+
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h2>Smart Office 2.0 - Télécommande</h2>
+        <div class="controls">
+            <button onclick="goToSlide(currentSlide - 1)" id="btnPrev">Précédent (Flèche Gauche)</button>
+            <button onclick="goToSlide(currentSlide + 1)" id="btnNext">Suivant (Flèche Droite)</button>
+            <button onclick="startTimer()" style="background: #32d74b; margin-left: 20px;">Démarrer Chrono</button>
+        </div>
+        <div class="timer" id="timer">15:00</div>
+    </div>
+
+    <div class="sidebar" id="thumbnails">
+        <div class="slide-preview active" onclick="goToSlide(0)">
+            <h4>Slide 1</h4><p>Titre</p>
+        </div>
+        <div class="slide-preview" onclick="goToSlide(1)">
+            <h4>Slide 2</h4><p>Enjeu Hyper-Croissance</p>
+        </div>
+        <div class="slide-preview" onclick="goToSlide(2)">
+            <h4>Slide 3</h4><p>Réseau & Sécurité</p>
+        </div>
+        <div class="slide-preview" onclick="goToSlide(3)">
+            <h4>Slide 4</h4><p>Hybridation & Cloud</p>
+        </div>
+        <div class="slide-preview" onclick="goToSlide(4)">
+            <h4>Slide 5</h4><p>Données & Stockage</p>
+        </div>
+        <div class="slide-preview" onclick="goToSlide(5)">
+            <h4>Slide 6</h4><p>Automatisation DevOps</p>
+        </div>
+        <div class="slide-preview" onclick="goToSlide(6)">
+            <h4>Slide 7</h4><p>Supervision & ITSM</p>
+        </div>
+        <div class="slide-preview" onclick="goToSlide(7)">
+            <h4>Slide 8</h4><p>Conclusion</p>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <!-- Slide 0 Script -->
+        <div class="script-section active" id="script-0">
+            <div class="speaker oceane">OCÉANE (1 min)</div>
+            <div class="notes">[Attendre le silence complet. Regarder le jury.]</div>
+            <p>"Bonjour à tous et merci d'être présents pour cette soutenance."</p>
+            <p>"Nous sommes ravis, Ilyes, Mehdi, Florian et moi-même, de vous présenter le fruit de notre travail sur le projet Smart Office 2.0 pour l'entreprise Biotech Corp."</p>
+            <p>"Notre mission durant ce Bachelor 3 a été de concevoir une architecture technique complète, résiliente et évolutive, capable de soutenir les fortes ambitions de cette entreprise."</p>
+            <p>"Sans plus attendre, voyons le défi qui nous a été posé."</p>
+            <div class="notes">[Cliquer sur Suivant]</div>
+        </div>
+
+        <!-- Slide 1 Script -->
+        <div class="script-section" id="script-1">
+            <div class="speaker oceane">OCÉANE (2 min)</div>
+            <p>"Biotech Corp est face à un enjeu majeur : l'hyper-croissance. L'entreprise passe rapidement à 200 collaborateurs."</p>
+            <p>"Pour absorber cette croissance, il a fallu repenser entièrement leurs locaux physiques en un véritable 'Smart Building', intégrant de nombreux capteurs IoT et du flex-office."</p>
+            <p>"Mais surtout, il a fallu repenser leur Système d'Information."</p>
+            <p>"Face à ce besoin d'agilité, la réponse évidente était **l'Architecture Hybride**."</p>
+            <p>"Nous avons choisi de conserver une base 'On-Premise' locale pour la sécurité, la souveraineté des données et la latence des équipements IoT, tout en s'appuyant sur l'élasticité du Cloud pour l'application métier."</p>
+            <p>"Je laisse la parole à Ilyes qui va vous détailler les fondations réseau de ce projet."</p>
+        </div>
+
+        <!-- Slide 2 Script -->
+        <div class="script-section" id="script-2">
+            <div class="speaker ilyes">ILYES (3 min 30)</div>
+            <p>"Merci Océane. Pour que cette hybridation fonctionne, il fallait des fondations locales extrêmement solides et sécurisées."</p>
+            <p>"Nous avons conçu un réseau réparti sur 4 étages, articulé autour d'un cœur de réseau redondé avec des liaisons Fibre 10 Gigabits. Le protocole Spanning Tree garantit qu'aucune boucle ne fera tomber le réseau."</p>
+            <p>"Du côté de la sécurité, nous avons appliqué le principe du **Zero Trust**."</p>
+            <p>"Rien n'est digne de confiance par défaut. Nous avons segmenté le réseau en 8 VLANs strictement isolés : un VLAN pour les employés, un pour la VoIP, un autre totalement cloisonné pour la R&D, et bien sûr un VLAN pour les capteurs IoT."</p>
+            <p>"Tout le trafic inter-VLAN est filtré par notre pare-feu pfSense via des ACLs strictes, empêchant par exemple à un équipement IoT compromis d'accéder aux serveurs."</p>
+            <p>"Enfin, l'accès sans-fil est centralisé via un WLC et sécurisé par la norme 802.1x, garantissant que seuls les appareils authentifiés accèdent au réseau d'entreprise."</p>
+            <div class="notes">[Regarder Océane pour lui redonner la parole]</div>
+        </div>
+
+        <!-- Slide 3 Script -->
+        <div class="script-section" id="script-3">
+            <div class="speaker oceane">OCÉANE (2 min 30)</div>
+            <p>"Une fois cette base locale sécurisée, nous l'avons connectée au Cloud Microsoft Azure."</p>
+            <p>"Cette connexion n'est pas faite au hasard. Elle repose sur un **Tunnel IPsec IKEv2** chiffré de bout en bout entre notre pfSense local et une Azure VPN Gateway."</p>
+            <p>"Ce tunnel nous permet deux choses fondamentales :"</p>
+            <p>"Premièrement, l'**Hybridation Active Directory**. Notre contrôleur de domaine local se synchronise avec Entra ID dans le cloud. Ainsi, un collaborateur utilise le même mot de passe pour se connecter au Wi-Fi local et à l'application cloud."</p>
+            <p>"Deuxièmement, cela permet à notre application web, hébergée sur Azure App Service (un choix PaaS justifié par notre analyse TCO pour réduire la maintenance), de venir lire et écrire des données de manière totalement privée et sécurisée sur nos bases de données locales."</p>
+            <p>"Et justement, pour la partie Data, Mehdi va vous expliquer notre approche."</p>
+        </div>
+
+        <!-- Slide 4 Script -->
+        <div class="script-section" id="script-4">
+            <div class="speaker mehdi">MEHDI (2 min)</div>
+            <p>"Merci. Concernant la donnée, notre défi était double : gérer des réservations de bureaux critiques, et absorber un flux massif de logs venant des capteurs IoT."</p>
+            <p>"C'est pourquoi nous avons opté pour une approche **Polyglotte**."</p>
+            <p>"Nous utilisons **PostgreSQL** (une base relationnelle) pour garantir l'intégrité ACID des réservations et des identités."</p>
+            <p>"Et en parallèle, nous utilisons **MongoDB** (une base NoSQL) spécialement taillée pour l'ingestion rapide des données Time-Series de nos capteurs, évitant tout goulot d'étranglement."</p>
+            <p>"Bien sûr, cette donnée est vitale. Notre stratégie de sauvegarde repose sur la **règle d'or du 3-2-1** : 3 copies des données, sur 2 supports différents, dont 1 externalisée et chiffrée, ce qui nous protège efficacement contre les ransomwares."</p>
+        </div>
+
+        <!-- Slide 5 Script -->
+        <div class="script-section" id="script-5">
+            <div class="speaker mehdi">MEHDI (2 min)</div>
+            <p>"Au-delà de l'infrastructure pure, Biotech Corp avait besoin d'agilité dans ses déploiements."</p>
+            <p>"Nous avons mis en place une démarche **DevOps** complète."</p>
+            <p>"L'intégralité du code de l'application est versionné sous GitHub. Chaque modification déclenche un pipeline CI/CD automatisé qui teste et déploie l'application vers Azure."</p>
+            <p>"Nous avons implémenté la logique de **Zero Downtime Deployment** via les 'Deployment Slots' Azure, permettant de mettre à jour le site sans aucune coupure pour les utilisateurs."</p>
+            <p>"Tout ce projet a d'ailleurs été géré de manière Agile, avec des sprints de 2 semaines tracés sur GitHub Projects."</p>
+            <p>"Je laisse maintenant Florian vous parler du maintien en condition opérationnelle."</p>
+        </div>
+
+        <!-- Slide 6 Script -->
+        <div class="script-section" id="script-6">
+            <div class="speaker florian">FLORIAN (2 min)</div>
+            <p>"Une infrastructure parfaite sur le papier ne sert à rien si elle tombe en panne sans qu'on le sache."</p>
+            <p>"Nous avons déployé un socle de supervision complet basé sur **Zabbix et Grafana**."</p>
+            <p>"Zabbix monitore l'état de santé de tous nos équipements locaux via SNMP v3 de manière chiffrée, tandis que Grafana nous permet d'afficher des tableaux de bord dynamiques et très visuels, notamment pour l'état de nos salles de réunion et de nos capteurs."</p>
+            <p>"Mais la supervision s'intègre dans une gouvernance plus large : l'**ITSM**."</p>
+            <p>"Nous avons mis en place une véritable matrice de gestion des incidents, basée sur les standards ITIL, pour définir l'urgence et l'impact de chaque panne."</p>
+            <p>"Enfin, notre BIA (Bilan d'Impact sur l'Activité) nous a permis de rédiger un Plan de Continuité d'Activité robuste, définissant des RTO et RPO clairs pour garantir la résilience de l'entreprise."</p>
+        </div>
+
+        <!-- Slide 7 Script -->
+        <div class="script-section" id="script-7">
+            <div class="speaker oceane">OCÉANE (1 min)</div>
+            <p>"Pour conclure, Smart Office 2.0 est bien plus qu'une simple mise à jour réseau."</p>
+            <p>"C'est une architecture hybride, sécurisée dès sa conception par le Zero Trust, résiliente grâce à ses redondances et ses plans de reprise, et hautement évolutive grâce au Cloud et au DevOps."</p>
+            <p>"Nous vous remercions de votre attention."</p>
+            <div class="notes">[Sourire au jury]</div>
+            <p>"Nous sommes maintenant à votre entière disposition pour répondre à vos questions."</p>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const totalSlides = 8;
+        const syncChannel = new BroadcastChannel('presentation_sync');
+
+        function updateUI() {
+            // Update script visibility
+            document.querySelectorAll('.script-section').forEach(el => el.classList.remove('active'));
+            document.getElementById('script-' + currentSlide).classList.add('active');
+
+            // Update thumbnails
+            document.querySelectorAll('.slide-preview').forEach((el, index) => {
+                if (index === currentSlide) el.classList.add('active');
+                else el.classList.remove('active');
+            });
+
+            // Update buttons
+            document.getElementById('btnPrev').disabled = currentSlide === 0;
+            document.getElementById('btnNext').disabled = currentSlide === totalSlides - 1;
+
+            // Scroll to top of script
+            document.querySelector('.main-content').scrollTop = 0;
+        }
+
+        function goToSlide(index) {
+            if (index < 0 || index >= totalSlides) return;
+            currentSlide = index;
+            updateUI();
+            
+            // Broadcast to presentation window
+            syncChannel.postMessage({ type: 'slide_changed', slide: currentSlide });
+        }
+
+        // Listen for keyboard
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+                goToSlide(currentSlide + 1);
+            } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                goToSlide(currentSlide - 1);
+            }
+        });
+
+        // Listen for sync from presentation window
+        syncChannel.onmessage = (e) => {
+            if (e.data.type === 'slide_changed' && e.data.slide !== currentSlide) {
+                currentSlide = e.data.slide;
+                updateUI();
+            }
+        };
+
+        // Timer Logic
+        let timerInterval;
+        let timeRemaining = 15 * 60; // 15 minutes in seconds
+
+        function startTimer() {
+            if (timerInterval) return; // already running
+            document.getElementById('timer').style.color = '#32d74b';
+            
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                let m = Math.floor(timeRemaining / 60);
+                let s = timeRemaining % 60;
+                
+                let el = document.getElementById('timer');
+                el.innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+
+                if (timeRemaining <= 3 * 60) {
+                    el.className = 'timer warning';
+                }
+                if (timeRemaining <= 1 * 60) {
+                    el.className = 'timer danger';
+                }
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                }
+            }, 1000);
+        }
+
+        // Init
+        updateUI();
+    </script>
+</body>
+</html>

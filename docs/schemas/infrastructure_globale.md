@@ -30,7 +30,7 @@ graph LR
     PFS <== "🔗 VPN IPsec" ==> VGW
 
     %% AZURE CLOUD
-    subgraph AZURE ["🟦 AZURE CLOUD (172.16.x.x)"]
+    subgraph AZURE ["🟦 AZURE CLOUD (10.100.x.x)"]
         direction TB
         VGW["🌐 VPN Gateway"]
         

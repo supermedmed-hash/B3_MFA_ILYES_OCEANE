@@ -9,21 +9,17 @@ Ce document sert de board Kanban interne pour l'équipe B3 (Florian, Ilyes, Mehd
 
 ---
 
-## 🚀 Sprint 3 : Finalisation & Documentation (En Cours)
+## 🏁 Sprint 3 : Finalisation & Documentation (Terminé)
 *Objectif : Terminer tous les livrables pour le jury et finaliser la documentation.*
 
-### 🔴 À Faire (To Do)
+### ✅ Terminé (Done)
 *   **[MEHDI]** Finaliser le workflow CI/CD avec Quality Gate. (3 SP)
 *   **[ILYES]** Tester le failover pfSense (Lien 4G backup). (5 SP)
-*   **[TOUS]** Relecture croisée du DAT final. (2 SP)
-
-### 🚧 En Cours (In Progress)
 *   **[OCÉANE]** Rédaction de l'analyse comparative Cloud (TCO). (3 SP)
 *   **[FLORIAN]** Mise en place des sauvegardes automatisées (Script PS1). (5 SP)
-
-### ✅ Terminé (Done)
 *   **[ILYES]** Création de la matrice de flux réseau et schéma physique. (5 SP)
 *   **[FLORIAN]** Modélisation UML et MLD des bases de données. (3 SP)
+*   **[TOUS]** Relecture croisée du DAT final. (2 SP)
 
 ---
 

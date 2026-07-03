@@ -47,18 +47,10 @@
     <h2>2. Architecture Physique et Réseau</h2>
     <p>L'infrastructure repose sur un bâtiment de 4 étages avec un cœur de réseau redondé. La sécurité est assurée par une segmentation stricte des flux et l'application d'un modèle Zero Trust au niveau du pare-feu pfSense.</p>
     
-    <div class="link-card">
-        🏢 <a href="../schemas/schema_physique.md">Schéma d'Architecture Physique</a> (Plans de câblage, inventaire matériel)
-    </div>
-    <div class="link-card">
-        🌐 <a href="../schemas/plan_adressage_biotech.md">Plan d'Adressage IP et VLANs</a>
-    </div>
-    <div class="link-card">
-        🔀 <a href="../schemas/matrice_flux_reseau.md">Matrice des Flux Réseau (ACLs pfSense)</a>
-    </div>
-    <div class="link-card">
-        📶 <a href="architecture_wifi.md">Architecture WLAN / Wi-Fi d'entreprise</a>
-    </div>
+    
+    
+    
+    
 
     <div class="page-break"></div>
 
@@ -69,56 +61,34 @@
         Le tunnel VPN IPsec (IKEv2) monte une liaison chiffrée permanente entre le pfSense local et la passerelle VPN Azure, permettant à l'application Cloud de requêter nos bases locales.
     </div>
 
-    <div class="link-card">
-        ☁️ <a href="analyse_comparative_cloud.md">Analyse Comparative Cloud et TCO (Justification financière)</a>
-    </div>
-    <div class="link-card">
-        🧩 <a href="../schemas/architecture_hybride_detaillee.md">Schéma Logique de l'Architecture Hybride</a>
-    </div>
+    
+    
 
     <h2>4. Modélisation et Sauvegarde des Données (Mehdi)</h2>
     <p>Nous utilisons une approche polyglotte : PostgreSQL pour garantir l'intégrité transactionnelle des réservations, et MongoDB pour ingérer la masse des logs générés par les capteurs IoT, évitant ainsi un goulot d'étranglement.</p>
 
-    <div class="link-card">
-        📊 <a href="../schemas/modele_donnees_UML.md">Modèles de Données (UML/Merise PostgreSQL & MongoDB)</a>
-    </div>
-    <div class="link-card">
-        💾 <a href="strategie_stockage.md">Stratégie de Stockage et Plan de Sauvegarde (3-2-1)</a>
-    </div>
+    
+    
 
     <div class="page-break"></div>
 
     <h2>5. Sécurité, Gouvernance et Résilience</h2>
     <p>La sécurité du SI et la continuité de service sont intégrées By Design. Le projet intègre une gestion complète du cycle de vie des incidents (ITIL) et un Plan de Reprise d'Activité basé sur une analyse des impacts métier.</p>
 
-    <div class="link-card">
-        🛡️ <a href="../procedures/politique_securite.html">Politique de Sécurité (PSSI) — Zero Trust & IAM</a>
-    </div>
-    <div class="link-card">
-        📉 <a href="../procedures/analyse_BIA.html">Analyse d'Impact sur l'Activité (BIA) — Définition RTO/RPO</a>
-    </div>
-    <div class="link-card">
-        🔄 <a href="../procedures/PCA_PRA_SmartOffice2.html">Plan de Continuité et de Reprise d'Activité (PCA/PRA)</a>
-    </div>
-    <div class="link-card">
-        🎫 <a href="../procedures/processus_ITSM.html">Processus ITSM (Gestion des Incidents et Escalade)</a>
-    </div>
+    
+    
+    
+    
 
     <h2>6. Supervision et Observabilité (Florian)</h2>
     <p>La haute disponibilité et le monitoring proactif sont assurés par un socle Zabbix/Grafana, permettant à la fois de surveiller la santé des équipements réseau et serveurs, et de fournir des Dashboards dynamiques basés sur les données IoT.</p>
 
-    <div class="link-card">
-        <h2>📂 Consulter les Dossiers Détaillés</h2>
-        👁️ <a href="supervision_monitoring.md">Architecture de Supervision (Zabbix & Grafana)</a>
-    </div>
+    
 
     <h2>7. Démarche DevOps et Suivi de Projet (Mehdi)</h2>
     <p>L'intégralité du code (Infrastructure as Code, Pipeline CI/CD, Application Web) est gérée sous GitHub. Le déploiement vers Azure est totalement automatisé (Zero Downtime Deployment).</p>
 
-    <div class="link-card">
-        <h2>📂 Consulter les Dossiers Détaillés</h2>
-        🚀 <a href="../procedures/strategie_deploiement_azure.md">Stratégie de Déploiement Azure & CI/CD</a>
-    </div>
+    
 
     <h2>8. Limites Techniques et Théorie de l'Hybridation</h2>
     <p>Dans le cadre de ce projet académique, la mise en place <strong>réelle</strong> du tunnel hybride s'est heurtée à des limites matérielles et budgétaires :</p>
