@@ -134,7 +134,7 @@
             <button onclick="goToSlide(currentSlide + 1)" id="btnNext">Suivant (Flèche Droite)</button>
             <button onclick="startTimer()" style="background: #32d74b; margin-left: 20px;">Démarrer Chrono</button>
         </div>
-        <div class="timer" id="timer">15:00</div>
+        <div class="timer" id="timer">20:00</div>
     </div>
 
     <div class="sidebar" id="thumbnails">
@@ -168,88 +168,94 @@
         <!-- Slide 0 Script -->
         <div class="script-section active" id="script-0">
             <div class="speaker oceane">OCÉANE (1 min)</div>
-            <div class="notes">[Attendre le silence complet. Regarder le jury.]</div>
-            <p>"Bonjour à tous et merci d'être présents pour cette soutenance."</p>
-            <p>"Nous sommes ravis, Ilyes, Mehdi, Florian et moi-même, de vous présenter le fruit de notre travail sur le projet Smart Office 2.0 pour l'entreprise Biotech Corp."</p>
-            <p>"Notre mission durant ce Bachelor 3 a été de concevoir une architecture technique complète, résiliente et évolutive, capable de soutenir les fortes ambitions de cette entreprise."</p>
-            <p>"Sans plus attendre, voyons le défi qui nous a été posé."</p>
+            <div class="notes">[Attendre le silence complet. Regarder le jury, prendre une grande inspiration.]</div>
+            <p>"Bonjour à toutes et à tous, et merci d'être présents aujourd'hui pour assister à notre soutenance."</p>
+            <p>"Nous sommes extrêmement fiers, Ilyes, Mehdi, Florian et moi-même, de vous présenter l'aboutissement de notre travail de Bachelor 3. Ce projet, baptisé Smart Office 2.0, a été pensé pour l'entreprise Biotech Corp."</p>
+            <p>"Tout au long de cette année, notre mission a été de concevoir de A à Z une architecture technique qui soit non seulement robuste et ultra-sécurisée, mais qui soit aussi capable d'accompagner de manière fluide les fortes ambitions de développement de notre client."</p>
+            <p>"Sans plus attendre, plongeons dans le contexte et découvrons le défi technique colossal qui nous a été posé."</p>
             <div class="notes">[Cliquer sur Suivant]</div>
         </div>
 
         <!-- Slide 1 Script -->
         <div class="script-section" id="script-1">
-            <div class="speaker oceane">OCÉANE (2 min)</div>
-            <p>"Biotech Corp est face à un enjeu majeur : l'hyper-croissance. L'entreprise passe rapidement à 200 collaborateurs."</p>
-            <p>"Pour absorber cette croissance, il a fallu repenser entièrement leurs locaux physiques en un véritable 'Smart Building', intégrant de nombreux capteurs IoT et du flex-office."</p>
-            <p>"Mais surtout, il a fallu repenser leur Système d'Information."</p>
-            <p>"Face à ce besoin d'agilité, la réponse évidente était **l'Architecture Hybride**."</p>
-            <p>"Nous avons choisi de conserver une base 'On-Premise' locale pour la sécurité, la souveraineté des données et la latence des équipements IoT, tout en s'appuyant sur l'élasticité du Cloud pour l'application métier."</p>
-            <p>"Je laisse la parole à Ilyes qui va vous détailler les fondations réseau de ce projet."</p>
+            <div class="speaker oceane">OCÉANE (2 min 30)</div>
+            <p>"Biotech Corp fait aujourd'hui face à un enjeu majeur que beaucoup d'entreprises rêveraient d'avoir : une hyper-croissance fulgurante. L'entreprise passe brutalement à plus de 200 collaborateurs."</p>
+            <p>"Pour absorber cette croissance sans brider la productivité, il ne s'agissait pas seulement de louer de nouveaux locaux. Il a fallu repenser entièrement l'espace de travail physique pour le transformer en un véritable 'Smart Building'. Cela implique l'intégration massive d'objets connectés (des capteurs de présence IoT) et l'adoption d'un fonctionnement en 'flex-office'."</p>
+            <p>"Mais pour que ce bâtiment intelligent prenne vie, il fallait surtout repenser les fondations mêmes de leur Système d'Information, qui n'était plus du tout dimensionné pour une telle charge."</p>
+            <p>"Face à ce besoin crucial d'agilité, d'évolutivité et de sécurité, une architecture traditionnelle On-Premise aurait été trop rigide, et un passage en 100% Cloud aurait posé d'énormes soucis de souveraineté et de latence pour nos capteurs IoT."</p>
+            <p>"La réponse évidente et stratégique était donc l'Architecture Hybride. Nous avons fait le choix de conserver une base 'On-Premise' locale très solide pour garantir la sécurité et la maîtrise des coûts, tout en nous appuyant de manière ciblée sur l'élasticité phénoménale du Cloud pour héberger notre application métier."</p>
+            <p>"C'est une synergie parfaite. Je laisse maintenant la parole à Ilyes, notre Lead Réseau, qui va vous détailler avec précision la conception de nos fondations On-Premise."</p>
         </div>
 
         <!-- Slide 2 Script -->
         <div class="script-section" id="script-2">
-            <div class="speaker ilyes">ILYES (3 min 30)</div>
-            <p>"Merci Océane. Pour que cette hybridation fonctionne, il fallait des fondations locales extrêmement solides et sécurisées."</p>
-            <p>"Nous avons conçu un réseau réparti sur 4 étages, articulé autour d'un cœur de réseau redondé avec des liaisons Fibre 10 Gigabits. Le protocole Spanning Tree garantit qu'aucune boucle ne fera tomber le réseau."</p>
-            <p>"Du côté de la sécurité, nous avons appliqué le principe du **Zero Trust**."</p>
-            <p>"Rien n'est digne de confiance par défaut. Nous avons segmenté le réseau en 8 VLANs strictement isolés : un VLAN pour les employés, un pour la VoIP, un autre totalement cloisonné pour la R&D, et bien sûr un VLAN pour les capteurs IoT."</p>
-            <p>"Tout le trafic inter-VLAN est filtré par notre pare-feu pfSense via des ACLs strictes, empêchant par exemple à un équipement IoT compromis d'accéder aux serveurs."</p>
-            <p>"Enfin, l'accès sans-fil est centralisé via un WLC et sécurisé par la norme 802.1x, garantissant que seuls les appareils authentifiés accèdent au réseau d'entreprise."</p>
+            <div class="speaker ilyes">ILYES (4 min 30)</div>
+            <p>"Merci Océane. Pour que cette hybridation puisse fonctionner de manière fluide, il était impératif de bâtir des fondations locales extrêmement solides, résilientes, et surtout impénétrables."</p>
+            <p>"Nous avons conçu un réseau d'entreprise réparti physiquement sur 4 étages. Ce réseau est articulé autour d'un cœur de réseau totalement redondé, utilisant des liaisons Fibre Optique à 10 Gigabits par seconde pour éviter tout goulot d'étranglement. Pour garantir la haute disponibilité, nous avons configuré le protocole Spanning Tree, ce qui nous assure qu'en cas de boucle accidentelle ou de défaillance d'un câble, le réseau recalculera instantanément un nouveau chemin sans aucune coupure pour les utilisateurs."</p>
+            <p>"Mais la véritable clé de voûte de notre conception réseau, c'est la sécurité. Nous avons strictement appliqué le paradigme du **Zero Trust** : aucune machine, aucun utilisateur n'est digne de confiance par défaut, qu'il soit à l'intérieur ou à l'extérieur des locaux."</p>
+            <p>"Concrètement, nous avons segmenté le réseau de manière drastique en 8 VLANs totalement isolés. Nous avons par exemple un VLAN dédié aux employés, un autre priorisé pour la Téléphonie sur IP, un VLAN totalement 'air-gapped' pour le département de Recherche et Développement, et bien évidemment, un VLAN spécifique pour isoler les capteurs IoT."</p>
+            <p>"Pourquoi isoler l'IoT ? Parce que les objets connectés sont notoirement vulnérables. Si un capteur venait à être compromis par une attaque, l'isolement par VLAN empêche la menace de se propager vers nos serveurs critiques."</p>
+            <p>"Tout le trafic inter-VLAN est centralisé et filtré par notre pare-feu pfSense. Nous avons rédigé une matrice de flux très fine traduite en ACLs strictes, fonctionnant sur le principe du 'Default Deny'. Tout ce qui n'est pas explicitement autorisé est bloqué et journalisé."</p>
+            <p>"Enfin, concernant la mobilité des collaborateurs, l'accès au réseau sans-fil est géré par un contrôleur centralisé et sécurisé par la norme 802.1x couplée à un serveur RADIUS. Cela garantit que seuls les appareils authentifiés par l'Active Directory peuvent négocier une connexion avec nos bornes."</p>
             <div class="notes">[Regarder Océane pour lui redonner la parole]</div>
+            <p>"Maintenant que notre forteresse locale est bâtie, Océane va vous expliquer comment nous l'avons ouverte vers le Cloud en toute sécurité."</p>
         </div>
 
         <!-- Slide 3 Script -->
         <div class="script-section" id="script-3">
-            <div class="speaker oceane">OCÉANE (2 min 30)</div>
-            <p>"Une fois cette base locale sécurisée, nous l'avons connectée au Cloud Microsoft Azure."</p>
-            <p>"Cette connexion n'est pas faite au hasard. Elle repose sur un **Tunnel IPsec IKEv2** chiffré de bout en bout entre notre pfSense local et une Azure VPN Gateway."</p>
-            <p>"Ce tunnel nous permet deux choses fondamentales :"</p>
-            <p>"Premièrement, l'**Hybridation Active Directory**. Notre contrôleur de domaine local se synchronise avec Entra ID dans le cloud. Ainsi, un collaborateur utilise le même mot de passe pour se connecter au Wi-Fi local et à l'application cloud."</p>
-            <p>"Deuxièmement, cela permet à notre application web, hébergée sur Azure App Service (un choix PaaS justifié par notre analyse TCO pour réduire la maintenance), de venir lire et écrire des données de manière totalement privée et sécurisée sur nos bases de données locales."</p>
-            <p>"Et justement, pour la partie Data, Mehdi va vous expliquer notre approche."</p>
+            <div class="speaker oceane">OCÉANE (3 min)</div>
+            <p>"Effectivement, le défi suivant était d'étendre ce réseau local vers le Cloud Microsoft Azure, sans faire le moindre compromis sur la sécurité."</p>
+            <p>"Pour réaliser cette extension, nous avons monté un Tunnel IPsec de type Site-à-Site, basé sur le protocole IKEv2. Ce tunnel crée une liaison chiffrée permanente entre la patte WAN de notre pare-feu pfSense local et une Azure Virtual Network Gateway provisionnée dans le cloud."</p>
+            <p>"La sécurité de ce tunnel est maximale, avec une phase 1 utilisant un chiffrement AES-256 et des clés générées par l'algorithme de Diffie-Hellman, empêchant toute interception des données en transit."</p>
+            <p>"Ce pont sécurisé nous permet de réaliser deux opérations fondamentales pour l'entreprise."</p>
+            <p>"Premièrement, la synchronisation de nos identités. Notre contrôleur de domaine On-Premise, qui est le maître absolu des identités, se synchronise via Azure AD Connect avec le tenant Entra ID dans le cloud. Le collaborateur bénéficie alors d'un Single Sign-On parfait : il utilise le même mot de passe pour ouvrir sa session Windows au bureau, et pour accéder à l'application métier sur le web."</p>
+            <p>"Deuxièmement, parlons de l'application. Nous l'avons hébergée sur un Azure App Service. C'est un service PaaS, un choix mûrement réfléchi et validé par une analyse comparative TCO (Total Cost of Ownership). Ce PaaS nous décharge de l'administration du système d'exploitation, réduit nos coûts d'infrastructure, et offre une scalabilité automatique en cas de pic d'utilisation."</p>
+            <p>"Et grâce à notre tunnel IPsec, cette application web dans le cloud peut venir requêter nos bases de données qui sont restées bien à l'abri sur nos serveurs locaux. Pour comprendre l'architecture complexe de ces données, je passe la parole à Mehdi."</p>
         </div>
 
         <!-- Slide 4 Script -->
         <div class="script-section" id="script-4">
-            <div class="speaker mehdi">MEHDI (2 min)</div>
-            <p>"Merci. Concernant la donnée, notre défi était double : gérer des réservations de bureaux critiques, et absorber un flux massif de logs venant des capteurs IoT."</p>
-            <p>"C'est pourquoi nous avons opté pour une approche **Polyglotte**."</p>
-            <p>"Nous utilisons **PostgreSQL** (une base relationnelle) pour garantir l'intégrité ACID des réservations et des identités."</p>
-            <p>"Et en parallèle, nous utilisons **MongoDB** (une base NoSQL) spécialement taillée pour l'ingestion rapide des données Time-Series de nos capteurs, évitant tout goulot d'étranglement."</p>
-            <p>"Bien sûr, cette donnée est vitale. Notre stratégie de sauvegarde repose sur la **règle d'or du 3-2-1** : 3 copies des données, sur 2 supports différents, dont 1 externalisée et chiffrée, ce qui nous protège efficacement contre les ransomwares."</p>
+            <div class="speaker mehdi">MEHDI (3 min)</div>
+            <p>"Merci Océane. La gestion de la donnée est le véritable cœur battant du projet Smart Office. Notre défi architectural était particulièrement complexe : nous devions gérer des réservations de bureaux avec une tolérance zéro à l'erreur, tout en absorbant un flux massif et continu de logs provenant de centaines de capteurs IoT."</p>
+            <p>"Une seule base de données classique aurait très vite saturé. C'est pourquoi nous avons opté pour une approche d'Architecture Polyglotte, c'est-à-dire l'utilisation du bon outil de base de données pour le bon usage."</p>
+            <p>"D'un côté, nous utilisons **PostgreSQL**, un puissant moteur de base de données relationnelle. PostgreSQL nous garantit l'intégrité transactionnelle, ce qu'on appelle les propriétés ACID. C'est indispensable pour gérer les identités, la facturation ou les réservations de bureaux, où une double réservation est inacceptable."</p>
+            <p>"De l'autre côté, nous utilisons **MongoDB**, un moteur NoSQL orienté documents. MongoDB est incroyablement véloce pour les écritures massives et non structurées. Il est spécialement taillé pour ingérer les millions de relevés de températures, de taux de CO2 et de détection de présence générés quotidiennement par nos capteurs en mode Time-Series, évitant ainsi de congestionner la base principale."</p>
+            <p>"Bien sûr, cette donnée a une valeur inestimable pour l'entreprise. Notre stratégie de protection repose sur la stricte application de la règle d'or de la sauvegarde : le 3-2-1."</p>
+            <p>"Nous conservons au minimum 3 copies de la donnée, réparties sur 2 supports de stockage de technologies différentes, avec obligatoirement 1 copie externalisée de manière chiffrée hors site. En cas de sinistre majeur du bâtiment ou d'attaque par Ransomware de niveau 0, cette politique nous assure de toujours pouvoir remonter l'historique de l'entreprise."</p>
         </div>
 
         <!-- Slide 5 Script -->
         <div class="script-section" id="script-5">
-            <div class="speaker mehdi">MEHDI (2 min)</div>
-            <p>"Au-delà de l'infrastructure pure, Biotech Corp avait besoin d'agilité dans ses déploiements."</p>
-            <p>"Nous avons mis en place une démarche **DevOps** complète."</p>
-            <p>"L'intégralité du code de l'application est versionné sous GitHub. Chaque modification déclenche un pipeline CI/CD automatisé qui teste et déploie l'application vers Azure."</p>
-            <p>"Nous avons implémenté la logique de **Zero Downtime Deployment** via les 'Deployment Slots' Azure, permettant de mettre à jour le site sans aucune coupure pour les utilisateurs."</p>
-            <p>"Tout ce projet a d'ailleurs été géré de manière Agile, avec des sprints de 2 semaines tracés sur GitHub Projects."</p>
-            <p>"Je laisse maintenant Florian vous parler du maintien en condition opérationnelle."</p>
+            <div class="speaker mehdi">MEHDI (3 min)</div>
+            <p>"Mais au-delà de la conception de l'infrastructure pure, l'exigence de Biotech Corp était d'avoir une équipe capable de livrer de nouvelles fonctionnalités métier extrêmement rapidement, sans jamais casser la production."</p>
+            <p>"C'est pourquoi nous avons infusé une véritable culture et démarche **DevOps** tout au long du projet."</p>
+            <p>"Concrètement, l'intégralité de notre code source, qu'il s'agisse de l'application web ou des scripts d'infrastructure, est versionné et géré sous GitHub. Plus personne ne déploie manuellement."</p>
+            <p>"Nous avons construit un pipeline d'Intégration Continue et de Déploiement Continu, le fameux CI/CD. À chaque fois qu'un développeur pousse une modification sur la branche principale, le pipeline GitHub Actions prend le relais. Il compile le code, exécute des tests automatisés, et s'assure de la qualité du livrable."</p>
+            <p>"Une fois validée, l'application est déployée automatiquement de manière totalement transparente vers notre environnement Azure. Nous utilisons la mécanique des 'Deployment Slots'. Le nouveau code est poussé sur un serveur virtuel en attente, et une fois prêt, le trafic est basculé instantanément, garantissant un **Zero Downtime Deployment**. Nos utilisateurs ne subissent aucune coupure pendant les mises à jour."</p>
+            <p>"Et pour gérer ce rythme soutenu, tout notre projet a été piloté de manière Agile, découpé en Sprints itératifs de deux semaines. Chaque tâche était tracée, estimée, et revue, offrant à notre client une visibilité totale sur l'avancement."</p>
+            <p>"Mais une fois le code en production, le travail n'est pas fini. Je laisse maintenant Florian vous expliquer comment nous garantissons le maintien en condition opérationnelle de ce monstre d'architecture."</p>
         </div>
 
         <!-- Slide 6 Script -->
         <div class="script-section" id="script-6">
-            <div class="speaker florian">FLORIAN (2 min)</div>
-            <p>"Une infrastructure parfaite sur le papier ne sert à rien si elle tombe en panne sans qu'on le sache."</p>
-            <p>"Nous avons déployé un socle de supervision complet basé sur **Zabbix et Grafana**."</p>
-            <p>"Zabbix monitore l'état de santé de tous nos équipements locaux via SNMP v3 de manière chiffrée, tandis que Grafana nous permet d'afficher des tableaux de bord dynamiques et très visuels, notamment pour l'état de nos salles de réunion et de nos capteurs."</p>
-            <p>"Mais la supervision s'intègre dans une gouvernance plus large : l'**ITSM**."</p>
-            <p>"Nous avons mis en place une véritable matrice de gestion des incidents, basée sur les standards ITIL, pour définir l'urgence et l'impact de chaque panne."</p>
-            <p>"Enfin, notre BIA (Bilan d'Impact sur l'Activité) nous a permis de rédiger un Plan de Continuité d'Activité robuste, définissant des RTO et RPO clairs pour garantir la résilience de l'entreprise."</p>
+            <div class="speaker florian">FLORIAN (3 min)</div>
+            <p>"Merci Mehdi. Une infrastructure, aussi parfaite et redondante soit-elle sur le papier, ne sert rigoureusement à rien si elle tombe en panne un matin sans que l'équipe technique n'en soit alertée."</p>
+            <p>"C'est pour cela que nous avons déployé, dès les fondations du projet, un socle de supervision granulaire et proactif, basé sur le puissant duo open-source **Zabbix et Grafana**."</p>
+            <p>"Zabbix est le cœur de notre monitoring. Il surveille en temps réel l'état de santé de absolument tous nos équipements matériels et logiciels. Il communique avec nos switchs Cisco et nos serveurs Linux via le protocole SNMP en version 3, qui garantit le chiffrement et l'authentification de ces métriques hautement confidentielles. Zabbix va vérifier la charge CPU, l'état des ports fibres, la taille des disques, et générer des alertes proactives avant même que la panne ne survienne."</p>
+            <p>"Grafana, de son côté, nous sert d'outil décisionnel. Il s'alimente directement sur notre base MongoDB pour afficher de magnifiques tableaux de bord en temps réel. La direction peut ainsi visualiser en un clin d'œil le taux d'occupation des salles de réunion ou la qualité de l'air du bâtiment."</p>
+            <p>"Mais la supervision technique seule ne suffit pas. Elle s'inscrit dans une gouvernance beaucoup plus large : la gestion des services informatiques, l'**ITSM**."</p>
+            <p>"Nous avons mis en place une véritable matrice de gestion des incidents, qui respecte les bonnes pratiques ITIL. Chaque alerte remontée par Zabbix est classifiée selon son niveau d'urgence et son impact business. Cela permet à l'équipe support de prioriser efficacement son travail."</p>
+            <p>"Enfin, notre approche est allée jusqu'à la réalisation d'une analyse d'impact, le BIA. Cela nous a permis d'identifier nos processus critiques, de définir formellement la perte de données acceptable et le temps d'arrêt tolérable. C'est sur ces métriques précises que nous avons rédigé le Plan de Reprise d'Activité de l'entreprise, garantissant sa survie en cas de crise majeure."</p>
         </div>
 
         <!-- Slide 7 Script -->
         <div class="script-section" id="script-7">
             <div class="speaker oceane">OCÉANE (1 min)</div>
-            <p>"Pour conclure, Smart Office 2.0 est bien plus qu'une simple mise à jour réseau."</p>
-            <p>"C'est une architecture hybride, sécurisée dès sa conception par le Zero Trust, résiliente grâce à ses redondances et ses plans de reprise, et hautement évolutive grâce au Cloud et au DevOps."</p>
-            <p>"Nous vous remercions de votre attention."</p>
-            <div class="notes">[Sourire au jury]</div>
-            <p>"Nous sommes maintenant à votre entière disposition pour répondre à vos questions."</p>
+            <p>"Pour conclure cette présentation, nous souhaitons insister sur le fait que Smart Office 2.0 est bien plus qu'une simple refonte de câblage et d'infrastructure serveur."</p>
+            <p>"C'est l'implémentation d'une véritable architecture hybride moderne. Elle est sécurisée dès sa conception fondamentale par le paradigme Zero Trust de nos réseaux. Elle est extrêmement résiliente grâce à ses redondances matérielles et ses processus stricts de reprise d'activité. Et elle est, surtout, hautement évolutive, capable de suivre le rythme effréné de l'entreprise grâce à la puissance du Cloud PaaS et à l'automatisation intégrale apportée par nos processus DevOps."</p>
+            <p>"Au nom de toute l'équipe, nous vous remercions sincèrement pour votre attention tout au long de cette soutenance."</p>
+            <div class="notes">[Sourire au jury, se tenir droit et confiant]</div>
+            <p>"Nous sommes maintenant à votre entière disposition pour échanger avec vous et répondre à toutes vos questions techniques ou méthodologiques."</p>
         </div>
     </div>
 
@@ -305,7 +311,7 @@
 
         // Timer Logic
         let timerInterval;
-        let timeRemaining = 15 * 60; // 15 minutes in seconds
+        let timeRemaining = 20 * 60; // 20 minutes in seconds
 
         function startTimer() {
             if (timerInterval) return; // already running
