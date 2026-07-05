@@ -1,0 +1,6 @@
+<step title="Incoming Request" date="2026-06-23T09:01:28.493" instance="dbefe9" url="/api/deployments/f3c5bf52b5412438272e292b717ba9ac21679f291782204845424" method="PUT" type="request" pid="770,1,7" Host="smartoffice-poc-app.scm.azurewebsites.net" User-Agent="GITHUBACTIONS_DeployWebAppToAzure_c66a93058c44500bcb882ca10ff536340dec45d7577142e49357dcd11f831205_v2.2.19" Authorization="Bea..." Content-Type="application/json; charset=utf-8" Content-Length="339" X-ARR-LOG-ID="847b6e37-ec2b-46ad-b1c6-72ecee9c3861" CLIENT-IP="48.217.34.233:16456" X-SITE-DEPLOYMENT-ID="smartoffice-poc-app" WAS-DEFAULT-HOSTNAME="smartoffice-poc-app.scm.azurewebsites.net" X-Forwarded-Proto="https" X-AppService-Proto="https" X-Forwarded-TlsVersion="1.3" X-WAWS-Unencoded-URL="/api/deployments/f3c5bf52b5412438272e292b717ba9ac21679f291782204845424" X-Client-IP="48.217.34.233" X-Client-Port="16456" >
+  <step title="DeploymentService.Deploy(id)" date="2026-06-23T09:01:29.900" >
+    <step title="DeploymentService.Create(id)" date="2026-06-23T09:01:29.910" /><!-- duration: 1290ms -->
+  </step><!-- duration: 1331ms -->
+  <step title="Outgoing response" date="2026-06-23T09:01:31.443" type="response" statusCode="200" statusText="OK" /><!-- duration: 30ms -->
+</step><!-- duration: 3008ms -->

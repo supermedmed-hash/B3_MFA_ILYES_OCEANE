@@ -18,7 +18,7 @@ Cette matrice documente l'ensemble des flux autorisés (ACLs) entre les différe
 | **VLAN 50** | `10.10.50.0/24` | IoT & Imprimantes |
 | **VLAN 99** | `10.10.99.0/24` | Guest (Wi-Fi public) |
 | **VLAN 100** | `10.10.100.0/24` | Management Réseau (Zabbix, AP) |
-| **Azure VNet** | `10.100.0.0/16` | Ressources Cloud Azure |
+| **Azure VNet** | `172.16.0.0/16` | Ressources Cloud Azure |
 
 ---
 
@@ -54,7 +54,7 @@ Cette matrice documente l'ensemble des flux autorisés (ACLs) entre les différe
 ### 3.1 NAT (Network Address Translation)
 - **Outbound NAT** : Activé en mode "Hybrid".
 - Translation (PAT) configurée pour les réseaux `10.10.20.0/24` (Employés), `10.10.30.0/24` (R&D), `10.10.40.0/24` (VoIP) et `10.10.99.0/24` (Guest) vers l'IP publique WAN du pfSense pour l'accès Internet.
-- **PAS de NAT** entre les réseaux locaux (VLAN 10 à 100) et le réseau Azure (`10.100.0.0/16`) car le tunnel IPsec gère le routage réseau-à-réseau pur (Phase 2 configurée sur ces subnets).
+- **PAS de NAT** entre les réseaux locaux (VLAN 10 à 100) et le réseau Azure (`172.16.0.0/16`) car le tunnel IPsec gère le routage réseau-à-réseau pur (Phase 2 configurée sur ces subnets).
 
 ### 3.2 Filtrage applicatif (Layer 7)
 - Utilisation de pfBlockerNG (optionnel) envisagée pour la phase de production pour bloquer les IP malveillantes connues et le trafic publicitaire/P2P sur le VLAN 99 (Guest).

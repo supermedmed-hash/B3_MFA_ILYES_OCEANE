@@ -6,16 +6,16 @@ Ce schéma présente l'interconnexion entre l'infrastructure locale (On-Premise)
 
 ```mermaid
 graph TD
-    subgraph "🟦 CLOUD AZURE (VNet - 10.100.0.0/16)"
-        subgraph "Identity Subnet (10.100.1.0/24)"
+    subgraph "🟦 CLOUD AZURE (VNet - 172.16.0.0/16)"
+        subgraph "Identity Subnet (172.16.1.0/24)"
             DC_AZ["VM: DC-CLOUD\n(Replica AD)"]
         end
 
-        subgraph "App Subnet (10.100.2.0/24)"
+        subgraph "App Subnet (172.16.2.0/24)"
             AZ_APP["Azure App Service\n(Node.js App)"]
         end
 
-        subgraph "Data Subnet (10.100.3.0/24)"
+        subgraph "Data Subnet (172.16.3.0/24)"
             AZ_PG["Azure DB PostgreSQL\n(Managed)"]
         end
 
@@ -28,7 +28,7 @@ graph TD
         end
 
         subgraph "🖧 Segmentation VLANs"
-            subgraph "VLAN 10: Serveurs (10.10.10.0/24)"
+            subgraph "VLAN 20: Serveurs (10.10.20.0/24)"
                 DC_LOC["SRV-AD-LOCAL\n(Windows Server)"]
                 DKR["Docker Host\n(PoC Application)"]
             end
@@ -79,13 +79,13 @@ graph TD
 ## 📋 Inventaire Technique
 
 ### 1. Documentation Applicative et Données
-*   **Bases de données polyglottes** : [Modèle de données UML/Merise](modele_donnees_UML.md) justifiant Postgres (relationnel) + Mongo (Time-Series).
+*   **Bases de données polyglottes** : [Modèle de données UML/Merise](../schemas/modele_donnees_UML.md) justifiant Postgres (relationnel) + Mongo (Time-Series).
 *   **Stratégie de stockage et sauvegarde** : NAS en local avec réplication, script automatisé, Règle du 3-2-1. Voir [Stratégie de Stockage](strategie_stockage.md).
 
 ### 2. Couche Réseau et Sécurité (Ilyes)
-*   **Plan d'adressage** : Plan IPv4 avec 8 VLANs isolés. Voir [Plan d'Adressage](plan_adressage_biotech.md).
-*   **Architecture Physique** : Bâtiment de 4 étages avec backbone fibre 10G. Voir [Schéma Physique](schema_physique.md).
-*   **Flux et ACLs** : Politique Deny All sur pfSense, matrice de flux validée. Voir [Matrice des Flux Réseau](matrice_flux_reseau.md).
+*   **Plan d'adressage** : Plan IPv4 avec 8 VLANs isolés. Voir [Plan d'Adressage](../procedures/plan_adressage_biotech.md).
+*   **Architecture Physique** : Bâtiment de 4 étages avec backbone fibre 10G. Voir [Schéma Physique](../schemas/schema_physique.md).
+*   **Flux et ACLs** : Politique Deny All sur pfSense, matrice de flux validée. Voir [Matrice des Flux Réseau](../schemas/matrice_flux_reseau.md).
 *   **Réseau Sans Fil (WLAN)** : Architecture centralisée avec WLC, SSID par VLAN, sécurité 802.1X. Voir [Architecture Wi-Fi](architecture_wifi.md).
 *   **Politique de Sécurité (PSSI)** : Zero Trust, NAC, IAM. Voir [Politique de Sécurité](../procedures/politique_securite.html).
 

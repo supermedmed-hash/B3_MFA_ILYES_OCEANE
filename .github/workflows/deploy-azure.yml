@@ -79,12 +79,8 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: 📝 Prepare Docker Compose with Secrets
-        run: |
-          sed -i "s/\${ACR_LOGIN_SERVER}/${{ secrets.ACR_LOGIN_SERVER }}/g" docker-compose.azure.yml
-
-      - name: 🚀 Deploy to Azure App Service (Multi-Container)
+      - name: 🚀 Deploy to Azure App Service (Single Container)
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'smartoffice-poc-app'
-          configuration-file: 'docker-compose.azure.yml'
+          images: '${{ secrets.ACR_LOGIN_SERVER }}/smartoffice-web:${{ github.sha }}'

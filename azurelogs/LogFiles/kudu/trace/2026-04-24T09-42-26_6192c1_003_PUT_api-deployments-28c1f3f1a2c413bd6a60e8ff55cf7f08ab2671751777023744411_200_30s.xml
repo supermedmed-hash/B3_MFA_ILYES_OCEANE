@@ -1,0 +1,7 @@
+<step title="Incoming Request" date="2026-04-24T09:42:26.659" instance="6192c1" url="/api/deployments/28c1f3f1a2c413bd6a60e8ff55cf7f08ab2671751777023744411" method="PUT" type="request" pid="777,1,7" Host="smartoffice-poc-app.scm.azurewebsites.net" User-Agent="GITHUBACTIONS_DeployWebAppToAzure_c66a93058c44500bcb882ca10ff536340dec45d7577142e49357dcd11f831205_2.2.18" Authorization="Bea..." Content-Type="application/json; charset=utf-8" Cookie="ARRAffinity=6192c1db74f2264222894c9db185c4804ec0d4d8c5ddc297a0a56d17fb5deb39; ARRAffinitySameSite=6192c1db74f2264222894c9db185c4804ec0d4d8c5ddc297a0a56d17fb5deb39" Content-Length="339" X-ARR-LOG-ID="d3450e77-a53b-46bc-85fd-35cddd2cebe9" CLIENT-IP="172.172.87.86:20544" X-SITE-DEPLOYMENT-ID="smartoffice-poc-app" WAS-DEFAULT-HOSTNAME="smartoffice-poc-app.scm.azurewebsites.net" X-Forwarded-Proto="https" X-AppService-Proto="https" X-Forwarded-TlsVersion="1.3" X-WAWS-Unencoded-URL="/api/deployments/28c1f3f1a2c413bd6a60e8ff55cf7f08ab2671751777023744411" X-Client-IP="172.172.87.86" X-Client-Port="20544" >
+  <step title="Cleanup Xml Logs" date="2026-04-24T09:42:26.854" /><!-- duration: 325ms -->
+  <step title="DeploymentService.Deploy(id)" date="2026-04-24T09:42:52.561" >
+    <step title="DeploymentService.Create(id)" date="2026-04-24T09:42:52.793" /><!-- duration: 3750ms -->
+  </step><!-- duration: 4069ms -->
+  <step title="Outgoing response" date="2026-04-24T09:42:56.757" type="response" statusCode="200" statusText="OK" /><!-- duration: 48ms -->
+</step><!-- duration: 30182ms -->
