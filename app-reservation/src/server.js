@@ -57,9 +57,12 @@ async function initializePostgres() {
                 id SERIAL PRIMARY KEY,
                 employe_nom VARCHAR(100) NOT NULL,
                 salle_nom VARCHAR(50) NOT NULL,
-                date_reservation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                date_reservation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                date_prevue TIMESTAMP
             );
         `);
+        // Migration au cas où la table existe déjà sans la colonne
+        await client.query(`ALTER TABLE reservations ADD COLUMN IF NOT EXISTS date_prevue TIMESTAMP;`);
         console.log('Tables PostgreSQL vérifiées/créées.');
     } catch (err) {
         console.error('Erreur lors de l\'initialisation des tables PostgreSQL, nouvelle tentative dans 5s...', err.message);
@@ -150,13 +153,13 @@ const checkAuth = (req, res, next) => {
 
 // Réserver une salle (Accessible à tous les connectés)
 app.post('/api/reserver', checkAuth, async (req, res) => {
-    const { salle_nom } = req.body;
+    const { salle_nom, date_prevue } = req.body;
     const employe_nom = req.user.username; // Le nom vient de la session, impossible à falsifier
 
     try {
         await pool.query(
-            'INSERT INTO reservations (employe_nom, salle_nom) VALUES ($1, $2)',
-            [employe_nom, salle_nom]
+            'INSERT INTO reservations (employe_nom, salle_nom, date_prevue) VALUES ($1, $2, $3)',
+            [employe_nom, salle_nom, date_prevue || new Date()]
         );
 
         const log = new IotLog({
@@ -168,7 +171,31 @@ app.post('/api/reserver', checkAuth, async (req, res) => {
 
         res.redirect('/');
     } catch (err) {
+        console.error(err);
         res.status(500).send("Erreur lors de la réservation.");
+    }
+});
+
+// Obtenir les réservations au format JSON pour FullCalendar
+app.get('/api/reservations/json', checkAuth, async (req, res) => {
+    try {
+        const result = await pool.query('SELECT * FROM reservations');
+        const events = result.rows.map(row => {
+            const startDate = new Date(row.date_prevue || row.date_reservation);
+            const endDate = new Date(startDate.getTime() + 60 * 60 * 1000); // 1 heure par défaut
+            const isPast = endDate < new Date();
+            return {
+                id: row.id,
+                title: `${row.employe_nom} - ${row.salle_nom}`,
+                start: startDate.toISOString(),
+                end: endDate.toISOString(),
+                color: isPast ? '#6c757d' : '#0d6efd' // Gris si passé, Bleu si futur
+            };
+        });
+        res.json(events);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Erreur serveur" });
     }
 });
 
@@ -249,32 +276,7 @@ app.get('/', async (req, res) => {
     }
 
     // --- Si l'utilisateur est connecté --> Dashboard Principal ---
-    let reservationsHtml = '';
     let iotLogsHtml = '';
-
-    try {
-        const pgResult = await pool.query('SELECT * FROM reservations ORDER BY date_reservation DESC LIMIT 10');
-        if (pgResult.rows.length === 0) {
-            reservationsHtml = '<p class="text-muted p-3">Aucune réservation pour le moment.</p>';
-        } else {
-            reservationsHtml = '<ul class="list-group list-group-flush">';
-            pgResult.rows.forEach(row => {
-                const date = new Date(row.date_reservation).toLocaleString('fr-FR');
-                // Seul l'Admin peut voir le bouton Supprimer
-                const deleteBtn = userSession.role === 'admin'
-                    ? `<form action="/api/supprimer/${row.id}" method="POST" class="d-inline float-end"><button type="submit" class="btn btn-sm btn-outline-danger">Supprimer</button></form>`
-                    : '';
-
-                reservationsHtml += `
-                <li class="list-group-item">
-                    👔 <strong>${row.employe_nom}</strong> a réservé la salle <strong>${row.salle_nom}</strong> 
-                    <br><small class="text-muted">${date}</small>
-                    ${deleteBtn}
-                </li>`;
-            });
-            reservationsHtml += '</ul>';
-        }
-    } catch (err) { }
 
     try {
         const mongoResult = await IotLog.find().sort({ timestamp: -1 }).limit(10);
@@ -299,6 +301,7 @@ app.get('/', async (req, res) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Dashboard - Smart Office 2.0</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
     </head>
     <body class="bg-light">
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4 p-3 shadow">
@@ -326,6 +329,10 @@ app.get('/', async (req, res) => {
                                         <option value="Salle Turing">Salle Turing</option>
                                     </select>
                                 </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Date et heure prévues</label>
+                                    <input type="datetime-local" class="form-control" name="date_prevue" required>
+                                </div>
                                 <button type="submit" class="btn btn-primary w-100">Réserver la salle</button>
                             </form>
                         </div>
@@ -333,11 +340,11 @@ app.get('/', async (req, res) => {
 
                     <div class="card shadow-sm border-0">
                         <div class="card-header bg-white">
-                            <h5 class="mb-0">Tableau des Réservations (SQL)</h5>
-                            <small class="text-muted">Géré via PostgreSQL</small>
+                            <h5 class="mb-0">Agenda des Réservations</h5>
+                            <small class="text-muted">Géré via FullCalendar</small>
                         </div>
-                        <div class="card-body p-0">
-                            ${reservationsHtml}
+                        <div class="card-body p-2">
+                            <div id="calendar"></div>
                         </div>
                     </div>
                 </div>
@@ -355,6 +362,37 @@ app.get('/', async (req, res) => {
                 </div>
             </div>
         </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var calendarEl = document.getElementById('calendar');
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'timeGridWeek',
+                    locale: 'fr',
+                    slotMinTime: '08:00:00',
+                    slotMaxTime: '20:00:00',
+                    headerToolbar: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                    },
+                    events: '/api/reservations/json',
+                    eventClick: function(info) {
+                        ${userSession.role === 'admin' ? `
+                        if (confirm('Voulez-vous vraiment supprimer cette réservation ?')) {
+                            const form = document.createElement('form');
+                            form.method = 'POST';
+                            form.action = '/api/supprimer/' + info.event.id;
+                            document.body.appendChild(form);
+                            form.submit();
+                        }
+                        ` : `
+                        alert('Réservation : ' + info.event.title + '\\nLe : ' + info.event.start.toLocaleString());
+                        `}
+                    }
+                });
+                calendar.render();
+            });
+        </script>
     </body>
     </html>
     `);
