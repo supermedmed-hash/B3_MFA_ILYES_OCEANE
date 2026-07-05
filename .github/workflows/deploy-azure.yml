@@ -12,6 +12,7 @@
 name: 🚀 Build & Deploy Smart Office to Azure
 
 on:
+  workflow_dispatch:
   push:
     branches: [ "develop", "main" ]
     paths:
