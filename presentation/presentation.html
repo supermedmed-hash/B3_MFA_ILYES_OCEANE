@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Office 2.0 - Présentation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f5f5f7;
+            --text-color: #1d1d1f;
+            --accent-color: #0066cc;
+            /* Light glassmorphism */
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(0, 0, 0, 0.05);
+            --subtext-color: #86868b;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            overflow: hidden; /* Hide scrollbars */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Abstract Apple-like background blobs (light mode versions) */
+        .blob {
+            position: absolute;
+            filter: blur(100px);
+            z-index: 0;
+            opacity: 0.8;
+        }
+        .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(41,151,255,0.2) 0%, rgba(255,255,255,0) 70%); }
+        .blob-2 { bottom: -20%; right: -10%; width: 60vw; height: 60vw; background: radial-gradient(circle, rgba(142,45,226,0.15) 0%, rgba(255,255,255,0) 70%); }
+
+        .slides-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+            transform: scale(0.95);
+            padding: 5% 10%;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+        }
+
+        /* Slide going out */
+        .slide.prev { transform: scale(1.05); }
+
+        h1 {
+            font-weight: 800;
+            font-size: 5vw;
+            letter-spacing: -0.04em;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #1d1d1f 0%, #434345 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h2 {
+            font-weight: 600;
+            font-size: 3vw;
+            letter-spacing: -0.02em;
+            margin-bottom: 30px;
+            color: var(--text-color);
+        }
+
+        p, li {
+            font-weight: 400;
+            font-size: 1.8vw;
+            line-height: 1.5;
+            color: var(--subtext-color);
+            margin-bottom: 20px;
+            list-style: none;
+        }
+        
+        strong {
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-radius: 24px;
+            padding: 40px 60px;
+            max-width: 80%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+            width: 100%;
+        }
+
+        .feature-item {
+            background: rgba(255,255,255,0.6);
+            border: 1px solid rgba(0,0,0,0.05);
+            padding: 30px;
+            border-radius: 16px;
+            text-align: left;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        .feature-item h3 {
+            font-size: 1.8vw;
+            margin-bottom: 10px;
+            color: var(--text-color);
+            margin-top: 0;
+            font-weight: 600;
+        }
+
+        .speaker-badge {
+            position: absolute;
+            bottom: 40px;
+            left: 40px;
+            font-size: 1.2vw;
+            color: var(--accent-color);
+            background: rgba(0, 102, 204, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 102, 204, 0.2);
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .nav-hints {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            font-size: 1vw;
+            color: #a1a1a6;
+            font-weight: 400;
+            z-index: 10;
+        }
+        
+        /* Utility overrides to remove hardcoded white colors */
+        .title-sub { font-size: 2vw; color: var(--text-color); font-weight: 600; }
+        .text-dark { color: var(--text-color) !important; }
+    </style>
+</head>
+<body>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <div class="slides-container" id="slides-container">
+        
+        <!-- Slide 0 -->
+        <div class="slide active">
+            <div class="glass-card">
+                <img src="../logo-ynov.png" alt="Ynov" style="height: 60px; margin-bottom: 20px; filter: grayscale(100%) contrast(120%);" onerror="this.style.display='none'">
+                <h1>Smart Office 2.0</h1>
+                <p class="title-sub">Soutenance d'Architecture Technique - Bachelor 3</p>
+                <p>Océane · Ilyes · Mehdi · Florian</p>
+            </div>
+            <div class="speaker-badge">Équipe Projet</div>
+        </div>
+
+        <!-- Slide 1 -->
+        <div class="slide">
+            <h2>L'Enjeu de l'Hyper-Croissance</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h3>200 collaborateurs</h3>
+                    <p>Mise à l'échelle rapide des locaux et du SI de Biotech Corp.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Smart Building</h3>
+                    <p>Intégration de capteurs IoT et flex-office.</p>
+                </div>
+                <div class="feature-item" style="grid-column: span 2; text-align: center;">
+                    <h3>La Réponse : Architecture Hybride</h3>
+                    <p>Résilience du On-Premise + Élasticité du Cloud</p>
+                </div>
+            </div>
+            <div class="speaker-badge">Océane (Système & Cloud)</div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="slide">
+            <h2>Fondations : Réseau & Sécurité</h2>
+            <div class="glass-card">
+                <p class="title-sub" style="margin-bottom: 15px;">Zero Trust By Design</p>
+                <ul style="text-align: left; padding-left: 20px;">
+                    <li>• Cœur de réseau fibre 10G redondé (Spanning Tree)</li>
+                    <li>• Segmentation stricte : 8 VLANs isolés (Employés, IoT, Guest...)</li>
+                    <li>• Contrôle des flux via ACLs sur pfSense</li>
+                    <li>• Réseau sans fil centralisé (802.1x)</li>
+                </ul>
+            </div>
+            <div class="speaker-badge">Ilyes (Lead Réseau & Sécurité)</div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="slide">
+            <h2>Hybridation & Cloud</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h3>Tunnel IPsec IKEv2</h3>
+                    <p>Liaison chiffrée permanente entre le pfSense local et Azure VPN Gateway.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>PaaS Azure</h3>
+                    <p>App Service pour l'évolutivité web, justifié par une analyse TCO rigoureuse.</p>
+                </div>
+                <div class="feature-item" style="grid-column: span 2;">
+                    <h3>Hybridation Active Directory</h3>
+                    <p>Synchronisation sécurisée des identités locales vers Entra ID pour un SSO transparent.</p>
+                </div>
+            </div>
+            <div class="speaker-badge">Océane (Système & Cloud)</div>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="slide">
+            <h2>Données & Stockage</h2>
+            <div class="glass-card" style="text-align: left;">
+                <h3 class="text-dark" style="font-size: 2vw; margin-top:0;">Approche Polyglotte</h3>
+                <p>• <strong>PostgreSQL :</strong> Pour l'intégrité transactionnelle (ACID) des réservations.</p>
+                <p>• <strong>MongoDB :</strong> Ingère l'énorme volume de logs (Time-Series) des capteurs IoT.</p>
+                <br>
+                <h3 class="text-dark" style="font-size: 2vw;">Plan de Sauvegarde</h3>
+                <p>Application stricte de la règle <strong>3-2-1</strong> avec réplication distante chiffrée.</p>
+            </div>
+            <div class="speaker-badge">Mehdi (Data & DevOps)</div>
+        </div>
+
+        <!-- Slide 5 -->
+        <div class="slide">
+            <h2>Automatisation DevOps</h2>
+            <div class="feature-grid">
+                <div class="feature-item" style="grid-column: span 2; text-align: center;">
+                    <h3>Zero Downtime Deployment</h3>
+                </div>
+                <div class="feature-item">
+                    <h3>Pipeline CI/CD</h3>
+                    <p>Code sous GitHub, builds automatisés, et déploiements transparents vers Azure.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Suivi Agile</h3>
+                    <p>Sprints de 2 semaines, gestion via GitHub Projects. Traçabilité totale.</p>
+                </div>
+            </div>
+            <div class="speaker-badge">Mehdi (Data & DevOps)</div>
+        </div>
+
+        <!-- Slide 6 -->
+        <div class="slide">
+            <h2>Supervision & Résilience</h2>
+            <div class="glass-card">
+                <p class="title-sub">Zabbix & Grafana</p>
+                <ul style="text-align: left; margin-bottom: 30px;">
+                    <li>• Monitoring SNMP v3 des switchs et serveurs locaux.</li>
+                    <li>• Dashboards décisionnels pour remonter l'état des capteurs.</li>
+                </ul>
+                <p class="title-sub">Gouvernance ITSM</p>
+                <ul style="text-align: left;">
+                    <li>• Matrice de qualification des incidents (Urgence / Impact).</li>
+                    <li>• Analyse BIA et définition stricte des RTO / RPO (PCA/PRA).</li>
+                </ul>
+            </div>
+            <div class="speaker-badge">Florian (Supervision & ITSM)</div>
+        </div>
+
+        <!-- Slide 7 -->
+        <div class="slide">
+            <h1>Merci.</h1>
+            <p class="title-sub" style="font-size: 2.5vw;">Avez-vous des questions ?</p>
+            <div class="speaker-badge">Équipe Projet</div>
+        </div>
+
+    </div>
+
+    <div class="nav-hints">Flèches gauche/droite pour naviguer</div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        let currentSlide = 0;
+        
+        const syncChannel = new BroadcastChannel('presentation_sync');
+
+        function goToSlide(index) {
+            if (index < 0 || index >= slides.length) return;
+            
+            slides.forEach(s => {
+                s.classList.remove('active');
+                s.classList.remove('prev');
+            });
+
+            if (currentSlide < index && slides[currentSlide]) {
+                slides[currentSlide].classList.add('prev');
+            }
+
+            currentSlide = index;
+            slides[currentSlide].classList.add('active');
+
+            syncChannel.postMessage({ type: 'slide_changed', slide: currentSlide });
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+                goToSlide(currentSlide + 1);
+            } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                goToSlide(currentSlide - 1);
+            }
+        });
+
+        syncChannel.onmessage = (e) => {
+            if (e.data.type === 'slide_changed' && e.data.slide !== currentSlide) {
+                goToSlide(e.data.slide);
+            }
+        };
+
+        // Tell presenter view we are here
+        syncChannel.postMessage({ type: 'slide_changed', slide: currentSlide });
+    </script>
+</body>
+</html>

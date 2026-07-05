@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ==============================================================================
+  Smart Office 2.0 — Template Zabbix pour la Supervision
+  Auteur : Florian (Lead Supervision)
+
+  JURY DEFENSE :
+  Ce template définit les éléments supervisés (items), les seuils d'alerte
+  (triggers) et les règles de découverte pour l'infrastructure Smart Office 2.0.
+  Il est importable directement dans Zabbix via Administration > Templates > Import.
+
+  Architecture de supervision :
+    - Zabbix Server (MariaDB backend) collecte les métriques
+    - Zabbix Agents sur les VMs (AD, Docker Host)
+    - SNMP sur les switchs Cisco et pfSense
+    - Grafana se connecte à Zabbix comme datasource pour les dashboards
+  ==============================================================================
+-->
+<zabbix_export>
+    <version>6.0</version>
+    <date>2026-07-01T00:00:00Z</date>
+    <groups>
+        <group>
+            <name>Smart Office 2.0</name>
+        </group>
+    </groups>
+    <templates>
+        <!-- ==========================================
+             TEMPLATE 1 : Supervision Serveur Linux/Docker
+             Appliqué à : SRV-DOCKER (VLAN 10)
+             ========================================== -->
+        <template>
+            <template>Template_SmartOffice_Docker_Host</template>
+            <name>Smart Office - Docker Host Monitoring</name>
+            <description>Supervision du serveur Docker hébergeant PostgreSQL, MongoDB, Zabbix et l'application web en local.</description>
+            <groups>
+                <group>
+                    <name>Smart Office 2.0</name>
+                </group>
+            </groups>
+            <items>
+                <!-- CPU -->
+                <item>
+                    <name>CPU - Charge moyenne (1 min)</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.cpu.load[all,avg1]</key>
+                    <delay>30s</delay>
+                    <value_type>FLOAT</value_type>
+                    <description>Charge CPU moyenne sur 1 minute. Seuil critique à 90%.</description>
+                </item>
+                <item>
+                    <name>CPU - Utilisation (%)</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>system.cpu.util</key>
+                    <delay>30s</delay>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                </item>
+                <!-- RAM -->
+                <item>
+                    <name>RAM - Mémoire disponible</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>vm.memory.size[available]</key>
+                    <delay>60s</delay>
+                    <value_type>UNSIGNED</value_type>
+                    <units>B</units>
+                </item>
+                <item>
+                    <name>RAM - Utilisation (%)</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>vm.memory.size[pused]</key>
+                    <delay>60s</delay>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                </item>
+                <!-- Disque -->
+                <item>
+                    <name>Disque - Espace libre (/)</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>vfs.fs.size[/,pfree]</key>
+                    <delay>120s</delay>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <description>Pourcentage d'espace disque libre sur la partition racine.</description>
+                </item>
+                <!-- Docker -->
+                <item>
+                    <name>Docker - Nombre de conteneurs actifs</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>docker.containers.running</key>
+                    <delay>60s</delay>
+                    <value_type>UNSIGNED</value_type>
+                    <description>Nombre de conteneurs Docker en état running. Attendu : 7 (web, postgres, mongo, zabbix-db, zabbix-server, zabbix-web, grafana).</description>
+                </item>
+                <!-- Réseau -->
+                <item>
+                    <name>Réseau - Trafic entrant (eth0)</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>net.if.in[eth0]</key>
+                    <delay>30s</delay>
+                    <value_type>UNSIGNED</value_type>
+                    <units>bps</units>
+                </item>
+                <item>
+                    <name>Réseau - Trafic sortant (eth0)</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>net.if.out[eth0]</key>
+                    <delay>30s</delay>
+                    <value_type>UNSIGNED</value_type>
+                    <units>bps</units>
+                </item>
+                <!-- Services applicatifs -->
+                <item>
+                    <name>App Web - Port 3000 (Node.js)</name>
+                    <type>SIMPLE</type>
+                    <key>net.tcp.service[tcp,,3000]</key>
+                    <delay>30s</delay>
+                    <value_type>UNSIGNED</value_type>
+                    <description>Vérifie que l'application Node.js répond sur le port 3000.</description>
+                </item>
+                <item>
+                    <name>PostgreSQL - Port 5432</name>
+                    <type>SIMPLE</type>
+                    <key>net.tcp.service[tcp,,5432]</key>
+                    <delay>30s</delay>
+                    <value_type>UNSIGNED</value_type>
+                </item>
+                <item>
+                    <name>MongoDB - Port 27017</name>
+                    <type>SIMPLE</type>
+                    <key>net.tcp.service[tcp,,27017]</key>
+                    <delay>30s</delay>
+                    <value_type>UNSIGNED</value_type>
+                </item>
+            </items>
+            <triggers>
+                <!-- TRIGGERS : Seuils d'alerte automatiques -->
+                <trigger>
+                    <expression>last(/Template_SmartOffice_Docker_Host/system.cpu.util)&gt;90</expression>
+                    <name>ALERTE : CPU &gt; 90% sur le Docker Host</name>
+                    <priority>HIGH</priority>
+                    <description>La charge CPU du serveur Docker dépasse 90%. Vérifier les conteneurs en cours d'exécution.</description>
+                </trigger>
+                <trigger>
+                    <expression>last(/Template_SmartOffice_Docker_Host/vm.memory.size[pused])&gt;85</expression>
+                    <name>ALERTE : RAM &gt; 85% sur le Docker Host</name>
+                    <priority>HIGH</priority>
+                    <description>La mémoire RAM est presque saturée. Risque de OOM Kill sur les conteneurs.</description>
+                </trigger>
+                <trigger>
+                    <expression>last(/Template_SmartOffice_Docker_Host/vfs.fs.size[/,pfree])&lt;10</expression>
+                    <name>CRITIQUE : Espace disque &lt; 10% sur /</name>
+                    <priority>DISASTER</priority>
+                    <description>L'espace disque est critique. Les bases de données risquent de crasher (PostgreSQL, MongoDB).</description>
+                </trigger>
+                <trigger>
+                    <expression>last(/Template_SmartOffice_Docker_Host/docker.containers.running)&lt;5</expression>
+                    <name>ALERTE : Moins de 5 conteneurs Docker actifs</name>
+                    <priority>HIGH</priority>
+                    <description>Un ou plusieurs conteneurs ont crashé. Vérifier avec 'docker ps' et 'docker logs'.</description>
+                </trigger>
+                <trigger>
+                    <expression>last(/Template_SmartOffice_Docker_Host/net.tcp.service[tcp,,3000])=0</expression>
+                    <name>CRITIQUE : Application Web (port 3000) hors ligne</name>
+                    <priority>DISASTER</priority>
+                    <description>L'application Node.js ne répond plus. Vérifier le conteneur smartoffice_web.</description>
+                </trigger>
+                <trigger>
+                    <expression>last(/Template_SmartOffice_Docker_Host/net.tcp.service[tcp,,5432])=0</expression>
+                    <name>CRITIQUE : PostgreSQL (port 5432) hors ligne</name>
+                    <priority>DISASTER</priority>
+                    <description>La base PostgreSQL est down. Les réservations ne fonctionnent plus.</description>
+                </trigger>
+                <trigger>
+                    <expression>last(/Template_SmartOffice_Docker_Host/net.tcp.service[tcp,,27017])=0</expression>
+                    <name>ALERTE : MongoDB (port 27017) hors ligne</name>
+                    <priority>HIGH</priority>
+                    <description>La base MongoDB est down. Les logs IoT ne sont plus collectés.</description>
+                </trigger>
+            </triggers>
+        </template>
+
+        <!-- ==========================================
+             TEMPLATE 2 : Supervision pfSense / VPN
+             Appliqué à : pfSense Firewall
+             ========================================== -->
+        <template>
+            <template>Template_SmartOffice_pfSense</template>
+            <name>Smart Office - pfSense &amp; VPN Monitoring</name>
+            <description>Supervision du pare-feu pfSense : état du tunnel VPN IPsec, charge CPU, interfaces réseau.</description>
+            <groups>
+                <group>
+                    <name>Smart Office 2.0</name>
+                </group>
+            </groups>
+            <items>
+                <item>
+                    <name>pfSense - Uptime</name>
+                    <type>SNMPV2</type>
+                    <key>sysUpTime.0</key>
+                    <snmp_oid>1.3.6.1.2.1.1.3.0</snmp_oid>
+                    <delay>300s</delay>
+                    <value_type>UNSIGNED</value_type>
+                    <units>s</units>
+                </item>
+                <item>
+                    <name>VPN IPsec - Statut du tunnel Azure</name>
+                    <type>SNMPV2</type>
+                    <key>vpn.ipsec.tunnel.status</key>
+                    <snmp_oid>1.3.6.1.4.1.12325.1.200.1.8.2.1.7</snmp_oid>
+                    <delay>30s</delay>
+                    <value_type>UNSIGNED</value_type>
+                    <description>Statut du tunnel IPsec Site-to-Site vers Azure VPN Gateway. 1 = UP, 0 = DOWN.</description>
+                </item>
+                <item>
+                    <name>pfSense - CPU Utilisation (%)</name>
+                    <type>SNMPV2</type>
+                    <key>hrProcessorLoad.1</key>
+                    <snmp_oid>1.3.6.1.2.1.25.3.3.1.2.1</snmp_oid>
+                    <delay>60s</delay>
+                    <value_type>UNSIGNED</value_type>
+                    <units>%</units>
+                </item>
+                <item>
+                    <name>pfSense - Paquets bloqués (Firewall)</name>
+                    <type>SNMPV2</type>
+                    <key>pf.counters.blocked</key>
+                    <snmp_oid>1.3.6.1.4.1.12325.1.200.1.2.1.0</snmp_oid>
+                    <delay>60s</delay>
+                    <value_type>UNSIGNED</value_type>
+                    <description>Nombre de paquets bloqués par les règles pfSense (Deny All). Une augmentation soudaine peut indiquer un scan de ports ou une tentative d'intrusion.</description>
+                </item>
+                <!-- Ping vers la passerelle Azure (vérification de bout en bout) -->
+                <item>
+                    <name>VPN - Latence vers Azure Gateway (ICMP)</name>
+                    <type>SIMPLE</type>
+                    <key>icmppingsec[10.100.0.1]</key>
+                    <delay>60s</delay>
+                    <value_type>FLOAT</value_type>
+                    <units>s</units>
+                    <description>Latence ICMP vers la passerelle Azure via le tunnel VPN. Permet de vérifier que le tunnel fonctionne de bout en bout.</description>
+                </item>
+            </items>
+            <triggers>
+                <trigger>
+                    <expression>last(/Template_SmartOffice_pfSense/vpn.ipsec.tunnel.status)=0</expression>
+                    <name>CRITIQUE : Tunnel VPN IPsec vers Azure DOWN</name>
+                    <priority>DISASTER</priority>
+                    <description>Le tunnel VPN Site-to-Site est tombé. L'application Cloud ne peut plus joindre les bases de données locales. Vérifier pfSense > Status > IPsec.</description>
+                </trigger>
+                <trigger>
+                    <expression>last(/Template_SmartOffice_pfSense/hrProcessorLoad.1)&gt;80</expression>
+                    <name>ALERTE : CPU pfSense &gt; 80%</name>
+                    <priority>HIGH</priority>
+                    <description>Le pare-feu est surchargé. Vérifier les logs pour du trafic anormal (DDoS, scan).</description>
+                </trigger>
+                <trigger>
+                    <expression>change(/Template_SmartOffice_pfSense/pf.counters.blocked)&gt;1000</expression>
+                    <name>ALERTE : Pic de paquets bloqués (possible scan de ports)</name>
+                    <priority>WARNING</priority>
+                    <description>Plus de 1000 paquets ont été bloqués en un intervalle. Possible scan de ports ou tentative d'intrusion. Analyser les logs pfSense.</description>
+                </trigger>
+                <trigger>
+                    <expression>last(/Template_SmartOffice_pfSense/icmppingsec[10.100.0.1])&gt;0.5</expression>
+                    <name>ALERTE : Latence VPN élevée (&gt; 500ms)</name>
+                    <priority>WARNING</priority>
+                    <description>La latence vers Azure est anormalement élevée. Vérifier la bande passante du lien FAI.</description>
+                </trigger>
+            </triggers>
+        </template>
+    </templates>
+</zabbix_export>

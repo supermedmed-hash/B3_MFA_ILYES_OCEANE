@@ -11,22 +11,24 @@ graph LR
         SW["🖧 Cisco Switch"]
         
         subgraph VLANS ["VLANs"]
-            V20["🖥️ Srv (AD, Zabbix)"]
-            V40["📡 IoT (Capteurs)"]
-            V30["👥 Users"]
+            V10["🖥️ Srv (AD, Docker)"]
+            V20["👥 Employees"]
+            V50["📡 IoT (Capteurs)"]
+            V100["🔧 Mgmt (Zabbix)"]
         end
         
         PFS --- SW
+        SW --- V10
         SW --- V20
-        SW --- V40
-        SW --- V30
+        SW --- V50
+        SW --- V100
     end
 
     %% TUNNEL
     PFS <== "🔗 VPN IPsec" ==> VGW
 
     %% AZURE CLOUD
-    subgraph AZURE ["🟦 AZURE CLOUD (172.16.x.x)"]
+    subgraph AZURE ["🟦 AZURE CLOUD (10.100.x.x)"]
         direction TB
         VGW["🌐 VPN Gateway"]
         
@@ -47,8 +49,8 @@ graph LR
     end
 
     %% FLUX TRANSVERSES
-    V20 -. "Supervision" .-> DOCKER
-    DC_AZ -. "Sync" .-> V20
+    V100 -. "Supervision" .-> DOCKER
+    DC_AZ -. "Sync" .-> V10
 
     %% STYLING
     style LOCAL fill:#fff4dd,stroke:#d4a017

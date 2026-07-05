@@ -6,7 +6,7 @@ Ce document fournit la version Mermaid du schéma d'architecture finale, synchro
 
 ```mermaid
 graph TB
-    subgraph "🟦 MICROSOFT AZURE (VNet - 172.16.0.0/16)"
+    subgraph "🟦 MICROSOFT AZURE (VNet - 10.100.0.0/16)"
         subgraph "Identity Subnet"
             DC_AZ["SRV-AD-CLOUD\n(Azure VM - Replica)"]
         end
@@ -30,17 +30,20 @@ graph TB
         PFS["Firewall PfSense\n(IPsec Gateway)"]
         
         subgraph "Segmentation VLANs"
-            V10["VLAN 10\n(Management)"]
-            
-            subgraph "VLAN 20 (Servers)"
+            subgraph "VLAN 10 (Servers)"
                 DC_LOC["SRV-AD-LOCAL\n(Windows Server)"]
-                ZBX["Zabbix Server\n(Florian)"]
+                DKR["SRV-DOCKER\n(Docker Host)"]
             end
             
-            V30["VLAN 30\n(Users)"]
+            V20["VLAN 20\n(Employees)"]
+            V30["VLAN 30\n(R&D Isolé)"]
             
-            subgraph "VLAN 40 (IoT)"
+            subgraph "VLAN 50 (IoT)"
                 IOT["Capteurs Salles\n(Da Vinci, Lovelace, Turing)"]
+            end
+            
+            subgraph "VLAN 100 (Management)"
+                ZBX["Zabbix Server\n(Florian)"]
             end
         end
     end
